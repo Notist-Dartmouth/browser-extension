@@ -6,14 +6,17 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
     filename: 'popup.js'
   },
+  resolve: {
+    extensions: ['', '.js', '.jsx']
+  },
   module: {
-    rules: [
+    loaders: [
       {
-          test: /\.(js|jsx)$/,
-          include: './src',
-          use: 'babel-loader',
-          exclude: /node_modules/,
-          include: path.resolve(__dirname, 'src')
+        test: /\.jsx?$/,
+        include: './src',
+        loader: 'babel-loader',
+        exclude: /node_modules/,
+        include: path.resolve(__dirname, 'src')
       }
     ]
   }
