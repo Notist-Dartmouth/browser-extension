@@ -1,10 +1,13 @@
 var path = require('path');
 
 module.exports = {
-  entry: path.resolve(__dirname, 'src/index.jsx'),
+  entry: {
+    popup: path.resolve(__dirname, 'src/index.jsx'),
+    background: path.resolve(__dirname, 'src/background.js')
+  },
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'popup.js'
+    filename: '[name].js'
   },
   resolve: {
     extensions: ['', '.js', '.jsx']

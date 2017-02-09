@@ -10,7 +10,13 @@ gulp.task('popup', () => {
     return gulp.src('index.html').pipe(gulp.dest('./dist'));
 });
 
-gulp.task('webpack', () => {
+gulp.task('background-webpack', () => {
+  return gulp.src('src/background.js')
+      .pipe(webpack(require('./webpack.config')))
+      .pipe(gulp.dest('dist/'));
+});
+
+gulp.task('popup-webpack', () => {
     return gulp.src('src/index.jsx')
         .pipe(webpack(require('./webpack.config')))
         .pipe(gulp.dest('dist/'));
@@ -20,6 +26,6 @@ gulp.task('clean', (cb) => {
     rimraf('dist/', cb);
 });
 
-gulp.task('build', ['clean', 'manifest', 'popup', 'webpack']);
+gulp.task('build', ['clean', 'manifest', 'popup', 'popup-webpack', 'background-webpack']);
 
 gulp.task('default', ['build']);
