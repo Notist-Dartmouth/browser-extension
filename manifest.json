@@ -9,6 +9,12 @@
   "permissions": [
     "tabs", "activeTab", "http://*/*", "https://*/*"
   ],
+  "content_scripts": [
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["content.js"]
+    }
+  ],
   "browser_action": {
     "default_title": "Create annotation",
     "default_popup": "index.html"
