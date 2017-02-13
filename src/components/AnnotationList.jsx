@@ -1,13 +1,19 @@
 import React, { PropTypes } from 'react';
+import Annotation from './Annotation';
 
-export default class AnnotationList extends React.Component {
+class AnnotationList extends React.Component {
   constructor(props) {
     super(props);
   }
 
   render() {
     return (<ul>
-      {this.props.annotations.map(a => <li key={a.id}>{a.articleText}</li>)}
+      {this.props.annotations.map(a =>
+        <Annotation
+          key={a.id}
+          articleText={a.articleText}
+        />
+      )}
     </ul>);
   }
 
@@ -16,3 +22,5 @@ export default class AnnotationList extends React.Component {
 AnnotationList.propTypes = {
   annotations: PropTypes.arrayOf(PropTypes.object).isRequired
 }
+
+export default AnnotationList;

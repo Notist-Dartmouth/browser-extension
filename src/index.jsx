@@ -8,8 +8,10 @@ import App from './components/App';
 
 const store = new Store({portName: 'notist'});
 
-render(
-  <Provider store={store}>
-    <App/>
-  </Provider>
-  , document.getElementById('app'));
+store.ready().then(() => {
+  render(
+    <Provider store={store}>
+      <App/>
+    </Provider>
+    , document.getElementById('app'));
+});

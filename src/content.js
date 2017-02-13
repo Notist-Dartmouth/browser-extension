@@ -10,18 +10,16 @@ document.onmouseup = function (e) {
     var textNode = document.createTextNode("Annotate");
     annotateButton.appendChild(textNode);
     annotateButton.addEventListener("click", () => {
-      console.log(text.toString());
-      store.dispatch(addAnnotation(text));
-      console.log(store.getState());
+      store.dispatch(addAnnotation(text.toString()));
     });
     annotateButton.setAttribute("id", "annotate-button");
     text.anchorNode.parentNode.appendChild(annotateButton);
   }
 }
 
-document.onmousedown = function (e) {
-  var annotateButton = document.getElementById("annotate-button");
-  if (annotateButton) {
-    annotateButton.remove();
-  }
-}
+// document.onmousedown = function (e) {
+//   var annotateButton = document.getElementById("annotate-button");
+//   if (annotateButton) {
+//     annotateButton.remove();
+//   }
+// }
