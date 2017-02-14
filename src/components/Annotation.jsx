@@ -7,9 +7,9 @@ class Annotation extends React.Component {
 
   render() {
     return (
-      <div>
+      <li>
         {this.props.articleText}
-      </div>
+      </li>
     );
   }
 }

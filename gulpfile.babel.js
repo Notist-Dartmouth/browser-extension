@@ -35,3 +35,7 @@ gulp.task('clean', (cb) => {
 gulp.task('build', ['clean', 'manifest', 'popup', 'popup-webpack', 'background-webpack', 'content-script']);
 
 gulp.task('default', ['build']);
+
+gulp.task('watch', ['default'], () => {
+  gulp.watch('./src/**/*', ['build']);
+});
