@@ -1,8 +1,3 @@
-import {Store} from 'react-chrome-redux';
-import {addAnnotation} from './actions';
-
-const store = new Store({portName: 'notist'});
-
 function removeAnnotateButton() {
   var annotateButton = document.getElementById("annotate-button");
   if (annotateButton) {
@@ -10,12 +5,16 @@ function removeAnnotateButton() {
   }
 }
 
+function annotateText(text) {
+  chrome.runtime.sendMessage({type: 'ADD_ANNOTATION', text: text});
+}
+
 function createAnnotateButton(text) {
   var annotateButton = document.createElement("button");
   var textNode = document.createTextNode("Annotate");
   annotateButton.appendChild(textNode);
   annotateButton.addEventListener("click", () => {
-    store.dispatch(addAnnotation(text));
+    annotateText(text);
   });
   annotateButton.setAttribute("id", "annotate-button");
   return annotateButton;
