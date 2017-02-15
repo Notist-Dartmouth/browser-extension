@@ -22,8 +22,11 @@ function createAnnotateButton(text) {
 
 document.onmouseup = function (e) {
   var text = document.getSelection();
-  if (e.target.id !== "annotate-button" && text.anchorNode.nodeType === Node.TEXT_NODE && text.toString().length != 0) {
-    text.anchorNode.parentNode.appendChild(createAnnotateButton(text.toString()));
+  if (e.target.id !== "annotate-button" && text.anchorNode && text.anchorNode.nodeType === Node.TEXT_NODE && text.toString().length != 0) {
+    var annotateButton = createAnnotateButton(text.toString());
+    var range = text.getRangeAt(0);
+    range.collapse(false);
+    range.insertNode(annotateButton);
   }
 }
 
