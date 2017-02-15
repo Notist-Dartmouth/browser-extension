@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
 import Annotation from './Annotation';
+import {List} from 'material-ui/List';
 
 class AnnotationList extends React.Component {
   constructor(props) {
@@ -7,14 +8,13 @@ class AnnotationList extends React.Component {
   }
 
   render() {
-    return (<ul>
-      {this.props.annotations.map(a =>
-        <Annotation
-          key={a.id}
-          articleText={a.articleText}
-        />
-      )}
-    </ul>);
+    return (
+      <List>
+        {this.props.annotations.map(a =>
+          <Annotation key={a.id} articleText={a.articleText} />
+        )}
+      </List>
+    );
   }
 
 }
