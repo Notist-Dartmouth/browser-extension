@@ -3,7 +3,6 @@ var path = require('path');
 module.exports = {
   entry: {
     content: path.resolve(__dirname, 'src/content.js'),
-    popup: path.resolve(__dirname, 'src/index.jsx'),
     background: path.resolve(__dirname, 'src/background.js')
   },
   output: {
