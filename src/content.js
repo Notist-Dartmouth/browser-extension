@@ -4,7 +4,6 @@ import {render} from 'react-dom';
 import {Provider} from 'react-redux';
 import {Store} from 'react-chrome-redux';
 import App from './components/App';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 const store = new Store({portName: 'notist'});
 
@@ -15,11 +14,9 @@ $("body").prepend(sidebar);
 store.ready().then(() => {
   render(
     <Provider store={store}>
-      <MuiThemeProvider>
-        <App/>
-      </MuiThemeProvider>
+      <App/>
     </Provider>
-    , document.getElementById('annotation-sidebar'));
+    , document.getElementById("annotation-sidebar"));
 });
 
 function createAnnotateButton(text) {
