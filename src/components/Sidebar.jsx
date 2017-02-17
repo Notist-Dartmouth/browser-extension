@@ -1,7 +1,6 @@
 import React from 'react';
 import Drawer from 'material-ui/Drawer';
 import AppBar from 'material-ui/AppBar';
-import RaisedButton from 'material-ui/RaisedButton';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import NavigationChevronLeft from 'material-ui/svg-icons/navigation/chevron-left';
 import NavigationChevronRight from 'material-ui/svg-icons/navigation/chevron-right';
@@ -13,7 +12,7 @@ export default class Sidebar extends React.Component {
   constructor(props) {
     super(props);
     injectTapEventPlugin();
-    this.state = {open: false}
+    this.state = { open: false }
   }
 
   render() {

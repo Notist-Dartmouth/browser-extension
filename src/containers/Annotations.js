@@ -3,7 +3,7 @@ import AnnotationList from '../components/AnnotationList';
 
 const mapStateToProps = (state) => {
   return {
-    annotations: state.annotations
+    annotations: state.annotations,
   }
 }
 

@@ -1,24 +1,16 @@
 import React, { PropTypes } from 'react';
-import {ListItem} from 'material-ui/List';
-import TextField from 'material-ui/TextField';
+import { ListItem } from 'material-ui/List';
 
-class Annotation extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
-  render() {
-    return (
-      <div>
-        <ListItem primaryText={this.props.articleText} />
-        <TextField hintText="Enter comment" />
-      </div>
-    );
-  }
+const Annotation = (props) => {
+  return (
+    <div>
+      <ListItem primaryText={props.articleText} />
+    </div>
+  );
 }
 
 Annotation.propTypes = {
-  articleText: PropTypes.string.isRequired
+  articleText: PropTypes.string.isRequired,
 }
 
 export default Annotation;

@@ -1,12 +1,12 @@
 import $ from 'jquery';
 import React from 'react';
-import {render} from 'react-dom';
-import {Provider} from 'react-redux';
-import {Store} from 'react-chrome-redux';
+import { render } from 'react-dom';
+import { Provider } from 'react-redux';
+import { Store } from 'react-chrome-redux';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Sidebar from './components/Sidebar';
 
-const store = new Store({portName: 'notist'});
+const store = new Store({ portName: 'notist' });
 
 var sidebar = document.createElement("div");
 sidebar.setAttribute("id", "annotation-sidebar");
@@ -16,7 +16,7 @@ store.ready().then(() => {
   render(
     <Provider store={store}>
       <MuiThemeProvider>
-        <Sidebar/>
+        <Sidebar />
       </MuiThemeProvider>
     </Provider>
     , document.getElementById("annotation-sidebar"));
