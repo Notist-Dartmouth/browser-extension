@@ -1,9 +1,12 @@
 import React from 'react';
-import Annotations from '../containers/Annotations';
 import Drawer from 'material-ui/Drawer';
 import AppBar from 'material-ui/AppBar';
 import RaisedButton from 'material-ui/RaisedButton';
 import injectTapEventPlugin from 'react-tap-event-plugin';
+import NavigationChevronLeft from 'material-ui/svg-icons/navigation/chevron-left';
+import NavigationChevronRight from 'material-ui/svg-icons/navigation/chevron-right';
+import IconButton from 'material-ui/IconButton';
+import Annotations from '../containers/Annotations';
 
 export default class Sidebar extends React.Component {
 
@@ -16,12 +19,19 @@ export default class Sidebar extends React.Component {
   render() {
     return (
       <div>
-        <RaisedButton
-          label="Toggle Drawer"
-          onTouchTap={() => this.setState({open: !this.state.open})}
-        />
-        <Drawer open={this.state.open} width={300} openSecondary={true} >
-          <AppBar title="Notist" />
+        <Drawer
+          open={this.state.open}
+          openSecondary={true}
+          containerStyle={{width: "300px", right: this.state.open ? 0 : "20px"}}
+        >
+          <AppBar
+            title="Notist"
+            iconElementLeft={
+              <IconButton onClick={() => this.setState({open: !this.state.open})}>
+                {this.state.open ? <NavigationChevronRight /> : <NavigationChevronLeft />}
+              </IconButton>
+            }
+          />
           <Annotations />
         </Drawer>
       </div>
