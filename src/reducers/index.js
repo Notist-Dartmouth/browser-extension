@@ -1,8 +1,8 @@
-import {combineReducers} from 'redux';
+import { combineReducers } from 'redux';
 import annotations from './annotation';
 
 const notistReducers = combineReducers({
-  annotations
+  annotations,
 });
 
 export default notistReducers;
