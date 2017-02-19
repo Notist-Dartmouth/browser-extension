@@ -33,7 +33,9 @@ const annotations = (state = [], action) => {
         annotation(undefined, action),
       ];
     case 'ADD_CHILD_ANNOTATION':
-      return state.map(a => annotation(a, action));
+      return state.map(a => annotation(Object.assign({}, a, {
+        childAnnotations: annotations(a.childAnnotations, action)
+      }), action));
     default:
       return state;
   }
