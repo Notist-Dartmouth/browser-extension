@@ -6,7 +6,11 @@ const AnnotationList = (props) => {
   return (
     <List>
       {props.annotations.map(a =>
-        <Annotation key={a.id} id={a.id} articleText={a.articleText} onCommentPost={props.onCommentPost} />
+        <Annotation
+          {...a}
+          key={a.id}
+          onCommentPost={props.onCommentPost}
+        />
       )}
     </List>
   );

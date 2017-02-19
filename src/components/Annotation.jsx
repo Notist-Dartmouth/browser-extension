@@ -1,24 +1,17 @@
 import React, { PropTypes } from 'react';
-import { List, ListItem } from 'material-ui/List';
+import { ListItem } from 'material-ui/List';
 import CommentBox from './CommentBox';
 
 const Annotation = (props) => {
   return (
-    <ListItem
-      primaryText={props.articleText || props.commentText}
-      nestedLevel={5}
-      insetChildren={true}
-      nestedItems={props.childAnnotations.map(a =>
-        <Annotation
-          key={a.id}
-          id={a.id}
-          commentText={a.commentText}
-          onCommentPost={props.onCommentPost}
-        />
-      )}
-    >
+    <div>
+      <ListItem
+        primaryText={props.articleText || props.commentText}
+        nestedItems={props.childAnnotations.map(a =>
+          <Annotation {...a} key={a.id} onCommentPost={props.onCommentPost} />)}
+      />
       <CommentBox onCommentPost={props.onCommentPost} annotationId={props.id} />
-    </ListItem>
+    </div>
   );
 };
 
