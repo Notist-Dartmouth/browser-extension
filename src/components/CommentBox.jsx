@@ -11,10 +11,16 @@ class CommentBox extends React.Component {
       commentText: '',
     };
     this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleChange(e) {
     this.setState({ commentText: e.target.value });
+  }
+
+  handleSubmit() {
+    this.props.onCommentPost(this.props.annotationId, this.state.commentText);
+    this.setState({ commentText: '' });
   }
 
   render() {
@@ -29,7 +35,7 @@ class CommentBox extends React.Component {
         />
         <RaisedButton
           type="submit"
-          onClick={() => this.props.onCommentPost(this.props.annotationId, this.state.commentText)}
+          onClick={this.handleSubmit}
           label="Post"
         />
       </Paper>

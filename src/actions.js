@@ -1,10 +1,9 @@
-var annotationId = 0;
+let annotationId = 0;
 
 export const addAnnotation = (articleText) => {
-  annotationId += 1;
   return {
     type: 'ADD_ANNOTATION',
-    id: annotationId,
+    id: annotationId++,
     articleText,
   };
 };
@@ -13,7 +12,7 @@ export const addChildAnnotation = (id, commentText) => {
   annotationId += 1;
   return {
     type: 'ADD_CHILD_ANNOTATION',
-    childId: annotationId,
+    childId: annotationId++,
     commentText,
     id,
   };

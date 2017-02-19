@@ -4,14 +4,12 @@ import CommentBox from './CommentBox';
 
 const Annotation = (props) => {
   return (
-    <div>
-      <ListItem
-        primaryText={props.articleText || props.commentText}
-        nestedItems={props.childAnnotations.map(a =>
-          <Annotation {...a} key={a.id} onCommentPost={props.onCommentPost} />)}
-      />
-      <CommentBox onCommentPost={props.onCommentPost} annotationId={props.id} />
-    </div>
+    <ListItem
+      primaryText={props.articleText || props.commentText}
+      secondaryText={<CommentBox onCommentPost={props.onCommentPost} annotationId={props.id} />}
+      nestedItems={props.childAnnotations.map(a =>
+        <Annotation {...a} key={a.id} onCommentPost={props.onCommentPost} />)}
+    />
   );
 };
 
