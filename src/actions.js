@@ -16,3 +16,10 @@ export const addChildAnnotation = (id, commentText) => {
     id,
   };
 };
+
+export const updateArticleUrl = (url) => {
+  return {
+    type: 'UPDATE_ARTICLE_URL',
+    url,
+  }
+};
