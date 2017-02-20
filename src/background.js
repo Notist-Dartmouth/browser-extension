@@ -1,15 +1,19 @@
 import { wrapStore } from 'react-chrome-redux';
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
+import thunkMiddleware from 'redux-thunk';
 import notistReducers from './reducers';
-import { addAnnotation, updateArticleUrl } from './actions';
+import { createAnnotation, updateArticleUrl } from './actions';
 
-const store = createStore(notistReducers, {});
+const store = createStore(
+  notistReducers,
+  applyMiddleware(thunkMiddleware),
+);
 wrapStore(store, { portName: 'notist' });
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   switch (request.type) {
     case 'ADD_ANNOTATION':
-      store.dispatch(addAnnotation(request.text));
+      store.dispatch(createAnnotation(null, request.articleText, '', request.articleUrl));
       break;
     default:
       break;

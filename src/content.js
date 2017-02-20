@@ -22,12 +22,16 @@ store.ready().then(() => {
     , document.getElementById('annotation-sidebar'));
 });
 
-function createAnnotateButton(text) {
+function createAnnotateButton(articleText) {
   const annotateButton = document.createElement('button');
   const textNode = document.createTextNode('Annotate');
   annotateButton.appendChild(textNode);
   annotateButton.addEventListener('click', () => {
-    chrome.runtime.sendMessage({ type: 'ADD_ANNOTATION', text });
+    chrome.runtime.sendMessage({
+      type: 'ADD_ANNOTATION',
+      articleUrl: store.getState().currentArticleUrl,
+      articleText,
+    });
   });
   annotateButton.setAttribute('id', 'annotate-button');
   return annotateButton;

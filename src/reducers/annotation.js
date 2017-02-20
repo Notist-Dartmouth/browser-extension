@@ -1,9 +1,10 @@
-const annotation = (state = {}, action) => {
+function annotation(state = {}, action) {
   switch (action.type) {
-    case 'ADD_ANNOTATION':
+    case 'RECEIVE_ANNOTATION':
       return {
         id: action.id,
         articleText: action.articleText,
+        text: action.text,
         childAnnotations: [],
       };
     case 'ADD_CHILD_ANNOTATION':
@@ -23,11 +24,11 @@ const annotation = (state = {}, action) => {
     default:
       return state;
   }
-};
+}
 
-const annotations = (state = [], action) => {
+function annotations(state = [], action) {
   switch (action.type) {
-    case 'ADD_ANNOTATION':
+    case 'RECEIVE_ANNOTATION':
       return [
         ...state,
         annotation(undefined, action),
@@ -39,6 +40,6 @@ const annotations = (state = [], action) => {
     default:
       return state;
   }
-};
+}
 
 export default annotations;
