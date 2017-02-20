@@ -17,7 +17,5 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 });
 
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-  if (changeInfo.url) {
-    store.dispatch(updateArticleUrl(changeInfo.url));
-  }
+  store.dispatch(updateArticleUrl(tab.url));
 });

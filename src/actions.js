@@ -1,6 +1,6 @@
 let annotationId = 0;
 
-export const addAnnotation = (articleText) => {
+const addAnnotation = (articleText) => {
   return {
     type: 'ADD_ANNOTATION',
     id: annotationId++,
@@ -14,6 +14,15 @@ export const addChildAnnotation = (id, commentText) => {
     childId: annotationId++,
     commentText,
     id,
+  };
+};
+
+const requestCreateAnnotation = (parentId, articleUrl, articleText, text) => {
+  return {
+    type: 'REQUEST_CREATE_ANNOTATION',
+    articleText,
+    text,
+    parentId,
   };
 };
 
