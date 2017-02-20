@@ -16,7 +16,6 @@ function requestCreateAnnotation() {
 function handleResponse(jsonResponse, dispatch, actionType) {
   switch (actionType) {
     case 'RECEIVE_ANNOTATION':
-      console.log(jsonResponse);
       if (jsonResponse.SUCCESS) {
         const { _id, articleText, text } = jsonResponse.SUCCESS;
         dispatch(receiveAnnotation(_id, articleText, text));
