@@ -8,9 +8,9 @@ import Sidebar from './components/Sidebar';
 
 const store = new Store({ portName: 'notist' });
 
-var sidebar = document.createElement("div");
-sidebar.setAttribute("id", "annotation-sidebar");
-$("body").prepend(sidebar);
+const sidebar = document.createElement('div');
+sidebar.setAttribute('id', 'annotation-sidebar');
+$('body').prepend(sidebar);
 
 store.ready().then(() => {
   render(
@@ -19,33 +19,33 @@ store.ready().then(() => {
         <Sidebar />
       </MuiThemeProvider>
     </Provider>
-    , document.getElementById("annotation-sidebar"));
+    , document.getElementById('annotation-sidebar'));
 });
 
 function createAnnotateButton(text) {
-  var annotateButton = document.createElement("button");
-  var textNode = document.createTextNode("Annotate");
+  const annotateButton = document.createElement('button');
+  const textNode = document.createTextNode('Annotate');
   annotateButton.appendChild(textNode);
-  annotateButton.addEventListener("click", () => {
-    chrome.runtime.sendMessage({type: 'ADD_ANNOTATION', text: text});
+  annotateButton.addEventListener('click', () => {
+    chrome.runtime.sendMessage({ type: 'ADD_ANNOTATION', text });
   });
-  annotateButton.setAttribute("id", "annotate-button");
+  annotateButton.setAttribute('id', 'annotate-button');
   return annotateButton;
 }
 
 document.onmouseup = function (e) {
-  if (e.target.id === "annotate-button") { return; }
-  var text = document.getSelection();
-  if (text.anchorNode && text.anchorNode.nodeType === Node.TEXT_NODE && text.toString().length != 0) {
-    var annotateButton = createAnnotateButton(text.toString());
-    var range = text.getRangeAt(0);
+  if (e.target.id === 'annotate-button') { return; }
+  const text = document.getSelection();
+  if (text.anchorNode && text.anchorNode.nodeType === Node.TEXT_NODE && text.toString().length !== 0) {
+    const annotateButton = createAnnotateButton(text.toString());
+    const range = text.getRangeAt(0);
     range.collapse(false);
     range.insertNode(annotateButton);
   }
-}
+};
 
 document.onmousedown = function (e) {
-  if (e.target.id !== "annotate-button") {
-    $("#annotate-button").remove();
+  if (e.target.id !== 'annotate-button') {
+    $('#annotate-button').remove();
   }
-}
+};
