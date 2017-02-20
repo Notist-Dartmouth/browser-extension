@@ -9,7 +9,6 @@ export const addAnnotation = (articleText) => {
 };
 
 export const addChildAnnotation = (id, commentText) => {
-  annotationId += 1;
   return {
     type: 'ADD_CHILD_ANNOTATION',
     childId: annotationId++,
