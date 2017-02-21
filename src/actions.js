@@ -16,6 +16,12 @@ function requestCreateAnnotation() {
   };
 }
 
+function requestFetchAnnotations() {
+  return {
+    type: 'REQUEST_FETCH_ANNOTATIONS',
+  };
+}
+
 function handleResponse(jsonResponse, dispatch, actionType) {
   switch (actionType) {
     case 'RECEIVE_ANNOTATION':
@@ -29,29 +35,46 @@ function handleResponse(jsonResponse, dispatch, actionType) {
   }
 }
 
+function sendCreateAnnotationRequest(hostname, dispatch, body) {
+  fetch(path.join('http://', hostname, 'api/annotation'), {
+    method: 'POST',
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    },
+    body,
+  })
+  .then(res => res.json())
+  .then(json => handleResponse(json, dispatch, 'RECEIVE_ANNOTATION'));
+}
+
 export function createAnnotation(parentId, articleText, text, articleUrl) {
   return function (dispatch) {
     dispatch(requestCreateAnnotation());
 
+    const body = JSON.stringify({
+      parentId,
+      articleText,
+      text,
+      articleUrl,
+      groupIds: [],
+    });
+
     chrome.storage.local.get('apiHost', result =>
-      fetch(path.join('http://', result.apiHost, 'api/annotation'), {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-        },
-        body: JSON.stringify({
-          parentId,
-          articleText,
-          text,
-          articleUrl,
-          groupIds: [],
-        }),
-      }).then(res => res.json())
-      .then(json => handleResponse(json, dispatch, 'RECEIVE_ANNOTATION')));
+      sendCreateAnnotationRequest(result.apiHost, dispatch, body));
   };
 }
+
+// export function fetchAnnotations() {
+//   return function (dispatch, getState) {
+//     if (getState().isFetchingAnnotations) return;
+//
+//     chrome.storage.local.get('apiHost', result =>
+//
+//   );
+//   };
+// }
 
 export function updateArticleUrl(url) {
   return {
