@@ -4,6 +4,9 @@ import rimraf from 'rimraf';
 
 const webpackConfig = require('./webpack.config');
 
+gulp.task('config', () =>
+  gulp.src('config.json').pipe(gulp.dest('./dist')));
+
 gulp.task('manifest', () =>
   gulp.src('manifest.json').pipe(gulp.dest('./dist')));
 
@@ -20,9 +23,9 @@ gulp.task('background-webpack', () =>
 gulp.task('clean', cb =>
     rimraf('dist/', cb));
 
-gulp.task('build', ['clean', 'manifest', 'background-webpack', 'content-script']);
+gulp.task('build', ['clean', 'config', 'manifest', 'background-webpack', 'content-script']);
 
 gulp.task('default', ['build']);
 
 gulp.task('watch', ['default'], () =>
-  gulp.watch('./src/**/*'));
+  gulp.watch('./src/**/*', ['default']));

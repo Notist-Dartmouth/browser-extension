@@ -1,6 +1,7 @@
 import { wrapStore } from 'react-chrome-redux';
 import { createStore, applyMiddleware } from 'redux';
 import thunkMiddleware from 'redux-thunk';
+import $ from 'jquery';
 import notistReducers from './reducers';
 import { createAnnotation, updateArticleUrl } from './actions';
 
@@ -20,6 +21,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   }
 });
 
-chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-  store.dispatch(updateArticleUrl(tab.url));
-});
+chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) =>
+  store.dispatch(updateArticleUrl(tab.url)));
+
+$.getJSON(chrome.extension.getURL('config.json'), configVars =>
+  chrome.storage.local.set(configVars));

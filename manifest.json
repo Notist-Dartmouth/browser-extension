@@ -7,7 +7,7 @@
     "scripts": ["background.js"]
   },
   "permissions": [
-    "tabs", "activeTab", "http://*/*", "https://*/*"
+    "tabs", "storage", "activeTab", "http://*/*", "https://*/*"
   ],
   "content_scripts": [
     {
@@ -17,5 +17,8 @@
   ],
   "browser_action": {
     "default_title": "Annotate"
-  }
+  },
+  "web_accessible_resources": [
+    "config.json"
+  ]
 }

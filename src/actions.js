@@ -1,3 +1,4 @@
+import fetch from 'isomorphic-fetch';
 import path from 'path';
 
 function receiveAnnotation(id, articleText, text) {
@@ -32,22 +33,23 @@ export function createAnnotation(parentId, articleText, text, articleUrl) {
   return function (dispatch) {
     dispatch(requestCreateAnnotation());
 
-    fetch('http://localhost:3000/api/annotation', {
-      method: 'POST',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-      },
-      body: JSON.stringify({
-        parentId,
-        articleText,
-        text,
-        articleUrl,
-        groupIds: [],
-      }),
-    }).then(res => res.json())
-      .then(json => handleResponse(json, dispatch, 'RECEIVE_ANNOTATION'));
+    chrome.storage.local.get('apiHost', result =>
+      fetch(path.join('http://', result.apiHost, 'api/annotation'), {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify({
+          parentId,
+          articleText,
+          text,
+          articleUrl,
+          groupIds: [],
+        }),
+      }).then(res => res.json())
+      .then(json => handleResponse(json, dispatch, 'RECEIVE_ANNOTATION')));
   };
 }
 
