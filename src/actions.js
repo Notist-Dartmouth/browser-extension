@@ -1,3 +1,5 @@
+import path from 'path';
+
 function receiveAnnotation(id, articleText, text) {
   return {
     type: 'RECEIVE_ANNOTATION',
