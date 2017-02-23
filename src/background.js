@@ -18,16 +18,6 @@ const store = createStore(
 );
 wrapStore(store, { portName: 'notist' });
 
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  switch (request.type) {
-    case 'ADD_ANNOTATION':
-      store.dispatch(createAnnotation(null, request.articleText, ''));
-      break;
-    default:
-      break;
-  }
-});
-
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) =>
   store.dispatch(updateArticleUrl(tab.url)));
 

@@ -12,26 +12,24 @@ const sidebar = document.createElement('div');
 sidebar.setAttribute('id', 'annotation-sidebar');
 $('body').prepend(sidebar);
 
-store.ready().then(() => {
+store.ready().then(() =>
   render(
     <Provider store={store}>
       <MuiThemeProvider>
         <Sidebar />
       </MuiThemeProvider>
     </Provider>
-    , document.getElementById('annotation-sidebar'));
-});
+    , document.getElementById('annotation-sidebar')));
 
 function createAnnotateButton(articleText) {
   const annotateButton = document.createElement('button');
   const textNode = document.createTextNode('Annotate');
   annotateButton.appendChild(textNode);
-  annotateButton.addEventListener('click', () => {
-    chrome.runtime.sendMessage({
-      type: 'ADD_ANNOTATION',
+  annotateButton.addEventListener('click', () =>
+    store.dispatch({
+      type: 'CREATE_ANNOTATION',
       articleText,
-    });
-  });
+    }));
   annotateButton.setAttribute('id', 'annotate-button');
   return annotateButton;
 }
