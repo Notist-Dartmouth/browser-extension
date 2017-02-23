@@ -7,7 +7,7 @@
     "scripts": ["background.js"]
   },
   "permissions": [
-    "tabs", "storage", "activeTab", "http://*/*", "https://*/*"
+    "tabs", "activeTab", "http://*/*", "https://*/*"
   ],
   "content_scripts": [
     {

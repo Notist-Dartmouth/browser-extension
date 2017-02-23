@@ -1,31 +1,43 @@
 import gulp from 'gulp';
 import webpack from 'webpack-stream';
 import rimraf from 'rimraf';
+import preprocess from 'gulp-preprocess';
 
 const webpackConfig = require('./webpack.config');
 
-gulp.task('config', () =>
-  gulp.src('config.json').pipe(gulp.dest('./dist')));
+const devConfig = {
+  context: {
+    ENVIRONMENT: 'development',
+    API_HOST: 'localhost:3000',
+  },
+};
 
-gulp.task('manifest', () =>
-  gulp.src('manifest.json').pipe(gulp.dest('./dist')));
-
-gulp.task('content-script', () =>
-  gulp.src('src/content.js')
-      .pipe(webpack(webpackConfig))
-      .pipe(gulp.dest('./dist')));
-
-gulp.task('background-webpack', () =>
-  gulp.src('src/background.js')
-      .pipe(webpack(webpackConfig))
-      .pipe(gulp.dest('dist/')));
+const prodConfig = {
+  context: {
+    ENVIRONMENT: 'production',
+    API_HOST: 'notist.herokuapp.com',
+  },
+};
 
 gulp.task('clean', cb =>
     rimraf('dist/', cb));
 
-gulp.task('build', ['clean', 'config', 'manifest', 'background-webpack', 'content-script']);
+gulp.task('manifest', ['clean'], () =>
+  gulp.src('manifest.json').pipe(gulp.dest('./dist')));
 
-gulp.task('default', ['build']);
+const build = (config) => {
+  gulp.src('src/content.js')
+      .pipe(webpack(webpackConfig))
+      .pipe(preprocess(config))
+      .pipe(gulp.dest('./dist'));
+  gulp.src('src/background.js')
+      .pipe(webpack(webpackConfig))
+      .pipe(preprocess(config))
+      .pipe(gulp.dest('dist/'));
+};
 
-gulp.task('watch', ['default'], () =>
-  gulp.watch('./src/**/*', ['default']));
+gulp.task('dev', ['manifest'], () => build(devConfig));
+
+gulp.task('prod', ['manifest'], () => build(prodConfig));
+
+gulp.task('watch', ['dev'], () => gulp.watch('./src/**/*'));

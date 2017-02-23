@@ -20,6 +20,3 @@ wrapStore(store, { portName: 'notist' });
 
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) =>
   store.dispatch(updateArticleUrl(tab.url)));
-
-$.getJSON(chrome.extension.getURL('config.json'), configVars =>
-  chrome.storage.local.set(configVars));

@@ -46,7 +46,7 @@ function sendCreateAnnotationRequest(hostname, dispatch, body) {
 }
 
 export function createAnnotation(parentId, articleText, text) {
-  return function (dispatch, getState) {
+  return (dispatch, getState) => {
     dispatch(requestCreateAnnotation());
 
     const body = {
@@ -57,8 +57,7 @@ export function createAnnotation(parentId, articleText, text) {
       groupIds: [],
     };
 
-    chrome.storage.local.get('apiHost', result =>
-      sendCreateAnnotationRequest(result.apiHost, dispatch, body));
+    sendCreateAnnotationRequest('/* @echo API_HOST */', dispatch, body);
   };
 }
 
