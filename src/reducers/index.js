@@ -6,19 +6,18 @@ function annotation(state = {}, action) {
       return {
         id: action.id,
         articleText: action.articleText,
-        text: action.text,
         childAnnotations: [],
       };
     case 'RECEIVE_REPLY':
-      if (state.id !== action.id) {
+      if (state.id !== action.parentId) {
         return state;
       }
       return Object.assign({}, state, {
         childAnnotations: [
           ...state.childAnnotations,
           {
-            id: action.childId,
-            commentText: action.commentText,
+            id: action.id,
+            text: action.text,
             childAnnotations: [],
           },
         ],

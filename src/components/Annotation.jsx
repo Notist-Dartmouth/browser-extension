@@ -5,7 +5,7 @@ import CommentBox from './CommentBox';
 const Annotation = (props) => {
   return (
     <ListItem
-      primaryText={props.articleText || props.commentText}
+      primaryText={props.articleText || props.text}
       secondaryText={<CommentBox onCommentPost={props.onCommentPost} annotationId={props.id} />}
       nestedItems={props.childAnnotations.map(a =>
         <Annotation {...a} key={a.id} onCommentPost={props.onCommentPost} />)}
@@ -15,15 +15,15 @@ const Annotation = (props) => {
 
 Annotation.propTypes = {
   articleText: PropTypes.string,
-  commentText: PropTypes.string,
+  text: PropTypes.string,
   childAnnotations: PropTypes.arrayOf(PropTypes.object),
   onCommentPost: PropTypes.func.isRequired,
-  id: PropTypes.number.isRequired,
+  id: PropTypes.string.isRequired,
 };
 
 Annotation.defaultProps = {
   articleText: '',
-  commentText: '',
+  text: '',
   childAnnotations: [],
 };
 
