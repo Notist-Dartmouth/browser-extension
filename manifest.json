@@ -17,8 +17,5 @@
   ],
   "browser_action": {
     "default_title": "Annotate"
-  },
-  "web_accessible_resources": [
-    "config.json"
-  ]
+  }
 }
