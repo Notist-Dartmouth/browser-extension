@@ -9,7 +9,7 @@ function annotation(state = {}, action) {
         text: action.text,
         childAnnotations: [],
       };
-    case 'ADD_CHILD_ANNOTATION':
+    case 'RECEIVE_REPLY':
       if (state.id !== action.id) {
         return state;
       }
@@ -35,7 +35,7 @@ function annotations(state = [], action) {
         ...state,
         annotation(undefined, action),
       ];
-    case 'ADD_CHILD_ANNOTATION':
+    case 'RECEIVE_REPLY':
       return state.map(a => annotation(Object.assign({}, a, {
         childAnnotations: annotations(a.childAnnotations, action)
       }), action));
@@ -68,6 +68,7 @@ function articleAnnotations(state = {
       return Object.assign({}, state, {
         isCreatingAnnotation: true,
       });
+    case 'RECEIVE_REPLY':
     case 'RECEIVE_ANNOTATION':
       return Object.assign({}, state, {
         annotations: annotations(state.annotations, action),

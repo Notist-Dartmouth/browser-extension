@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import AnnotationList from '../components/AnnotationList';
-import { addChildAnnotation } from '../actions';
+import { createAnnotation } from '../actions';
 
 function mapStateToProps(state) {
   const { annotations, isFetchingAnnotations, isCreatingAnnotation } = state.articleAnnotations;
@@ -13,7 +13,11 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    onCommentPost: (id, text) => dispatch(addChildAnnotation(id, text)),
+    onCommentPost: (parentId, text) => dispatch({
+      type: 'CREATE_ANNOTATION',
+      parentId,
+      text,
+    }),
   };
 }
 

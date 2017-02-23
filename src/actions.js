@@ -10,15 +10,17 @@ function receiveAnnotation(id, articleText, text) {
   };
 }
 
-function requestCreateAnnotation() {
+function receiveReply(id, text) {
   return {
-    type: 'REQUEST_CREATE_ANNOTATION',
+    type: 'RECEIVE_REPLY',
+    id,
+    text,
   };
 }
 
-function requestFetchAnnotations() {
+function requestCreateAnnotation() {
   return {
-    type: 'REQUEST_FETCH_ANNOTATIONS',
+    type: 'REQUEST_CREATE_ANNOTATION',
   };
 }
 
@@ -28,6 +30,12 @@ function handleResponse(jsonResponse, dispatch, actionType) {
       if (jsonResponse.SUCCESS) {
         const { _id, articleText, text } = jsonResponse.SUCCESS;
         dispatch(receiveAnnotation(_id, articleText, text));
+      }
+      break;
+    case 'RECEIVE_REPLY':
+      if (jsonResponse.SUCCESS) {
+        const { _id, text } = jsonResponse.SUCCESS;
+        dispatch(receiveReply(_id, text));
       }
       break;
     default:
@@ -43,38 +51,28 @@ function sendCreateAnnotationRequest(hostname, dispatch, body) {
       'Content-Type': 'application/json',
       Accept: 'application/json',
     },
-    body,
+    body: JSON.stringify(body),
   })
   .then(res => res.json())
-  .then(json => handleResponse(json, dispatch, 'RECEIVE_ANNOTATION'));
+  .then(json => handleResponse(json, dispatch, body.parentId ? 'RECEIVE_REPLY' : 'RECEIVE_ANNOTATION'));
 }
 
-export function createAnnotation(parentId, articleText, text, articleUrl) {
-  return function (dispatch) {
+export function createAnnotation(parentId, articleText, text) {
+  return function (dispatch, getState) {
     dispatch(requestCreateAnnotation());
 
-    const body = JSON.stringify({
+    const body = {
       parentId,
       articleText,
       text,
-      articleUrl,
+      articleUrl: getState().currentArticleUrl,
       groupIds: [],
-    });
+    };
 
     chrome.storage.local.get('apiHost', result =>
       sendCreateAnnotationRequest(result.apiHost, dispatch, body));
   };
 }
-
-// export function fetchAnnotations() {
-//   return function (dispatch, getState) {
-//     if (getState().isFetchingAnnotations) return;
-//
-//     chrome.storage.local.get('apiHost', result =>
-//
-//   );
-//   };
-// }
 
 export function updateArticleUrl(url) {
   return {

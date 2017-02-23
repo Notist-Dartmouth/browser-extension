@@ -29,7 +29,6 @@ function createAnnotateButton(articleText) {
   annotateButton.addEventListener('click', () => {
     chrome.runtime.sendMessage({
       type: 'ADD_ANNOTATION',
-      articleUrl: store.getState().currentArticleUrl,
       articleText,
     });
   });
