@@ -21,7 +21,7 @@ export default class Sidebar extends React.Component {
         <Drawer
           open={this.state.open}
           openSecondary={true}
-          containerStyle={{width: "300px", right: this.state.open ? 0 : "20px"}}
+          containerStyle={{ width: '300px', right: this.state.open ? 0 : '20px' }}
         >
           <AppBar
             title="Notist"

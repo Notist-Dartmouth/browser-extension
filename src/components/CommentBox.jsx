@@ -8,19 +8,19 @@ class CommentBox extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      commentText: '',
+      text: '',
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleChange(e) {
-    this.setState({ commentText: e.target.value });
+    this.setState({ text: e.target.value });
   }
 
   handleSubmit() {
-    this.props.onCommentPost(this.props.annotationId, this.state.commentText);
-    this.setState({ commentText: '' });
+    this.props.onCommentPost(this.props.annotationId, this.state.text);
+    this.setState({ text: '' });
   }
 
   render() {
@@ -30,7 +30,7 @@ class CommentBox extends React.Component {
           hintText="Enter comment"
           multiLine={true}
           rowsMax={4}
-          value={this.state.commentText}
+          value={this.state.text}
           onChange={this.handleChange}
         />
         <RaisedButton
@@ -45,7 +45,7 @@ class CommentBox extends React.Component {
 
 CommentBox.propTypes = {
   onCommentPost: PropTypes.func.isRequired,
-  annotationId: PropTypes.number.isRequired,
+  annotationId: PropTypes.string.isRequired,
 };
 
 export default CommentBox;
