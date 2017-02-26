@@ -40,4 +40,4 @@ gulp.task('dev', ['manifest'], () => build(devConfig));
 
 gulp.task('prod', ['manifest'], () => build(prodConfig));
 
-gulp.task('watch', ['dev'], () => gulp.watch('./src/**/*'));
+gulp.task('watch', ['dev'], () => gulp.watch('./src/**/*', ['dev']));

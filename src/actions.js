@@ -26,7 +26,7 @@ function requestCreateAnnotation() {
 }
 
 function sendCreateAnnotationRequest(hostname, dispatch, body) {
-  fetch(path.join('http://', hostname, 'api/annotation'), {
+  fetch(path.join('http://', hostname, 'api/annotations'), {
     method: 'POST',
     credentials: 'include',
     headers: {
