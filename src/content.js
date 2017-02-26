@@ -5,6 +5,7 @@ import { Provider } from 'react-redux';
 import { Store } from 'react-chrome-redux';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Sidebar from './components/Sidebar';
+import { newAnnotation } from './actions';
 
 const store = new Store({ portName: 'notist' });
 
@@ -25,11 +26,7 @@ function createAnnotateButton(articleText) {
   const annotateButton = document.createElement('button');
   const textNode = document.createTextNode('Annotate');
   annotateButton.appendChild(textNode);
-  annotateButton.addEventListener('click', () =>
-    store.dispatch({
-      type: 'CREATE_ANNOTATION',
-      articleText,
-    }));
+  annotateButton.addEventListener('click', () => store.dispatch(newAnnotation(articleText)));
   annotateButton.setAttribute('id', 'annotate-button');
   return annotateButton;
 }

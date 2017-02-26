@@ -57,15 +57,17 @@ function articleAnnotations(state = {
   isCreatingAnnotation: false,
   annotations: [],
   currentArticleUrl: '',
+  selectedArticleText: '',
 }, action) {
   switch (action.type) {
     case 'UPDATE_ARTICLE_URL':
       return Object.assign({}, state, {
         currentArticleUrl: articleUrl(state.currentArticleUrl, action),
       });
-    case 'REQUEST_CREATE_ANNOTATION':
+    case 'NEW_ANNOTATION':
       return Object.assign({}, state, {
         isCreatingAnnotation: true,
+        selectedArticleText: action.articleText,
       });
     case 'RECEIVE_REPLY':
     case 'RECEIVE_ANNOTATION':

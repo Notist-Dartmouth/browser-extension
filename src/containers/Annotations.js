@@ -3,11 +3,12 @@ import AnnotationList from '../components/AnnotationList';
 import AnnotationForm from '../components/AnnotationForm';
 
 function mapStateToProps(state) {
-  const { annotations, isFetchingAnnotations, isCreatingAnnotation } = state.articleAnnotations;
+  const { annotations, isFetchingAnnotations, isCreatingAnnotation, selectedArticleText } = state.articleAnnotations;
   return {
     annotations,
     isFetchingAnnotations,
     isCreatingAnnotation,
+    articleText: selectedArticleText,
   };
 }
 
@@ -24,4 +25,4 @@ function mapDispatchToProps(dispatch) {
 
 export const AnnotationListContainer = connect(mapStateToProps, mapDispatchToProps)(AnnotationList);
 
-export const AnnotationFormContainer = connect(null, mapDispatchToProps)(AnnotationForm);
+export const AnnotationFormContainer = connect(mapStateToProps, mapDispatchToProps)(AnnotationForm);
