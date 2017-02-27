@@ -1,34 +1,50 @@
 import React from 'react';
-import $ from 'jquery';
+
+const styles = {
+  editableDiv: {
+    border: '1px solid #ddd',
+    minHeight: '100px',
+    padding: '5px',
+    fontFamily: 'sans-serif',
+  },
+};
 
 class TextToolBar extends React.Component {
 
+  //  Ideally there should be one function that will look at the data-cmd field and use that in execCommand
+  //  Like this: var cmd = $(this).data.cmd;
+  //  document.execCommand(cmd, false, null);
+
   constructor(props) {
     super(props);
-    this.state = { open: false }
-    this.onBoldClicked = this.handleClick.bind(this);
-    this.onItalicClicked = this.handleClick.bind(this);
-    this.onUnderlineClick = this.handleClick.bind(this);
+    this.state = { open: false };
+    this.onBoldClicked = this.handleClickB.bind(this);
+    this.onItalicClicked = this.handleClickI.bind(this);
+    this.onUnderlineClicked = this.handleClickU.bind(this);
   }
 
-  handleClick(event) {
-    //  Get the text inside text area and surround it with <bold> </bold>
-    const textarea = $('#comment-box');
+  handleClickB(event) {
+    document.execCommand('bold', false, null);
+  }
 
-    const text = textarea.val(); // If nothing selected
+  handleClickI(event) {
+    document.execCommand('italic', false, null);
+  }
 
-    const sel = textarea.getSelection;
-
-    alert("All the text is: " + text + "\nand you selected: " + sel);
+  handleClickU(event) {
+    document.execCommand('underline', false, null)
   }
 
   render() {
     return (
-      <div>
-        <button onClick={this.onBoldClicked}>B</button>
-        <button onClick={this.onItalicClicked}>I</button>
-        <button onClick={this.onUnderlineClick}>U</button>
-      </div>
+        <div>
+          <a id="datacmd" data-cmd="bold" href="#" onClick={this.onBoldClicked}><strong>B</strong></a>
+          <a id="datacmd" data-cmd="italic" href="#" onClick={this.onItalicClicked}><i>I</i></a>
+          <a id="datacmd" data-cmd="underline" href="#" onClick={this.onUnderlineClicked}><u>U</u></a>
+          <div id="editable" contentEditable="true" style={styles.editableDiv}>
+            Write here!
+          </div>
+        </div>
     );
   }
 }
