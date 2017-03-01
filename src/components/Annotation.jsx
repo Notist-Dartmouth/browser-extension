@@ -2,11 +2,12 @@ import React, { PropTypes } from 'react';
 import { ListItem } from 'material-ui/List';
 import CommentBox from './CommentBox';
 
-const Annotation = (props) => {
+const Annotation = (props) => { //Can go to comment depth of 7
   return (
     <ListItem
       style={{ paddingLeft: 20 * props.depth }}
       secondaryText={<CommentBox onCommentPost={props.onCommentPost} parentId={props.id} />}
+      nestedListStyle={{ marginLeft: 20, borderLeft: '1px dashed black' }}
       nestedItems={props.childAnnotations.map(a =>
         <Annotation {...a} key={a.id} depth={props.depth + 1} onCommentPost={props.onCommentPost} />)}
     >
