@@ -6,7 +6,7 @@ const Annotation = (props) => {
   return (
     <ListItem
       primaryText={props.articleText || props.text}
-      secondaryText={<CommentBox onCommentPost={props.onCommentPost} annotationId={props.id} />}
+      secondaryText={<CommentBox onCommentPost={props.onCommentPost} parentId={props.id} />}
       nestedItems={props.childAnnotations.map(a =>
         <Annotation {...a} key={a.id} onCommentPost={props.onCommentPost} />)}
     />

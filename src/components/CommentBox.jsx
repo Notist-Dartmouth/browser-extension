@@ -1,7 +1,6 @@
 import React, { PropTypes } from 'react';
-import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
-import Paper from 'material-ui/Paper';
+import TextToolBar from './TextToolBar';
 
 class CommentBox extends React.Component {
 
@@ -19,33 +18,33 @@ class CommentBox extends React.Component {
   }
 
   handleSubmit() {
-    this.props.onCommentPost(this.props.annotationId, this.state.text);
+    this.props.onCommentPost(this.props.parentId, this.props.articleText, this.state.text);
     this.setState({ text: '' });
   }
 
   render() {
     return (
-      <Paper>
-        <TextField
-          hintText="Enter comment"
-          multiLine={true}
-          rowsMax={4}
-          value={this.state.text}
-          onChange={this.handleChange}
-        />
+      <div>
+        <TextToolBar onChange={this.handleChange} />
         <RaisedButton
           type="submit"
           onClick={this.handleSubmit}
           label="Post"
         />
-      </Paper>
+      </div>
     );
   }
 }
 
+CommentBox.defaultProps = {
+  parentId: null,
+  articleText: null,
+};
+
 CommentBox.propTypes = {
   onCommentPost: PropTypes.func.isRequired,
-  annotationId: PropTypes.string.isRequired,
+  parentId: PropTypes.string,
+  articleText: PropTypes.string,
 };
 
 export default CommentBox;

@@ -5,14 +5,14 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 import NavigationChevronLeft from 'material-ui/svg-icons/navigation/chevron-left';
 import NavigationChevronRight from 'material-ui/svg-icons/navigation/chevron-right';
 import IconButton from 'material-ui/IconButton';
-import Annotations from '../containers/Annotations';
+import { AnnotationListContainer, AnnotationFormContainer } from '../containers/Annotations';
 
 export default class Sidebar extends React.Component {
 
   constructor(props) {
     super(props);
     injectTapEventPlugin();
-    this.state = { open: false }
+    this.state = { open: false };
   }
 
   render() {
@@ -26,12 +26,13 @@ export default class Sidebar extends React.Component {
           <AppBar
             title="Notist"
             iconElementLeft={
-              <IconButton onClick={() => this.setState({open: !this.state.open})}>
+              <IconButton onClick={() => this.setState({ open: !this.state.open })}>
                 {this.state.open ? <NavigationChevronRight /> : <NavigationChevronLeft />}
               </IconButton>
             }
           />
-          <Annotations />
+          <AnnotationFormContainer />
+          <AnnotationListContainer />
         </Drawer>
       </div>
     );
