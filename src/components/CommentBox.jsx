@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextToolBar from './TextToolBar';
+import {Editor, EditorState, RichUtils } from 'draft-js';
 
 class CommentBox extends React.Component {
 
