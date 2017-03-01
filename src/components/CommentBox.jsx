@@ -1,5 +1,4 @@
 import React, { PropTypes } from 'react';
-import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextToolBar from './TextToolBar';
 
@@ -26,15 +25,7 @@ class CommentBox extends React.Component {
   render() {
     return (
       <div>
-        <TextToolBar />
-        <TextField
-          id="comment-box"
-          hintText="Enter comment"
-          multiLine={true}
-          rowsMax={4}
-          value={this.state.text}
-          onChange={this.handleChange}
-        />
+        <TextToolBar onChange={this.handleChange} />
         <RaisedButton
           type="submit"
           onClick={this.handleSubmit}

@@ -1,52 +1,38 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 
-const styles = {
-  editableDiv: {
-    border: '1px solid #ddd',
-    minHeight: '100px',
-    padding: '5px',
-    fontFamily: 'sans-serif',
-  },
+const textBoxStyle = {
+  border: '1px solid #ddd',
+  minHeight: '100px',
+  padding: '5px',
+  fontFamily: 'sans-serif',
 };
 
-class TextToolBar extends React.Component {
+const TextToolBar = (props) => {
 
-  //  Ideally there should be one function that will look at the data-cmd field and use that in execCommand
-  //  Like this: var cmd = $(this).data.cmd;
-  //  document.execCommand(cmd, false, null);
+  const handleToolBarClick = (event) => {
+    const cmd = event.target.getAttribute('data-cmd');
+    document.execCommand(cmd, false, null);
+  };
 
-  constructor(props) {
-    super(props);
-    this.state = { open: false };
-    this.onBoldClicked = this.handleClickB.bind(this);
-    this.onItalicClicked = this.handleClickI.bind(this);
-    this.onUnderlineClicked = this.handleClickU.bind(this);
-  }
+  return (
+    <div>
+      <button data-cmd="bold" href="#" onClick={handleToolBarClick}><strong>B</strong></button>
+      <button data-cmd="italic" href="#" onClick={handleToolBarClick}><i>I</i></button>
+      <button data-cmd="underline" href="#" onClick={handleToolBarClick}><u>U</u></button>
+      <div>
+        <input
+          type="text"
+          placeholder="Enter comment"
+          onChange={props.onChange}
+          style={textBoxStyle}
+        />
+      </div>
+    </div>
+  );
+};
 
-  handleClickB(event) {
-    document.execCommand('bold', false, null);
-  }
-
-  handleClickI(event) {
-    document.execCommand('italic', false, null);
-  }
-
-  handleClickU(event) {
-    document.execCommand('underline', false, null)
-  }
-
-  render() {
-    return (
-        <div>
-          <a id="datacmd" data-cmd="bold" href="#" onClick={this.onBoldClicked}><strong>B</strong></a>
-          <a id="datacmd" data-cmd="italic" href="#" onClick={this.onItalicClicked}><i>I</i></a>
-          <a id="datacmd" data-cmd="underline" href="#" onClick={this.onUnderlineClicked}><u>U</u></a>
-          <div id="editable" contentEditable="true" style={styles.editableDiv}>
-            Write here!
-          </div>
-        </div>
-    );
-  }
-}
+TextToolBar.propTypes = {
+  onChange: PropTypes.func.isRequired,
+};
 
 export default TextToolBar;

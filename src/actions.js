@@ -20,7 +20,7 @@ function receiveReply(id, parentId, text) {
 }
 
 function sendCreateAnnotationRequest(hostname, dispatch, body) {
-  fetch(path.join('http://', hostname, 'api/annotations'), {
+  fetch(path.join('http://', hostname, 'api/annotation'), {
     method: 'POST',
     credentials: 'include',
     headers: {
