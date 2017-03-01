@@ -6,6 +6,7 @@ function annotation(state = {}, action) {
       return {
         id: action.id,
         articleText: action.articleText,
+        text: action.text,
         childAnnotations: [],
       };
     case 'RECEIVE_REPLY':

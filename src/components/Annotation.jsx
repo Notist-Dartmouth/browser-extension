@@ -6,11 +6,16 @@ const Annotation = (props) => {
   return (
     <ListItem
       style={{ paddingLeft: 20 * props.depth }}
-      primaryText={props.articleText || props.text}
       secondaryText={<CommentBox onCommentPost={props.onCommentPost} parentId={props.id} />}
       nestedItems={props.childAnnotations.map(a =>
         <Annotation {...a} key={a.id} depth={props.depth + 1} onCommentPost={props.onCommentPost} />)}
-    />
+    >
+      <div>
+        {props.depth === 0 && <div className="article-text">{props.articleText}</div>}
+        <br />
+        <div>{props.text}</div>
+      </div>
+    </ListItem>
   );
 };
 
