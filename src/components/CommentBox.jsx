@@ -1,32 +1,30 @@
 import React, { PropTypes } from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
-import TextToolBar from './TextToolBar';
-import {Editor, EditorState, RichUtils } from 'draft-js';
+import { EditorState } from 'draft-js';
+import CommentEditor from './CommentEditor';
 
 class CommentBox extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      text: '',
-    };
+    this.state = { editorState: EditorState.createEmpty() };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleChange(e) {
-    this.setState({ text: e.target.value });
+  handleChange(editorState) {
+    this.setState({ editorState });
   }
 
   handleSubmit() {
-    this.props.onCommentPost(this.props.parentId, this.props.articleText, this.state.text);
-    this.setState({ text: '' });
+    const text = this.state.editorState.getPlainText();
+    this.props.onCommentPost(this.props.parentId, this.props.articleText, text);
   }
 
   render() {
     return (
       <div>
-        <TextToolBar onChange={this.handleChange} />
+        <CommentEditor onChange={this.handleChange} editorState={this.state.editorState} />
         <RaisedButton
           type="submit"
           onClick={this.handleSubmit}
