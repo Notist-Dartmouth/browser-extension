@@ -1,8 +1,9 @@
 import React, { PropTypes } from 'react';
 import { ListItem } from 'material-ui/List';
+import { Editor, EditorState } from 'draft-js';
 import CommentBox from './CommentBox';
 
-const Annotation = (props) => { //Can go to comment depth of 7
+const Annotation = (props) => {
   return (
     <ListItem
       style={{ paddingLeft: 20 * props.depth }}
@@ -14,7 +15,7 @@ const Annotation = (props) => { //Can go to comment depth of 7
       <div>
         {props.depth === 0 && <div className="article-text">{props.articleText}</div>}
         <br />
-        <div>{props.text}</div>
+        {props.textContent && <Editor readOnly editorState={EditorState.createWithContent(props.textContent)} />}
       </div>
     </ListItem>
   );
@@ -22,7 +23,7 @@ const Annotation = (props) => { //Can go to comment depth of 7
 
 Annotation.propTypes = {
   articleText: PropTypes.string,
-  text: PropTypes.string,
+  textContent: PropTypes.object,
   depth: PropTypes.number,
   childAnnotations: PropTypes.arrayOf(PropTypes.object),
   onCommentPost: PropTypes.func.isRequired,
@@ -31,7 +32,7 @@ Annotation.propTypes = {
 
 Annotation.defaultProps = {
   articleText: '',
-  text: '',
+  textContent: null,
   depth: 0,
   childAnnotations: [],
 };

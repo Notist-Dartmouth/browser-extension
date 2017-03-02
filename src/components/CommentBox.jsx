@@ -17,8 +17,9 @@ class CommentBox extends React.Component {
   }
 
   handleSubmit() {
-    const text = this.state.editorState.getPlainText();
-    this.props.onCommentPost(this.props.parentId, this.props.articleText, text);
+    this.props.onCommentPost(this.props.parentId,
+      this.props.articleText,
+      this.state.editorState.getCurrentContent());
   }
 
   render() {
