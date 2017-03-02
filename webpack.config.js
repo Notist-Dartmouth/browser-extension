@@ -1,9 +1,9 @@
-var path = require('path');
+const path = require('path');
 
 module.exports = {
   entry: {
     content: path.resolve(__dirname, 'src/content.js'),
-    background: path.resolve(__dirname, 'src/background.js')
+    background: path.resolve(__dirname, 'src/background.js'),
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
@@ -16,10 +16,9 @@ module.exports = {
     loaders: [
       {
         test: /\.jsx?$/,
-        include: './src',
         loader: 'babel-loader',
         exclude: /node_modules/,
-        include: path.resolve(__dirname, 'src')
+        include: path.resolve(__dirname, 'src'),
       }
     ]
   }
