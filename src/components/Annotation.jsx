@@ -1,29 +1,57 @@
 import React, { PropTypes } from 'react';
 import { ListItem } from 'material-ui/List';
-import { Editor, EditorState } from 'draft-js';
+import { Editor, EditorState, ContentState, convertFromHTML } from 'draft-js';
+import marked from 'marked';
 import CommentBox from './CommentBox';
 
-const Annotation = (props) => {
-  return (
-    <ListItem
-      style={{ paddingLeft: 20 * props.depth }}
-      secondaryText={<CommentBox onCommentPost={props.onCommentPost} parentId={props.id} />}
-      nestedListStyle={{ marginLeft: 20, borderLeft: '1px dashed black' }}
-      nestedItems={props.childAnnotations.map(a =>
-        <Annotation {...a} key={a.id} depth={props.depth + 1} onCommentPost={props.onCommentPost} />)}
-    >
-      <div>
-        {props.depth === 0 && <div className="article-text">{props.articleText}</div>}
-        <br />
-        {props.textContent && <Editor readOnly editorState={EditorState.createWithContent(props.textContent)} />}
-      </div>
-    </ListItem>
-  );
-};
+class Annotation extends React.Component {
+
+  constructor(props) {
+    super(props);
+    const commentBlocks = convertFromHTML(marked(props.text));
+    const commentContentState = ContentState.createFromBlockArray(
+      commentBlocks.contentBlocks,
+      commentBlocks.entityMap,
+    );
+    this.state = { commentEditorState: EditorState.createWithContent(commentContentState) };
+    this.childAnnotations = this.childAnnotations.bind(this);
+  }
+
+  childAnnotations() {
+    return this.props.childAnnotations.map(a =>
+      <Annotation
+        {...a}
+        key={a.id}
+        depth={this.props.depth + 1}
+        onCommentPost={this.props.onCommentPost}
+      />
+    );
+  }
+
+  render() {
+    return (
+      <ListItem
+        style={{ paddingLeft: 20 * this.props.depth }}
+        secondaryText={<CommentBox onCommentPost={this.props.onCommentPost} parentId={this.props.id} />}
+        nestedListStyle={{ marginLeft: 20, borderLeft: '1px dashed black' }}
+        nestedItems={this.childAnnotations()}
+      >
+        <div>
+          {this.props.depth === 0 && <div className="article-text">{this.props.articleText}</div>}
+          <br />
+          <Editor
+            readOnly
+            editorState={this.state.commentEditorState}
+          />
+        </div>
+      </ListItem>
+    );
+  }
+}
 
 Annotation.propTypes = {
   articleText: PropTypes.string,
-  textContent: PropTypes.object,
+  text: PropTypes.string,
   depth: PropTypes.number,
   childAnnotations: PropTypes.arrayOf(PropTypes.object),
   onCommentPost: PropTypes.func.isRequired,
@@ -32,7 +60,7 @@ Annotation.propTypes = {
 
 Annotation.defaultProps = {
   articleText: '',
-  textContent: null,
+  text: '',
   depth: 0,
   childAnnotations: [],
 };

@@ -1,40 +1,62 @@
 import React, { PropTypes } from 'react';
-import { Editor, RichUtils } from 'draft-js';
+import { Editor, EditorState, Modifier } from 'draft-js';
+import ICONS from '../constants/icons';
+import Icon from './Icon';
 
 class CommentEditor extends React.Component {
 
   constructor(props) {
     super(props);
-    this.handleKeyCommand = this.handleKeyCommand.bind(this);
     this.handleStyleCommand = this.handleStyleCommand.bind(this);
+    this.getSelectedText = this.getSelectedText.bind(this);
   }
 
-  handleKeyCommand(cmd) {
-    const newState = RichUtils.handleKeyCommand(this.props.editorState, cmd);
-    if (newState) {
-      this.props.onChange(newState);
-    }
+  getSelectedText() {
+    const selectionState = this.props.editorState.getSelection();
+    const anchor = selectionState.getAnchorKey();
+    const content = this.props.editorState.getCurrentContent();
+    const contentBlock = content.getBlockForKey(anchor);
+    const start = selectionState.getStartOffset();
+    const end = selectionState.getEndOffset();
+    return contentBlock.getText().slice(start, end);
   }
 
   handleStyleCommand(cmd) {
-    const newState = RichUtils.toggleInlineStyle(this.props.editorState, cmd);
-    if (newState) {
-      this.props.onChange(newState);
-    }
+    const selectedText = this.getSelectedText();
+    const markdown = cmd === 'BOLD' ? '**' : '*';
+    const newContentState = selectedText ?
+      Modifier.replaceText(
+        this.props.editorState.getCurrentContent(),
+        this.props.editorState.getSelection(),
+        `${markdown}${selectedText}${markdown}`) :
+      Modifier.insertText(this.props.editorState.getCurrentContent(),
+        this.props.editorState.getSelection(),
+        `${markdown}${selectedText}${markdown}`);
+    this.props.onChange(EditorState.createWithContent(newContentState));
   }
 
   render() {
     return (
       <div>
         <div>
-          <button onClick={this.handleStyleCommand('BOLD')}><strong>B</strong></button>
-          <button onClick={this.handleStyleCommand('ITALIC')}><i>I</i></button>
-          <button onClick={this.handleStyleCommand('UNDERLINE')}><u>U</u></button>
+          <button onClick={() => this.handleStyleCommand('BOLD')}>
+            <Icon icon={ICONS.BOLD} />
+          </button>
+          <button onClick={() => this.handleStyleCommand('ITALIC')}>
+            <Icon icon={ICONS.ITALIC} />
+          </button>
+          <button>
+            <Icon icon={ICONS.LINK} />
+          </button>
+          <button>
+            <Icon icon={ICONS.MARKDOWN} viewBoxSize={1024} />
+            Preview
+          </button>
         </div>
         <Editor
           onChange={this.props.onChange}
           editorState={this.props.editorState}
-          handleKeyCommand={this.handleKeyCommand}
+          handleKeyCommand={this.handleStyleCommand}
         />
       </div>
     );
@@ -42,7 +64,7 @@ class CommentEditor extends React.Component {
 }
 
 CommentEditor.propTypes = {
-  editorState: PropTypes.object.isRequired,
+  editorState: PropTypes.instanceOf(EditorState).isRequired,
   onChange: PropTypes.func.isRequired,
 };
 
