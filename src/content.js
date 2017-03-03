@@ -22,27 +22,34 @@ store.ready().then(() =>
     </Provider>
     , document.getElementById('annotation-sidebar')));
 
-function createAnnotateButton(articleText) {
-  const annotateButton = document.createElement('button');
-  const textNode = document.createTextNode('Annotate');
-  annotateButton.appendChild(textNode);
-  annotateButton.addEventListener('click', () => store.dispatch(newAnnotation(articleText)));
-  annotateButton.setAttribute('id', 'annotate-button');
-  return annotateButton;
-}
+const annotateButton = document.createElement('button');
+const textNode = document.createTextNode('Annotate');
+annotateButton.appendChild(textNode);
+annotateButton.setAttribute('id', 'annotate-button');
+let annotationDisabled = false;
 
-document.onmouseup = function (e) {
-  if (e.target.id === 'annotate-button') { return; }
+const isValidSelection = (selection) => {
+  return selection.anchorNode && selection.anchorNode.nodeType === Node.TEXT_NODE
+    && selection.toString().length !== 0;
+};
+
+document.onmouseup = (e) => {
+  if (annotationDisabled || e.target.id === 'annotate-button') { return; }
   const text = document.getSelection();
-  if (text.anchorNode && text.anchorNode.nodeType === Node.TEXT_NODE && text.toString().length !== 0) {
-    const annotateButton = createAnnotateButton(text.toString());
+  if (isValidSelection(text)) {
+    annotateButton.onclick = () => store.dispatch(newAnnotation(text.toString()));
     const range = text.getRangeAt(0);
     range.collapse(false);
     range.insertNode(annotateButton);
   }
 };
 
-document.onmousedown = function (e) {
+$('#annotation-sidebar').hover(
+  () => { annotationDisabled = true; },
+  () => { annotationDisabled = false; },
+);
+
+document.onmousedown = (e) => {
   if (e.target.id !== 'annotate-button') {
     $('#annotate-button').remove();
   }

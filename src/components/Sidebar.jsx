@@ -17,24 +17,22 @@ export default class Sidebar extends React.Component {
 
   render() {
     return (
-      <div>
-        <Drawer
-          open={this.state.open}
-          openSecondary={true}
-          containerStyle={{ width: '300px', right: this.state.open ? 0 : '20px' }}
-        >
-          <AppBar
-            title="Notist"
-            iconElementLeft={
-              <IconButton onClick={() => this.setState({ open: !this.state.open })}>
-                {this.state.open ? <NavigationChevronRight /> : <NavigationChevronLeft />}
-              </IconButton>
-            }
-          />
-          <AnnotationFormContainer />
-          <AnnotationListContainer />
-        </Drawer>
-      </div>
+      <Drawer
+        open={this.state.open}
+        openSecondary
+        containerStyle={{ width: '300px', right: this.state.open ? 0 : '20px' }}
+      >
+        <AppBar
+          title="Notist"
+          iconElementLeft={
+            <IconButton onClick={() => this.setState({ open: !this.state.open })}>
+              {this.state.open ? <NavigationChevronRight /> : <NavigationChevronLeft />}
+            </IconButton>
+          }
+        />
+        <AnnotationFormContainer />
+        <AnnotationListContainer />
+      </Drawer>
     );
   }
 }
