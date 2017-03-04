@@ -1,14 +1,33 @@
 import React, { PropTypes } from 'react';
-import { Editor, EditorState, Modifier } from 'draft-js';
+import { Editor, EditorState, Modifier, ContentState, convertFromHTML } from 'draft-js';
+import marked from 'marked';
 import ICONS from '../constants/icons';
 import Icon from './Icon';
 
 class CommentEditor extends React.Component {
 
+  static textToMarkdown(text, markdownCmd) {
+    switch (markdownCmd) {
+      case 'bold':
+        return text ? `**${text}**` : '**Bold**';
+      case 'italic':
+        return text ? `*${text}*` : '*Italic*';
+      case 'link':
+        return text ? `[${text}](your-link-here)` : '[](your-link-here)';
+      default:
+        return text;
+    }
+  }
+
   constructor(props) {
     super(props);
+    this.state = {
+      isPreview: false,
+      markdown: this.props.editorState.getCurrentContent().getPlainText(),
+    };
     this.handleStyleCommand = this.handleStyleCommand.bind(this);
     this.getSelectedText = this.getSelectedText.bind(this);
+    this.togglePreview = this.togglePreview.bind(this);
   }
 
   componentDidMount() {
@@ -18,7 +37,7 @@ class CommentEditor extends React.Component {
   getSelectedText() {
     const selectionState = this.props.editorState.getSelection();
     if (selectionState.isCollapsed()) {
-      return null;
+      return '';
     }
     const content = this.props.editorState.getCurrentContent();
     const startBlock = content.getBlockForKey(
@@ -42,17 +61,35 @@ class CommentEditor extends React.Component {
     return selectedText.concat(endBlock.getText().slice(0, selectionState.getEndOffset()));
   }
 
+  togglePreview() {
+    const markdown = this.state.isPreview ?
+      this.state.markdown :
+      this.props.editorState.getCurrentContent().getPlainText();
+    const blocks = convertFromHTML(marked(markdown));
+    const newContentState = this.state.isPreview ?
+      ContentState.createFromText(markdown) :
+      ContentState.createFromBlockArray(
+        blocks.contentBlocks,
+        blocks.entityMap,
+      );
+    this.props.onChange(EditorState.createWithContent(newContentState));
+    this.setState({
+      isPreview: !this.state.isPreview,
+      markdown,
+    });
+  }
+
   handleStyleCommand(cmd) {
     const selectedText = this.getSelectedText();
-    const markdown = cmd === 'BOLD' ? '**' : '*';
+    const markdown = CommentEditor.textToMarkdown(selectedText, cmd);
     const newContentState = selectedText ?
       Modifier.replaceText(
         this.props.editorState.getCurrentContent(),
         this.props.editorState.getSelection(),
-        `${markdown}${selectedText}${markdown}`) :
+        markdown) :
       Modifier.insertText(this.props.editorState.getCurrentContent(),
         this.props.editorState.getSelection(),
-        `${markdown}${selectedText}${markdown}`);
+        markdown);
     this.props.onChange(EditorState.createWithContent(newContentState));
   }
 
@@ -68,23 +105,24 @@ class CommentEditor extends React.Component {
     return (
       <div>
         <div>
-          <button onClick={() => this.handleStyleCommand('BOLD')}>
+          <button onClick={() => this.handleStyleCommand('bold')}>
             <Icon icon={ICONS.BOLD} />
           </button>
-          <button onClick={() => this.handleStyleCommand('ITALIC')}>
+          <button onClick={() => this.handleStyleCommand('italic')}>
             <Icon icon={ICONS.ITALIC} />
           </button>
-          <button>
+          <button onClick={() => this.handleStyleCommand('link')}>
             <Icon icon={ICONS.LINK} />
           </button>
-          <button>
+          <button onClick={() => this.togglePreview()}>
             <Icon icon={ICONS.MARKDOWN} viewBoxSize={1024} />
-            Preview
+            {this.state.isPreview ? 'Write' : 'Preview'}
           </button>
         </div>
         <div style={editorStyle} onClick={() => { this.editor.focus(); }}>
           <Editor
             ref={(editor) => { this.editor = editor; }}
+            readOnly={this.state.isPreview}
             stripPastedStyles={true}
             placeholder={'Enter comment'}
             onChange={this.props.onChange}
