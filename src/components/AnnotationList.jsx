@@ -10,6 +10,7 @@ const AnnotationList = (props) => {
           {...a}
           key={a.id}
           onCommentPost={props.onCommentPost}
+          onCommentToggle={props.onCommentToggle}
         />
       )}
     </List>
@@ -19,6 +20,7 @@ const AnnotationList = (props) => {
 AnnotationList.propTypes = {
   annotations: PropTypes.arrayOf(PropTypes.object).isRequired,
   onCommentPost: PropTypes.func.isRequired,
+  onCommentToggle: PropTypes.func.isRequired,
 };
 
 export default AnnotationList;

@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import { Editor, EditorState, Modifier, ContentState, convertFromHTML } from 'draft-js';
 import marked from 'marked';
+import RaisedButton from 'material-ui/RaisedButton';
 import ICONS from '../constants/icons';
 import Icon from './Icon';
 
@@ -22,12 +23,15 @@ class CommentEditor extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      editorState: EditorState.createEmpty(),
       isPreview: false,
-      markdown: this.props.editorState.getCurrentContent().getPlainText(),
+      markdown: '',
     };
     this.handleStyleCommand = this.handleStyleCommand.bind(this);
     this.getSelectedText = this.getSelectedText.bind(this);
     this.togglePreview = this.togglePreview.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.getMarkdown = this.getMarkdown.bind(this);
   }
 
   componentDidMount() {
@@ -35,11 +39,11 @@ class CommentEditor extends React.Component {
   }
 
   getSelectedText() {
-    const selectionState = this.props.editorState.getSelection();
+    const selectionState = this.state.editorState.getSelection();
     if (selectionState.isCollapsed()) {
       return '';
     }
-    const content = this.props.editorState.getCurrentContent();
+    const content = this.state.editorState.getCurrentContent();
     const startBlock = content.getBlockForKey(
       selectionState.isBackward ? selectionState.focusKey : selectionState.anchorKey);
     const endBlock = content.getBlockForKey(
@@ -61,10 +65,25 @@ class CommentEditor extends React.Component {
     return selectedText.concat(endBlock.getText().slice(0, selectionState.getEndOffset()));
   }
 
-  togglePreview() {
-    const markdown = this.state.isPreview ?
+  getMarkdown() {
+    return this.state.isPreview ?
       this.state.markdown :
-      this.props.editorState.getCurrentContent().getPlainText();
+      this.state.editorState.getCurrentContent().getPlainText();
+  }
+
+  handleSubmit() {
+    this.props.onCommentPost(this.props.parentId,
+      this.props.articleText,
+      this.getMarkdown());
+    this.setState({
+      editorState: EditorState.createEmpty(),
+      markdown: '',
+    });
+    this.props.onCommentCancel();
+  }
+
+  togglePreview() {
+    const markdown = this.getMarkdown();
     const blocks = convertFromHTML(marked(markdown));
     const newContentState = this.state.isPreview ?
       ContentState.createFromText(markdown) :
@@ -72,8 +91,8 @@ class CommentEditor extends React.Component {
         blocks.contentBlocks,
         blocks.entityMap,
       );
-    this.props.onChange(EditorState.createWithContent(newContentState));
     this.setState({
+      editorState: EditorState.createWithContent(newContentState),
       isPreview: !this.state.isPreview,
       markdown,
     });
@@ -84,13 +103,13 @@ class CommentEditor extends React.Component {
     const markdown = CommentEditor.textToMarkdown(selectedText, cmd);
     const newContentState = selectedText ?
       Modifier.replaceText(
-        this.props.editorState.getCurrentContent(),
-        this.props.editorState.getSelection(),
+        this.state.editorState.getCurrentContent(),
+        this.state.editorState.getSelection(),
         markdown) :
-      Modifier.insertText(this.props.editorState.getCurrentContent(),
-        this.props.editorState.getSelection(),
+      Modifier.insertText(this.state.editorState.getCurrentContent(),
+        this.state.editorState.getSelection(),
         markdown);
-    this.props.onChange(EditorState.createWithContent(newContentState));
+    this.setState({ editorState: EditorState.createWithContent(newContentState) });
   }
 
   render() {
@@ -125,9 +144,20 @@ class CommentEditor extends React.Component {
             readOnly={this.state.isPreview}
             stripPastedStyles={true}
             placeholder={'Enter comment'}
-            onChange={this.props.onChange}
-            editorState={this.props.editorState}
+            onChange={editorState => this.setState({ editorState })}
+            editorState={this.state.editorState}
             handleKeyCommand={this.handleStyleCommand}
+          />
+        </div>
+        <div>
+          <RaisedButton
+            type="submit"
+            onClick={this.handleSubmit}
+            label="Post"
+          />
+          <RaisedButton
+            onClick={this.props.onCommentCancel}
+            label="Cancel"
           />
         </div>
       </div>
@@ -136,8 +166,15 @@ class CommentEditor extends React.Component {
 }
 
 CommentEditor.propTypes = {
-  editorState: PropTypes.instanceOf(EditorState).isRequired,
-  onChange: PropTypes.func.isRequired,
+  onCommentCancel: PropTypes.func.isRequired,
+  onCommentPost: PropTypes.func.isRequired,
+  parentId: PropTypes.string,
+  articleText: PropTypes.string,
+};
+
+CommentEditor.defaultProps = {
+  parentId: null,
+  articleText: null,
 };
 
 export default CommentEditor;

@@ -2,7 +2,8 @@ import React, { PropTypes } from 'react';
 import { ListItem } from 'material-ui/List';
 import { Editor, EditorState, ContentState, convertFromHTML } from 'draft-js';
 import marked from 'marked';
-import CommentBox from './CommentBox';
+import RaisedButton from 'material-ui/RaisedButton';
+import CommentEditor from './CommentEditor';
 
 class Annotation extends React.Component {
 
@@ -24,6 +25,7 @@ class Annotation extends React.Component {
         key={a.id}
         depth={this.props.depth + 1}
         onCommentPost={this.props.onCommentPost}
+        onCommentToggle={this.props.onCommentToggle}
       />
     );
   }
@@ -37,7 +39,13 @@ class Annotation extends React.Component {
     return (
       <ListItem
         style={{ paddingLeft: 20 * this.props.depth }}
-        secondaryText={<CommentBox onCommentPost={this.props.onCommentPost} parentId={this.props.id} />}
+        secondaryText={this.props.newCommentVisible &&
+          <CommentEditor
+            onCommentPost={this.props.onCommentPost}
+            onCommentCancel={() => this.props.onCommentToggle(this.props.id)}
+            parentId={this.props.id}
+          />
+        }
         nestedListStyle={{ marginLeft: 20, borderLeft: '1px dashed black' }}
         nestedItems={this.childAnnotations()}
       >
@@ -45,9 +53,12 @@ class Annotation extends React.Component {
           {this.props.depth === 0 && <div style={styles.articleText}>{this.props.articleText}</div>}
           <br />
           <Editor
-            readOnly
+            readOnly={true}
             editorState={this.state.commentEditorState}
           />
+          {!this.props.newCommentVisible &&
+            <RaisedButton onClick={() => this.props.onCommentToggle(this.props.id)} label="Reply" />
+          }
         </div>
       </ListItem>
     );
@@ -58,8 +69,10 @@ Annotation.propTypes = {
   articleText: PropTypes.string,
   text: PropTypes.string,
   depth: PropTypes.number,
+  newCommentVisible: PropTypes.bool,
   childAnnotations: PropTypes.arrayOf(PropTypes.object),
   onCommentPost: PropTypes.func.isRequired,
+  onCommentToggle: PropTypes.func.isRequired,
   id: PropTypes.string.isRequired,
 };
 
@@ -68,6 +81,7 @@ Annotation.defaultProps = {
   text: '',
   depth: 0,
   childAnnotations: [],
+  newCommentVisible: false,
 };
 
 export default Annotation;
