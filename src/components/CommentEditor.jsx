@@ -36,6 +36,13 @@ class CommentEditor extends React.Component {
   }
 
   render() {
+    const editorStyle = {
+      border: '1px solid #ddd',
+      minHeight: '100px',
+      padding: '5px',
+      fontFamily: 'sans-serif',
+    };
+
     return (
       <div>
         <div>
@@ -53,11 +60,14 @@ class CommentEditor extends React.Component {
             Preview
           </button>
         </div>
-        <Editor
-          onChange={this.props.onChange}
-          editorState={this.props.editorState}
-          handleKeyCommand={this.handleStyleCommand}
-        />
+        <div style={editorStyle}>
+          <Editor
+            placeholder={'Enter Comment/Annotation'}
+            onChange={this.props.onChange}
+            editorState={this.props.editorState}
+            handleKeyCommand={this.handleStyleCommand}
+          />
+        </div>
       </div>
     );
   }

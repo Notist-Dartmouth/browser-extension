@@ -29,6 +29,11 @@ class Annotation extends React.Component {
   }
 
   render() {
+    const styles = {
+      articleText: {
+        fontStyle: 'italic',
+      },
+    };
     return (
       <ListItem
         style={{ paddingLeft: 20 * this.props.depth }}
@@ -37,7 +42,7 @@ class Annotation extends React.Component {
         nestedItems={this.childAnnotations()}
       >
         <div>
-          {this.props.depth === 0 && <div className="article-text">{this.props.articleText}</div>}
+          {this.props.depth === 0 && <div style={styles.articleText}>{this.props.articleText}</div>}
           <br />
           <Editor
             readOnly
