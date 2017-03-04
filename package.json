@@ -34,9 +34,12 @@
   },
   "homepage": "https://github.com/Notist/browser-extension#readme",
   "dependencies": {
+    "draft-js": "^0.10.0",
     "es6-promise": "^4.0.5",
+    "immutable": "^3.8.1",
     "isomorphic-fetch": "^2.2.1",
     "jquery": "^3.1.1",
+    "marked": "^0.3.6",
     "material-ui": "^0.17.0",
     "path": "^0.12.7",
     "react": "^15.4.2",

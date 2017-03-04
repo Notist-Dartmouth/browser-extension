@@ -52,6 +52,19 @@ export function createAnnotation(parentId, articleText, text) {
   };
 }
 
+export function toggleNewComment(annotationId) {
+  return {
+    type: 'TOGGLE_NEW_COMMENT',
+    annotationId,
+  };
+}
+
+export function toggleCreatingAnnotation() {
+  return {
+    type: 'TOGGLE_CREATING_ANNOTATION',
+  };
+}
+
 export function newAnnotation(articleText) {
   return {
     type: 'NEW_ANNOTATION',

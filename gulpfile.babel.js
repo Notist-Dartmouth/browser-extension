@@ -25,9 +25,6 @@ gulp.task('clean', cb =>
 gulp.task('manifest', ['clean'], () =>
   gulp.src('manifest.json').pipe(gulp.dest('./dist')));
 
-gulp.task('styles', ['clean'], () =>
-  gulp.src('src/stylesheet.css').pipe(gulp.dest('./dist')));
-
 const build = (config) => {
   gulp.src('src/content.js')
       .pipe(webpack(webpackConfig))
@@ -39,8 +36,8 @@ const build = (config) => {
       .pipe(gulp.dest('dist/'));
 };
 
-gulp.task('dev', ['manifest', 'styles'], () => build(devConfig));
+gulp.task('dev', ['manifest'], () => build(devConfig));
 
-gulp.task('prod', ['manifest', 'styles'], () => build(prodConfig));
+gulp.task('prod', ['manifest'], () => build(prodConfig));
 
 gulp.task('watch', ['dev'], () => gulp.watch('./src/**/*', ['dev']));
