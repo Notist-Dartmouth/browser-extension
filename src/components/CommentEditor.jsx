@@ -11,14 +11,35 @@ class CommentEditor extends React.Component {
     this.getSelectedText = this.getSelectedText.bind(this);
   }
 
+  componentDidMount() {
+    this.editor.focus();
+  }
+
   getSelectedText() {
     const selectionState = this.props.editorState.getSelection();
-    const anchor = selectionState.getAnchorKey();
+    if (selectionState.isCollapsed()) {
+      return null;
+    }
     const content = this.props.editorState.getCurrentContent();
-    const contentBlock = content.getBlockForKey(anchor);
+    const startBlock = content.getBlockForKey(
+      selectionState.isBackward ? selectionState.focusKey : selectionState.anchorKey);
+    const endBlock = content.getBlockForKey(
+      selectionState.isBackward ? selectionState.anchorKey : selectionState.focusKey);
     const start = selectionState.getStartOffset();
     const end = selectionState.getEndOffset();
-    return contentBlock.getText().slice(start, end);
+
+    if (selectionState.anchorKey === selectionState.focusKey) {
+      return startBlock.getText().slice(start, end);
+    }
+
+    let selectedText = startBlock.getText().slice(selectionState.getStartOffset());
+    let currentBlock = content.getBlockAfter(startBlock.getKey()).getKey();
+    while (currentBlock !== endBlock.getKey()) {
+      const blockText = content.getBlockForKey(currentBlock).getText();
+      selectedText = selectedText.concat(blockText);
+      currentBlock = content.getBlockAfter(currentBlock).getKey();
+    }
+    return selectedText.concat(endBlock.getText().slice(0, selectionState.getEndOffset()));
   }
 
   handleStyleCommand(cmd) {
@@ -39,6 +60,7 @@ class CommentEditor extends React.Component {
     const editorStyle = {
       border: '1px solid #ddd',
       minHeight: '100px',
+      cursor: 'text',
       padding: '5px',
       fontFamily: 'sans-serif',
     };
@@ -60,9 +82,11 @@ class CommentEditor extends React.Component {
             Preview
           </button>
         </div>
-        <div style={editorStyle}>
+        <div style={editorStyle} onClick={() => { this.editor.focus(); }}>
           <Editor
-            placeholder={'Enter Comment/Annotation'}
+            ref={(editor) => { this.editor = editor; }}
+            stripPastedStyles={true}
+            placeholder={'Enter comment'}
             onChange={this.props.onChange}
             editorState={this.props.editorState}
             handleKeyCommand={this.handleStyleCommand}
