@@ -19,8 +19,8 @@ function receiveReply(id, parentId, text) {
   };
 }
 
-function sendCreateAnnotationRequest(hostname, dispatch, body) {
-  fetch(path.join('http://', hostname, 'api/annotation'), {
+function sendCreateAnnotationRequest(dispatch, body) {
+  fetch(path.join('http://', '/* @echo API_HOST */', 'api/annotation'), {
     method: 'POST',
     credentials: 'include',
     headers: {
@@ -39,7 +39,7 @@ function sendCreateAnnotationRequest(hostname, dispatch, body) {
   });
 }
 
-export function createAnnotation(parentId, articleText, text) {
+export function createAnnotationAsync(parentId, articleText, text) {
   return (dispatch, getState) => {
     const body = {
       parentId,
@@ -48,7 +48,16 @@ export function createAnnotation(parentId, articleText, text) {
       articleUrl: getState().currentArticleUrl,
       groupIds: [],
     };
-    sendCreateAnnotationRequest('/* @echo API_HOST */', dispatch, body);
+    sendCreateAnnotationRequest(dispatch, body);
+  };
+}
+
+export function createAnnotation(parentId, articleText, text) {
+  return {
+    type: 'CREATE_ANNOTATION',
+    articleText,
+    parentId,
+    text,
   };
 }
 

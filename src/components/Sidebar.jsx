@@ -5,7 +5,8 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 import NavigationChevronLeft from 'material-ui/svg-icons/navigation/chevron-left';
 import NavigationChevronRight from 'material-ui/svg-icons/navigation/chevron-right';
 import IconButton from 'material-ui/IconButton';
-import { AnnotationListContainer, AnnotationFormContainer } from '../containers/Annotations';
+import AnnotationListContainer from '../containers/AnnotationListContainer';
+import AnnotationFormContainer from '../containers/AnnotationFormContainer';
 
 export default class Sidebar extends React.Component {
 
