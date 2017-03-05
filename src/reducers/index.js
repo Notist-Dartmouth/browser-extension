@@ -1,8 +1,9 @@
 import { combineReducers } from 'redux';
+import * as types from '../constants/actionTypes';
 
 function annotation(state = {}, action) {
   switch (action.type) {
-    case 'RECEIVE_ANNOTATION':
+    case types.RECEIVE_ANNOTATION:
       return {
         id: action.id,
         articleText: action.articleText,
@@ -10,11 +11,11 @@ function annotation(state = {}, action) {
         childAnnotations: [],
         newCommentVisible: false,
       };
-    case 'TOGGLE_NEW_COMMENT':
+    case types.TOGGLE_NEW_COMMENT:
       return Object.assign({}, state, {
         newCommentVisible: action.annotationId === state.id ? !state.newCommentVisible : false,
       });
-    case 'RECEIVE_REPLY':
+    case types.RECEIVE_REPLY:
       if (state.id !== action.parentId) {
         return state;
       }
@@ -35,13 +36,13 @@ function annotation(state = {}, action) {
 
 function annotations(state = [], action) {
   switch (action.type) {
-    case 'RECEIVE_ANNOTATION':
+    case types.RECEIVE_ANNOTATION:
       return [
         ...state,
         annotation(undefined, action),
       ];
-    case 'TOGGLE_NEW_COMMENT':
-    case 'RECEIVE_REPLY':
+    case types.TOGGLE_NEW_COMMENT:
+    case types.RECEIVE_REPLY:
       return state.map(a => annotation(Object.assign({}, a, {
         childAnnotations: annotations(a.childAnnotations, action),
       }), action));
@@ -52,7 +53,7 @@ function annotations(state = [], action) {
 
 function articleUrl(state = '', action) {
   switch (action.type) {
-    case 'UPDATE_ARTICLE_URL':
+    case types.UPDATE_ARTICLE_URL:
       return action.url;
     default:
       return state;
@@ -67,22 +68,22 @@ function articleAnnotations(state = {
   selectedArticleText: '',
 }, action) {
   switch (action.type) {
-    case 'TOGGLE_CREATING_ANNOTATION':
+    case types.TOGGLE_CREATING_ANNOTATION:
       return Object.assign({}, state, {
         isCreatingAnnotation: !state.isCreatingAnnotation,
       });
-    case 'UPDATE_ARTICLE_URL':
+    case types.UPDATE_ARTICLE_URL:
       return Object.assign({}, state, {
         currentArticleUrl: articleUrl(state.currentArticleUrl, action),
       });
-    case 'NEW_ANNOTATION':
+    case types.NEW_ANNOTATION:
       return Object.assign({}, state, {
         isCreatingAnnotation: true,
         selectedArticleText: action.articleText,
       });
-    case 'TOGGLE_NEW_COMMENT':
-    case 'RECEIVE_REPLY':
-    case 'RECEIVE_ANNOTATION':
+    case types.TOGGLE_NEW_COMMENT:
+    case types.RECEIVE_REPLY:
+    case types.RECEIVE_ANNOTATION:
       return Object.assign({}, state, {
         annotations: annotations(state.annotations, action),
         isCreatingAnnotation: false,
