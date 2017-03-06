@@ -7,7 +7,7 @@
     es6: true
   },
   rules: {
-    arrow-body-style: ["error", "never"],
+    arrow-body-style: ["error", "as-needed"],
     strict: 0,
     quotes: [2, "single"],
     no-else-return: 0,

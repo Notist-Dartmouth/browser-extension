@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import * as types from '../constants/actionTypes';
+import * as types from '../constants/ActionTypes';
 
 function annotation(state = {}, action) {
   switch (action.type) {

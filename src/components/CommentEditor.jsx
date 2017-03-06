@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import { Editor, EditorState, Modifier, ContentState, convertFromHTML } from 'draft-js';
 import marked from 'marked';
 import RaisedButton from 'material-ui/RaisedButton';
-import ICONS from '../constants/icons';
+import ICONS from '../constants/Icons';
 import Icon from './Icon';
 
 class CommentEditor extends React.Component {

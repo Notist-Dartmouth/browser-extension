@@ -1,4 +1,5 @@
-import * as types from '../src/constants/actionTypes';
+import configureMockStore from 'redux-mock-store';
+import * as types from '../src/constants/ActionTypes';
 import * as actions from '../src/actions';
 
 describe('actions', () => {
