@@ -12,7 +12,14 @@
   "content_scripts": [
     {
       "matches": ["http://*/*", "https://*/*"],
-      "js": ["content.js"]
+      "css": [
+        "lib/css/annotator.min.css"
+      ],
+      "js": [
+        "lib/scripts/jquery-1.6.min.js",
+        "lib/scripts/annotator-full.min.js",
+        "content.js"
+      ]
     }
   ],
   "browser_action": {
