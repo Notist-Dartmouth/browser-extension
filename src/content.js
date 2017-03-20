@@ -9,7 +9,6 @@ import { newAnnotation } from './actions';
 const sidebar = document.createElement('div');
 sidebar.setAttribute('id', 'annotation-sidebar');
 $('body').prepend(sidebar);
-$('body').annotator();
 
 const store = new Store({ portName: 'notist' });
 store.ready().then(() =>
@@ -21,35 +20,53 @@ store.ready().then(() =>
     </Provider>
     , document.getElementById('annotation-sidebar')));
 
-// const annotateButton = document.createElement('button');
-// const textNode = document.createTextNode('Annotate');
-// annotateButton.appendChild(textNode);
-// annotateButton.setAttribute('id', 'annotate-button');
-// let annotationDisabled = false;
-//
-// const isValidSelection = (selection) => {
-//   return selection.anchorNode && selection.anchorNode.nodeType === Node.TEXT_NODE
-//     && selection.toString().length !== 0;
-// };
-//
-// document.onmouseup = (e) => {
-//   if (annotationDisabled || e.target.id === 'annotate-button') { return; }
-//   const text = document.getSelection();
-//   if (isValidSelection(text)) {
-//     annotateButton.onclick = () => store.dispatch(newAnnotation(text.toString()));
-//     const range = text.getRangeAt(0);
-//     range.collapse(false);
-//     range.insertNode(annotateButton);
-//   }
-// };
-//
-// $('#annotation-sidebar').hover(
-//   () => { annotationDisabled = true; },
-//   () => { annotationDisabled = false; },
-// );
-//
-// document.onmousedown = (e) => {
-//   if (e.target.id !== 'annotate-button') {
-//     $('#annotate-button').remove();
-//   }
-// };
+// Based on the annotationFactory method from the Annotator library - https://github.com/openannotation/annotator/blob/master/src/ui/main.js
+// Returns the selected text and its range in the document
+const makeAnnotation = (ranges) => {
+  const text = [];
+  const serializedRanges = [];
+  for (let i = 0, len = ranges.length; i < len; i += 1) {
+    const r = ranges[i];
+    text.push(r.text());
+    serializedRanges.push(r.serialize(document.body, '.annotator-hl'));
+  }
+  return {
+    quote: text.join(' / '),
+    ranges: serializedRanges,
+  };
+};
+
+// Based on the main module from the Annotator library - https://github.com/openannotation/annotator/blob/master/src/ui/main.js
+// Modified to create a new annotation when the user clicks the annotation adder, rather than showing the editor
+const adderModule = () => {
+  let adder;
+  let highlighter;
+  let textselector;
+  return {
+    start: (app) => {
+      adder = new annotator.ui.adder.Adder({
+        onCreate: annotation => app.annotations.create(annotation),
+      });
+      adder.attach();
+      highlighter = new annotator.ui.highlighter.Highlighter(document.body);
+      textselector = new annotator.ui.textselector.TextSelector(document.body, {
+        onSelection: (ranges, event) => {
+          if (ranges.length > 0) {
+            const annotation = makeAnnotation(ranges);
+            adder.load(annotation, annotator.util.mousePosition(event));
+          } else {
+            adder.hide();
+          }
+        },
+      });
+    },
+    annotationCreated: (annotation) => {
+      highlighter.draw(annotation);
+      store.dispatch(newAnnotation(annotation.quote));
+    },
+  };
+};
+
+const notistAnnotator = new annotator.App();
+notistAnnotator.include(adderModule);
+notistAnnotator.start();

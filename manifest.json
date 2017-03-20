@@ -17,7 +17,7 @@
       ],
       "js": [
         "lib/scripts/jquery-1.6.min.js",
-        "lib/scripts/annotator-full.min.js",
+        "lib/scripts/annotator.min.js",
         "content.js"
       ]
     }
