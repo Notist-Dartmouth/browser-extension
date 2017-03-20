@@ -64,6 +64,9 @@ const adderModule = () => {
       highlighter.draw(annotation);
       store.dispatch(newAnnotation(annotation.quote));
     },
+    annotationDeleted: (annotation) => {
+      highlighter.undraw(annotation);
+    },
   };
 };
 
