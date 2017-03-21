@@ -5,7 +5,7 @@ import notistReducers from './reducers';
 import { createAnnotationAsync, updateArticleUrl } from './actions';
 
 const aliases = {
-  CREATE_ANNOTATION: action => createAnnotationAsync(action.parentId, action.articleText, action.text),
+  CREATE_ANNOTATION: action => createAnnotationAsync(action.parent, action.articleText, action.ranges, action.text),
 };
 
 const store = createStore(

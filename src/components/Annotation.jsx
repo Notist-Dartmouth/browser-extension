@@ -43,7 +43,7 @@ class Annotation extends React.Component {
           <CommentEditor
             onCommentPost={this.props.onCommentPost}
             onCommentCancel={() => this.props.onCommentToggle(this.props.id)}
-            parentId={this.props.id}
+            parent={this.props.id}
           />
         }
         nestedListStyle={{ marginLeft: 20, borderLeft: '1px dashed black' }}

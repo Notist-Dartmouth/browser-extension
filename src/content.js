@@ -39,17 +39,13 @@ const makeAnnotation = (ranges) => {
 // Based on the main module from the Annotator library - https://github.com/openannotation/annotator/blob/master/src/ui/main.js
 // Modified to create a new annotation when the user clicks the annotation adder, rather than showing the editor
 const adderModule = () => {
-  let adder;
-  let highlighter;
-  let textselector;
   return {
     start: (app) => {
-      adder = new annotator.ui.adder.Adder({
+      const adder = new annotator.ui.adder.Adder({
         onCreate: annotation => app.annotations.create(annotation),
       });
       adder.attach();
-      highlighter = new annotator.ui.highlighter.Highlighter(document.body);
-      textselector = new annotator.ui.textselector.TextSelector(document.body, {
+      const textselector = new annotator.ui.textselector.TextSelector(document.body, {
         onSelection: (ranges, event) => {
           if (ranges.length > 0) {
             const annotation = makeAnnotation(ranges);
@@ -61,11 +57,7 @@ const adderModule = () => {
       });
     },
     annotationCreated: (annotation) => {
-      highlighter.draw(annotation);
-      store.dispatch(newAnnotation(annotation.quote));
-    },
-    annotationDeleted: (annotation) => {
-      highlighter.undraw(annotation);
+      store.dispatch(newAnnotation(annotation.quote, annotation.ranges));
     },
   };
 };
@@ -73,3 +65,21 @@ const adderModule = () => {
 const notistAnnotator = new annotator.App();
 notistAnnotator.include(adderModule);
 notistAnnotator.start();
+
+const highlighter = new annotator.ui.highlighter.Highlighter(document.body);
+let currentAnnotations;
+const handleAnnotationsChanged = () => {
+  const previousAnnotations = currentAnnotations;
+  currentAnnotations = store.getState().articleAnnotations.annotations;
+  if (currentAnnotations !== previousAnnotations) {
+    if (previousAnnotations) {
+      previousAnnotations.forEach((a) => {
+        highlighter.undraw(a);
+      });
+    }
+    currentAnnotations.forEach((a) => {
+      highlighter.draw(a);
+    });
+  }
+};
+store.subscribe(handleAnnotationsChanged);

@@ -7,6 +7,7 @@ function annotation(state = {}, action) {
       return {
         id: action.id,
         articleText: action.articleText,
+        ranges: action.ranges,
         text: action.text,
         childAnnotations: [],
         newCommentVisible: false,
@@ -16,7 +17,7 @@ function annotation(state = {}, action) {
         newCommentVisible: action.annotationId === state.id ? !state.newCommentVisible : false,
       });
     case types.RECEIVE_REPLY:
-      if (state.id !== action.parentId) {
+      if (state.id !== action.parent) {
         return state;
       }
       return Object.assign({}, state, {
@@ -65,7 +66,10 @@ function articleAnnotations(state = {
   isCreatingAnnotation: false,
   annotations: [],
   currentArticleUrl: '',
-  selectedArticleText: '',
+  currentSelection: {
+    articleText: '',
+    ranges: [],
+  },
 }, action) {
   switch (action.type) {
     case types.TOGGLE_CREATING_ANNOTATION:
@@ -79,7 +83,10 @@ function articleAnnotations(state = {
     case types.NEW_ANNOTATION:
       return Object.assign({}, state, {
         isCreatingAnnotation: true,
-        selectedArticleText: action.articleText,
+        currentSelection: {
+          articleText: action.articleText,
+          ranges: action.ranges,
+        },
       });
     case types.TOGGLE_NEW_COMMENT:
     case types.RECEIVE_REPLY:

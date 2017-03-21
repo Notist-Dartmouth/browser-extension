@@ -6,13 +6,13 @@ describe('actions', () => {
   it('should create action for creating an annotation', () => {
     const articleText = 'valar morghulis';
     const text = 'valar dohaeris';
-    const parentId = 4;
+    const parent = 4;
     const action = {
       type: types.CREATE_ANNOTATION,
       articleText,
       text,
-      parentId,
+      parent,
     };
-    expect(actions.createAnnotation(parentId, articleText, text)).toEqual(action);
+    expect(actions.createAnnotation(parent, articleText, text)).toEqual(action);
   });
 });

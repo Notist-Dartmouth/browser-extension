@@ -9,7 +9,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    onCommentPost: (parentId, articleText, text) => dispatch(createAnnotation(parentId, articleText, text)),
+    onCommentPost: (parent, articleText, ranges, text) => dispatch(createAnnotation(parent, articleText, ranges, text)),
     onCommentToggle: annotationId => dispatch(toggleNewComment(annotationId)),
   };
 }

@@ -1,20 +1,21 @@
 import fetch from 'isomorphic-fetch';
 import path from 'path';
 
-function receiveAnnotation(id, articleText, text) {
+function receiveAnnotation(id, articleText, ranges, text) {
   return {
     type: 'RECEIVE_ANNOTATION',
     id,
     articleText,
+    ranges,
     text,
   };
 }
 
-function receiveReply(id, parentId, text) {
+function receiveReply(id, parent, text) {
   return {
     type: 'RECEIVE_REPLY',
     id,
-    parentId,
+    parent,
     text,
   };
 }
@@ -32,31 +33,33 @@ function sendCreateAnnotationRequest(dispatch, body) {
   .then(res => res.json())
   .then((json) => {
     if (json.SUCCESS) {
-      const { _id, articleText, text } = json.SUCCESS;
-      body.parentId ? dispatch(receiveReply(_id, body.parentId, text))
-        : dispatch(receiveAnnotation(_id, articleText, text));
+      const { _id, articleText, ranges, text } = json.SUCCESS;
+      body.parent ? dispatch(receiveReply(_id, body.parent, text))
+        : dispatch(receiveAnnotation(_id, articleText, ranges, text));
     }
   });
 }
 
-export function createAnnotationAsync(parentId, articleText, text) {
+export function createAnnotationAsync(parent, articleText, ranges, text) {
   return (dispatch, getState) => {
     const body = {
-      parentId,
+      parent,
       articleText,
+      ranges,
       text,
-      articleUrl: getState().currentArticleUrl,
-      groupIds: [],
+      uri: getState().articleAnnotations.currentArticleUrl,
+      groups: [],
     };
     sendCreateAnnotationRequest(dispatch, body);
   };
 }
 
-export function createAnnotation(parentId, articleText, text) {
+export function createAnnotation(parent, articleText, ranges, text) {
   return {
     type: 'CREATE_ANNOTATION',
     articleText,
-    parentId,
+    ranges,
+    parent,
     text,
   };
 }
@@ -74,10 +77,11 @@ export function toggleCreatingAnnotation() {
   };
 }
 
-export function newAnnotation(articleText) {
+export function newAnnotation(articleText, ranges) {
   return {
     type: 'NEW_ANNOTATION',
     articleText,
+    ranges,
   };
 }
 
