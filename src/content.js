@@ -3,7 +3,7 @@ import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 import { Store } from 'react-chrome-redux';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import Sidebar from './components/Sidebar';
+import SidebarContainer from './containers/SidebarContainer';
 import { newAnnotation } from './actions';
 
 const sidebar = document.createElement('div');
@@ -15,7 +15,7 @@ store.ready().then(() =>
   render(
     <Provider store={store}>
       <MuiThemeProvider>
-        <Sidebar />
+        <SidebarContainer />
       </MuiThemeProvider>
     </Provider>
     , document.getElementById('annotation-sidebar')));
