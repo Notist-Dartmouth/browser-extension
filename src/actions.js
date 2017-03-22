@@ -7,13 +7,10 @@ const headers = {
   Accept: 'application/json',
 };
 
-function receiveAnnotation(id, articleText, ranges, text) {
+function receiveAnnotation(annotation) {
   return {
     type: types.RECEIVE_ANNOTATION,
-    id,
-    articleText,
-    ranges,
-    text,
+    annotation,
   };
 }
 
@@ -24,10 +21,10 @@ function receiveAnnotations(annotations) {
   };
 }
 
-function receiveReply(id, parent, text) {
+function receiveReply(_id, parent, text) {
   return {
     type: types.RECEIVE_REPLY,
-    id,
+    _id,
     parent,
     text,
   };
@@ -43,10 +40,10 @@ function sendCreateAnnotationRequest(dispatch, body) {
   .then(res => res.json())
   .then((json) => {
     if (json.SUCCESS) {
-      const { _id, articleText, ranges, text } = json.SUCCESS;
+      const { _id, text } = json.SUCCESS;
       body.parent ? dispatch(receiveReply(_id, body.parent, text))
-        : dispatch(receiveAnnotation(_id, articleText, ranges, text));
-    }
+        : dispatch(receiveAnnotation(json.SUCCESS));
+    } // TODO: error handling
   });
 }
 
@@ -79,14 +76,20 @@ export function fetchAnnotationsAsync() {
   return (dispatch, getState) => {
     const { isFetchingAnnotations, currentArticleUrl } = getState().articleAnnotations;
     if (!isFetchingAnnotations) {
-      fetch(path.join('http://', '/* @echo API_HOST */', `api/article/annotations?uri=${currentArticleUrl}`), {
+      const annotationsEndpoint = new URL(path.join('http://', '/* @echo API_HOST */', 'api/article/annotations'));
+      annotationsEndpoint.searchParams.append('uri', currentArticleUrl);
+      fetch(annotationsEndpoint, {
         method: 'GET',
         credentials: 'include',
         headers,
       })
       .then(res => res.json())
-      .then((json) => {
-        console.log(json);
+      .then((annotations) => {
+        if (annotations.ERROR) {
+          console.log(annotations.ERROR); // TODO: error handling
+        } else {
+          dispatch(receiveAnnotations(annotations));
+        }
       });
     }
   };

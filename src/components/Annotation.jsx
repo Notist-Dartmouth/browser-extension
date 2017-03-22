@@ -22,7 +22,7 @@ class Annotation extends React.Component {
     return this.props.childAnnotations.map(a =>
       <Annotation
         {...a}
-        key={a.id}
+        key={a._id}
         depth={this.props.depth + 1}
         onCommentPost={this.props.onCommentPost}
         onCommentToggle={this.props.onCommentToggle}
@@ -42,8 +42,8 @@ class Annotation extends React.Component {
         secondaryText={this.props.newCommentVisible &&
           <CommentEditor
             onCommentPost={this.props.onCommentPost}
-            onCommentCancel={() => this.props.onCommentToggle(this.props.id)}
-            parent={this.props.id}
+            onCommentCancel={() => this.props.onCommentToggle(this.props._id)}
+            parent={this.props._id}
           />
         }
         nestedListStyle={{ marginLeft: 20, borderLeft: '1px dashed black' }}
@@ -57,7 +57,7 @@ class Annotation extends React.Component {
             editorState={this.state.commentEditorState}
           />
           {!this.props.newCommentVisible &&
-            <RaisedButton onClick={() => this.props.onCommentToggle(this.props.id)} label="Reply" />
+            <RaisedButton onClick={() => this.props.onCommentToggle(this.props._id)} label="Reply" />
           }
         </div>
       </ListItem>
@@ -73,7 +73,7 @@ Annotation.propTypes = {
   childAnnotations: PropTypes.arrayOf(PropTypes.object),
   onCommentPost: PropTypes.func.isRequired,
   onCommentToggle: PropTypes.func.isRequired,
-  id: PropTypes.string.isRequired,
+  _id: PropTypes.string.isRequired,
 };
 
 Annotation.defaultProps = {

@@ -3,28 +3,31 @@ import * as types from '../constants/ActionTypes';
 
 function annotation(state = {}, action) {
   switch (action.type) {
-    case types.RECEIVE_ANNOTATION:
+    case types.RECEIVE_ANNOTATIONS:
+    case types.RECEIVE_ANNOTATION: {
+      const { _id, articleText, text, ranges } = action.annotation;
       return {
-        id: action.id,
-        articleText: action.articleText,
-        ranges: action.ranges,
-        text: action.text,
+        _id,
+        articleText,
+        text,
+        ranges,
         childAnnotations: [],
         newCommentVisible: false,
       };
+    }
     case types.TOGGLE_NEW_COMMENT:
       return Object.assign({}, state, {
-        newCommentVisible: action.annotationId === state.id ? !state.newCommentVisible : false,
+        newCommentVisible: action.annotationId === state._id ? !state.newCommentVisible : false,
       });
     case types.RECEIVE_REPLY:
-      if (state.id !== action.parent) {
+      if (state._id !== action.parent) {
         return state;
       }
       return Object.assign({}, state, {
         childAnnotations: [
           ...state.childAnnotations,
           {
-            id: action.id,
+            _id: action._id,
             text: action.text,
             childAnnotations: [],
           },
@@ -42,6 +45,8 @@ function annotations(state = [], action) {
         ...state,
         annotation(undefined, action),
       ];
+    case types.RECEIVE_ANNOTATIONS:
+      return action.annotations.map(a => annotation(undefined, Object.assign(action, { annotation: a })));
     case types.TOGGLE_NEW_COMMENT:
     case types.RECEIVE_REPLY:
       return state.map(a => annotation(Object.assign({}, a, {
@@ -94,6 +99,15 @@ function articleAnnotations(state = {
       return Object.assign({}, state, {
         annotations: annotations(state.annotations, action),
         isCreatingAnnotation: false,
+      });
+    case types.FETCH_ANNOTATIONS:
+      return Object.assign({}, state, {
+        isFetchingAnnotations: true,
+      });
+    case types.RECEIVE_ANNOTATIONS:
+      return Object.assign({}, state, {
+        annotations: annotations(state.annotations, action),
+        isFetchingAnnotations: false,
       });
     default:
       return state;

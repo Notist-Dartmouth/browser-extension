@@ -8,7 +8,7 @@ const AnnotationList = (props) => {
       {props.annotations.map(a =>
         <Annotation
           {...a}
-          key={a.id}
+          key={a._id}
           onCommentPost={props.onCommentPost}
           onCommentToggle={props.onCommentToggle}
         />
