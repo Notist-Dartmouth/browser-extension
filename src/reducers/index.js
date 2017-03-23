@@ -1,20 +1,16 @@
 import { combineReducers } from 'redux';
 import * as types from '../constants/ActionTypes';
 
-function annotation(state = {}, action) {
+const initialAnnotationState = {
+  childAnnotations: [],
+  newCommentVisible: false,
+};
+
+function annotation(state = initialAnnotationState, action) {
   switch (action.type) {
     case types.RECEIVE_ANNOTATIONS:
-    case types.RECEIVE_ANNOTATION: {
-      const { _id, articleText, text, ranges } = action.annotation;
-      return {
-        _id,
-        articleText,
-        text,
-        ranges,
-        childAnnotations: [],
-        newCommentVisible: false,
-      };
-    }
+    case types.RECEIVE_ANNOTATION:
+      return Object.assign({}, state, action.annotation);
     case types.TOGGLE_NEW_COMMENT:
       return Object.assign({}, state, {
         newCommentVisible: action.annotationId === state._id ? !state.newCommentVisible : false,
