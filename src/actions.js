@@ -1,6 +1,7 @@
 import fetch from 'isomorphic-fetch';
 import path from 'path';
-import { URL, URLSearchParams } from 'isomorphic-url';
+import { URL } from 'isomorphic-url';
+import URLSearchParams from 'url-search-params';
 import * as types from './constants/ActionTypes';
 
 const headers = {
@@ -85,7 +86,8 @@ export function fetchAnnotationsAsync() {
   return (dispatch, getState) => {
     const { isFetchingAnnotations, currentArticleUrl } = getState().articleAnnotations;
     if (!isFetchingAnnotations) {
-      const annotationsEndpoint = new URL(path.join('http://', apiHost, 'api/article/annotations'));
+      const urlString = path.join('http://', apiHost, 'api/article/annotations');
+      const annotationsEndpoint = new URL(urlString);
       annotationsEndpoint.search = new URLSearchParams(`?uri=${currentArticleUrl}`);
       return fetch(annotationsEndpoint, {
         method: 'GET',
