@@ -31,12 +31,10 @@ function receiveAnnotations(annotations) {
   };
 }
 
-function receiveReply(_id, parent, text) {
+function receiveReply(reply) {
   return {
     type: types.RECEIVE_REPLY,
-    _id,
-    parent,
-    text,
+    reply,
   };
 }
 
@@ -45,14 +43,16 @@ function sendCreateAnnotationRequest(dispatch, body) {
     method: 'POST',
     credentials: 'include',
     headers,
-    body: JSON.stringify(body),
+    body,
   })
   .then(res => res.json())
   .then((json) => {
     if (json.SUCCESS) {
-      const { _id, text } = json.SUCCESS;
-      body.parent ? dispatch(receiveReply(_id, body.parent, text))
-        : dispatch(receiveAnnotation(json.SUCCESS));
+      if (json.SUCCESS.parent) {
+        dispatch(receiveReply(json.SUCCESS));
+      } else {
+        dispatch(receiveAnnotation(json.SUCCESS));
+      }
     } // TODO: error handling
   });
 }
@@ -60,7 +60,7 @@ function sendCreateAnnotationRequest(dispatch, body) {
 export function createAnnotationAsync(parent, articleText, ranges, text) {
   return (dispatch, getState) => {
     const body = {
-      parent,
+      parentId: parent,
       articleText,
       ranges,
       text,
@@ -68,7 +68,7 @@ export function createAnnotationAsync(parent, articleText, ranges, text) {
       groups: [], // TODO: pass this function the selected group(s) and whether public or not
       isPublic: true,
     };
-    return sendCreateAnnotationRequest(dispatch, body);
+    return sendCreateAnnotationRequest(dispatch, JSON.stringify(body));
   };
 }
 
@@ -85,7 +85,9 @@ export function createAnnotation(parent, articleText, ranges, text) {
 export function fetchAnnotationsAsync() {
   return (dispatch, getState) => {
     const { isFetchingAnnotations, currentArticleUrl } = getState().articleAnnotations;
-    if (!isFetchingAnnotations) {
+    if (isFetchingAnnotations) {
+      return Promise.resolve();
+    } else {
       const urlString = path.join('http://', apiHost, 'api/article/annotations');
       const annotationsEndpoint = new URL(urlString);
       annotationsEndpoint.search = new URLSearchParams(`?uri=${currentArticleUrl}`);

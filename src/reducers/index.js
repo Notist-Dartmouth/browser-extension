@@ -3,6 +3,7 @@ import * as types from '../constants/ActionTypes';
 
 const initialAnnotationState = {
   childAnnotations: [],
+  ranges: [],
   newCommentVisible: false,
 };
 
@@ -16,17 +17,13 @@ function annotation(state = initialAnnotationState, action) {
         newCommentVisible: action.annotationId === state._id ? !state.newCommentVisible : false,
       });
     case types.RECEIVE_REPLY:
-      if (state._id !== action.parent) {
+      if (state._id !== action.reply.parent) {
         return state;
       }
       return Object.assign({}, state, {
         childAnnotations: [
           ...state.childAnnotations,
-          {
-            _id: action._id,
-            text: action.text,
-            childAnnotations: [],
-          },
+          Object.assign({}, initialAnnotationState, action.reply),
         ],
       });
     default:

@@ -67,6 +67,31 @@ describe('async actions', () => {
     });
   });
 
+  it('creates RECEIVE_REPLY after replying to an annotation', () => {
+    const reply = {
+      text: 'this is cool',
+      parent: '123435235',
+    }
+    nock('http://localhost:3000/')
+      .post('/api/annotation')
+      .reply(200, { SUCCESS: reply } );
+
+    const expectedActions = [
+      {
+        type: types.RECEIVE_REPLY,
+        reply,
+      }
+    ];
+    const store = mockStore({
+      articleAnnotations: {
+        currentArticleUrl: 'www.gotgoats.com',
+      },
+    });
+    store.dispatch(actions.createAnnotationAsync(reply.parent, null, null, reply.text)).then(() => {
+      expect(store.getActions()).toEqual(expectedActions);
+    });
+  });
+
   it('creates RECEIVE_ANNOTATIONS after fetching annotations', () => {
     const annotations = [
       {
@@ -96,6 +121,17 @@ describe('async actions', () => {
     });
     store.dispatch(actions.fetchAnnotationsAsync()).then(() => {
       expect(store.getActions()).toEqual(expectedActions);
+    });
+  });
+
+  it('does not create RECEIVE_ANNOTATIONS if already fetching annotations', () => {
+    const store = mockStore({
+      articleAnnotations: {
+        isFetchingAnnotations: true,
+      },
+    });
+    store.dispatch(actions.fetchAnnotationsAsync()).then(() => {
+      expect(store.getActions()).toEqual([]);
     });
   });
 });
