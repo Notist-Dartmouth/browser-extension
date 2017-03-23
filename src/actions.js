@@ -1,11 +1,20 @@
 import fetch from 'isomorphic-fetch';
 import path from 'path';
+import { URL } from 'isomorphic-url';
 import * as types from './constants/ActionTypes';
 
 const headers = {
   'Content-Type': 'application/json',
   Accept: 'application/json',
 };
+
+let apiHost;
+// @if ENVIRONMENT='production'
+apiHost = 'notist.herokuapp.com';
+// @endif
+// @if ENVIRONMENT='development'
+apiHost = 'localhost:3000';
+// @endif
 
 function receiveAnnotation(annotation) {
   return {
@@ -31,7 +40,7 @@ function receiveReply(_id, parent, text) {
 }
 
 function sendCreateAnnotationRequest(dispatch, body) {
-  fetch(path.join('http://', '/* @echo API_HOST */', 'api/annotation'), {
+  return fetch(path.join('http://', apiHost, 'api/annotation'), {
     method: 'POST',
     credentials: 'include',
     headers,
@@ -58,7 +67,7 @@ export function createAnnotationAsync(parent, articleText, ranges, text) {
       groups: [], // TODO: pass this function the selected group(s) and whether public or not
       isPublic: true,
     };
-    sendCreateAnnotationRequest(dispatch, body);
+    return sendCreateAnnotationRequest(dispatch, body);
   };
 }
 
@@ -76,9 +85,9 @@ export function fetchAnnotationsAsync() {
   return (dispatch, getState) => {
     const { isFetchingAnnotations, currentArticleUrl } = getState().articleAnnotations;
     if (!isFetchingAnnotations) {
-      const annotationsEndpoint = new URL(path.join('http://', '/* @echo API_HOST */', 'api/article/annotations'));
+      const annotationsEndpoint = new URL(path.join('http://', apiHost, 'api/article/annotations'));
       annotationsEndpoint.searchParams.append('uri', currentArticleUrl);
-      fetch(annotationsEndpoint, {
+      return fetch(annotationsEndpoint, {
         method: 'GET',
         credentials: 'include',
         headers,

@@ -41,12 +41,12 @@ describe('async actions', () => {
   it('creates RECEIVE_ANNOTATION after creating new annotation', () => {
     const articleText = 'Who let the dogs out?';
     const text = 'roof roof roof roof';
-    nock('http:///* @echo API_HOST *//')
-      .get('/api/annotation')
+    nock('http://localhost:3000/')
+      .post('/api/annotation')
       .reply(200, { SUCCESS: {
         articleText,
         text,
-      } });
+      } } );
 
     const expectedActions = [
       {
@@ -62,7 +62,39 @@ describe('async actions', () => {
         currentArticleUrl: 'www.gotgoats.com',
       },
     });
-    return store.dispatch(actions.createAnnotationAsync(null, articleText, null, text)).then(() => {
+    store.dispatch(actions.createAnnotationAsync(null, articleText, null, text)).then(() => {
+      expect(store.getActions()).toEqual(expectedActions);
+    });
+  });
+
+  it('creates RECEIVE_ANNOTATIONS after fetching annotations', () => {
+    const annotations = [
+      {
+        articleText: 'he was a sk8ter boy',
+        text: 'she said see ya later boy',
+      },
+      {
+        articleText: 'he wasnt good enough for her',
+        text: 'now hes a super star',
+      }
+    ];
+    nock('http://localhost:3000/')
+      .get('/api/article/annotations')
+      .reply(200, annotations);
+
+    const expectedActions = [
+      {
+        type: types.RECEIVE_ANNOTATIONS,
+        annotations,
+      }
+    ];
+    const store = mockStore({
+      articleAnnotations: {
+        isFetchingAnnotations: false,
+        currentArticleUrl: 'www.athelstan.com',
+      },
+    });
+    store.dispatch(actions.fetchAnnotationsAsync()).then(() => {
       expect(store.getActions()).toEqual(expectedActions);
     });
   });

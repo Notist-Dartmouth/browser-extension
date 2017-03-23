@@ -8,14 +8,12 @@ const webpackConfig = require('./webpack.config');
 const devConfig = {
   context: {
     ENVIRONMENT: 'development',
-    API_HOST: 'localhost:3000',
   },
 };
 
 const prodConfig = {
   context: {
     ENVIRONMENT: 'production',
-    API_HOST: 'notist.herokuapp.com',
   },
 };
 
