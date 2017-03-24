@@ -64,7 +64,7 @@ export function createAnnotationAsync(parent, articleText, ranges, text) {
       articleText,
       ranges,
       text,
-      uri: getState().articleAnnotations.currentArticleUrl,
+      uri: getState().articles.currentArticleUrl,
       groups: [], // TODO: pass this function the selected group(s) and whether public or not
       isPublic: true,
     };
@@ -84,7 +84,7 @@ export function createAnnotation(parent, articleText, ranges, text) {
 
 export function fetchAnnotationsAsync() {
   return (dispatch, getState) => {
-    const { isFetchingAnnotations, currentArticleUrl } = getState().articleAnnotations;
+    const { isFetchingAnnotations, currentArticleUrl } = getState().articles;
     if (isFetchingAnnotations) {
       return Promise.resolve();
     } else {

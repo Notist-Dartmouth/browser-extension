@@ -58,7 +58,7 @@ describe('async actions', () => {
       },
     ];
     const store = mockStore({
-      articleAnnotations: {
+      articles: {
         currentArticleUrl: 'www.gotgoats.com',
       },
     });
@@ -83,7 +83,7 @@ describe('async actions', () => {
       }
     ];
     const store = mockStore({
-      articleAnnotations: {
+      articles: {
         currentArticleUrl: 'www.gotgoats.com',
       },
     });
@@ -114,7 +114,7 @@ describe('async actions', () => {
       }
     ];
     const store = mockStore({
-      articleAnnotations: {
+      articles: {
         isFetchingAnnotations: false,
         currentArticleUrl: 'www.athelstan.com',
       },
@@ -126,7 +126,7 @@ describe('async actions', () => {
 
   it('does not create RECEIVE_ANNOTATIONS if already fetching annotations', () => {
     const store = mockStore({
-      articleAnnotations: {
+      articles: {
         isFetchingAnnotations: true,
       },
     });

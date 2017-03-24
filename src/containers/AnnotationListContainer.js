@@ -3,7 +3,7 @@ import AnnotationList from '../components/AnnotationList';
 import { toggleNewComment, createAnnotation } from '../actions';
 
 function mapStateToProps(state) {
-  const { annotations } = state.articleAnnotations;
+  const { annotations } = state.articles;
   return { annotations };
 }
 

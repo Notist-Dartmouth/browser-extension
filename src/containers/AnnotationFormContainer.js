@@ -3,7 +3,7 @@ import AnnotationForm from '../components/AnnotationForm';
 import { toggleCreatingAnnotation, createAnnotation } from '../actions';
 
 function mapStateToProps(state) {
-  const { isCreatingAnnotation, currentSelection } = state.articleAnnotations;
+  const { isCreatingAnnotation, currentSelection } = state.articles;
   return {
     isCreatingAnnotation,
     articleSelection: currentSelection,

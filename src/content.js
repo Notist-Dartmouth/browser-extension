@@ -70,7 +70,7 @@ const highlighter = new annotator.ui.highlighter.Highlighter(document.body);
 let currentAnnotations;
 const handleAnnotationsChanged = () => {
   const previousAnnotations = currentAnnotations;
-  currentAnnotations = store.getState().articleAnnotations.annotations;
+  currentAnnotations = store.getState().articles.annotations;
   if (currentAnnotations !== previousAnnotations) {
     if (previousAnnotations) {
       previousAnnotations.forEach((a) => {
