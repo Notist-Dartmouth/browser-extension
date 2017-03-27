@@ -7,10 +7,10 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: '[name].js'
+    filename: '[name].js',
   },
   resolve: {
-    extensions: ['', '.js', '.jsx']
+    extensions: ['', '.js', '.jsx'],
   },
   module: {
     loaders: [
@@ -19,7 +19,7 @@ module.exports = {
         loader: 'babel-loader',
         exclude: /node_modules/,
         include: path.resolve(__dirname, 'src'),
-      }
-    ]
-  }
-}
+      },
+    ],
+  },
+};

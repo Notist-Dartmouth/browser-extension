@@ -1,89 +1,143 @@
 import fetch from 'isomorphic-fetch';
 import path from 'path';
+import { URL } from 'isomorphic-url';
+import URLSearchParams from 'url-search-params';
+import * as types from './constants/ActionTypes';
 
-function receiveAnnotation(id, articleText, text) {
+const headers = {
+  'Content-Type': 'application/json',
+  Accept: 'application/json',
+};
+
+let apiHost;
+// @if ENVIRONMENT='production'
+apiHost = 'notist.herokuapp.com';
+// @endif
+// @if ENVIRONMENT='development'
+apiHost = 'localhost:3000';
+// @endif
+
+function receiveAnnotation(annotation) {
   return {
-    type: 'RECEIVE_ANNOTATION',
-    id,
-    articleText,
-    text,
+    type: types.RECEIVE_ANNOTATION,
+    annotation,
   };
 }
 
-function receiveReply(id, parentId, text) {
+function receiveAnnotations(annotations) {
   return {
-    type: 'RECEIVE_REPLY',
-    id,
-    parentId,
-    text,
+    type: types.RECEIVE_ANNOTATIONS,
+    annotations,
+  };
+}
+
+function receiveReply(reply) {
+  return {
+    type: types.RECEIVE_REPLY,
+    reply,
   };
 }
 
 function sendCreateAnnotationRequest(dispatch, body) {
-  fetch(path.join('http://', '/* @echo API_HOST */', 'api/annotation'), {
+  return fetch(path.join('http://', apiHost, 'api/annotation'), {
     method: 'POST',
     credentials: 'include',
-    headers: {
-      'Content-Type': 'application/json',
-      Accept: 'application/json',
-    },
-    body: JSON.stringify(body),
+    headers,
+    body,
   })
   .then(res => res.json())
   .then((json) => {
     if (json.SUCCESS) {
-      const { _id, articleText, text } = json.SUCCESS;
-      body.parentId ? dispatch(receiveReply(_id, body.parentId, text))
-        : dispatch(receiveAnnotation(_id, articleText, text));
-    }
+      if (json.SUCCESS.parent) {
+        dispatch(receiveReply(json.SUCCESS));
+      } else {
+        dispatch(receiveAnnotation(json.SUCCESS));
+      }
+    } // TODO: error handling
   });
 }
 
-export function createAnnotationAsync(parentId, articleText, text) {
+export function createAnnotationAsync(parent, articleText, ranges, text) {
   return (dispatch, getState) => {
     const body = {
-      parentId,
+      parentId: parent,
       articleText,
+      ranges,
       text,
-      articleUrl: getState().currentArticleUrl,
-      groupIds: [],
+      uri: getState().articles.currentArticleUrl,
+      groups: [], // TODO: pass this function the selected group(s) and whether public or not
+      isPublic: true,
     };
-    sendCreateAnnotationRequest(dispatch, body);
+    return sendCreateAnnotationRequest(dispatch, JSON.stringify(body));
   };
 }
 
-export function createAnnotation(parentId, articleText, text) {
+export function createAnnotation(parent, articleText, ranges, text) {
   return {
-    type: 'CREATE_ANNOTATION',
+    type: types.CREATE_ANNOTATION,
     articleText,
-    parentId,
+    ranges,
+    parent,
     text,
+  };
+}
+
+export function fetchAnnotationsAsync() {
+  return (dispatch, getState) => {
+    const { isFetchingAnnotations, currentArticleUrl } = getState().articles;
+    if (isFetchingAnnotations) {
+      return Promise.resolve();
+    } else {
+      const urlString = path.join('http://', apiHost, 'api/article/annotations');
+      const annotationsEndpoint = new URL(urlString);
+      annotationsEndpoint.search = new URLSearchParams(`?uri=${currentArticleUrl}`);
+      return fetch(annotationsEndpoint, {
+        method: 'GET',
+        credentials: 'include',
+        headers,
+      })
+      .then(res => res.json())
+      .then((annotations) => {
+        if (annotations.ERROR) {
+          console.log(annotations.ERROR); // TODO: error handling
+        } else {
+          dispatch(receiveAnnotations(annotations));
+        }
+      });
+    }
+  };
+}
+
+export function fetchAnnotations() {
+  return {
+    type: types.FETCH_ANNOTATIONS,
   };
 }
 
 export function toggleNewComment(annotationId) {
   return {
-    type: 'TOGGLE_NEW_COMMENT',
+    type: types.TOGGLE_NEW_COMMENT,
     annotationId,
   };
 }
 
 export function toggleCreatingAnnotation() {
   return {
-    type: 'TOGGLE_CREATING_ANNOTATION',
+    type: types.TOGGLE_CREATING_ANNOTATION,
   };
 }
 
-export function newAnnotation(articleText) {
+export function newAnnotation(articleText, ranges) {
   return {
-    type: 'NEW_ANNOTATION',
+    type: types.NEW_ANNOTATION,
     articleText,
+    ranges,
   };
 }
 
 export function updateArticleUrl(url) {
   return {
-    type: 'UPDATE_ARTICLE_URL',
+    type: types.UPDATE_ARTICLE_URL,
     url,
   };
 }

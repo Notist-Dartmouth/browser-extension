@@ -3,13 +3,13 @@ import AnnotationList from '../components/AnnotationList';
 import { toggleNewComment, createAnnotation } from '../actions';
 
 function mapStateToProps(state) {
-  const { annotations } = state.articleAnnotations;
+  const { annotations } = state.articles;
   return { annotations };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    onCommentPost: (parentId, articleText, text) => dispatch(createAnnotation(parentId, articleText, text)),
+    onCommentPost: (parent, articleText, ranges, text) => dispatch(createAnnotation(parent, articleText, ranges, text)),
     onCommentToggle: annotationId => dispatch(toggleNewComment(annotationId)),
   };
 }

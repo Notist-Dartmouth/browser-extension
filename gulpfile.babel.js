@@ -8,14 +8,12 @@ const webpackConfig = require('./webpack.config');
 const devConfig = {
   context: {
     ENVIRONMENT: 'development',
-    API_HOST: 'localhost:3000',
   },
 };
 
 const prodConfig = {
   context: {
     ENVIRONMENT: 'production',
-    API_HOST: 'notist.herokuapp.com',
   },
 };
 
@@ -24,6 +22,10 @@ gulp.task('clean', cb =>
 
 gulp.task('manifest', ['clean'], () =>
   gulp.src('manifest.json').pipe(gulp.dest('./dist')));
+
+gulp.task('lib', ['manifest'], () =>
+  gulp.src('./src/lib/**/*.{js,css}')
+    .pipe(gulp.dest('dist/lib')));
 
 const build = (config) => {
   gulp.src('src/content.js')
@@ -36,8 +38,8 @@ const build = (config) => {
       .pipe(gulp.dest('dist/'));
 };
 
-gulp.task('dev', ['manifest'], () => build(devConfig));
+gulp.task('dev', ['lib'], () => build(devConfig));
 
-gulp.task('prod', ['manifest'], () => build(prodConfig));
+gulp.task('prod', ['lib'], () => build(prodConfig));
 
 gulp.task('watch', ['dev'], () => gulp.watch('./src/**/*', ['dev']));

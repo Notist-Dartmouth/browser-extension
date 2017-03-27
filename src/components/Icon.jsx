@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 
-// based on this article: https://medium.com/@david.gilbertson/icons-as-react-components-de3e33cb8792#.z11dp5ddx
+// This component is based on the Icon component described in this article:
+// https://medium.com/@david.gilbertson/icons-as-react-components-de3e33cb8792#.z11dp5ddx
 
 const Icon = (props) => {
   return (

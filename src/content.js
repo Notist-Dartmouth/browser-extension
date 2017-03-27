@@ -1,56 +1,73 @@
-import $ from 'jquery';
 import React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 import { Store } from 'react-chrome-redux';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import Sidebar from './components/Sidebar';
+import SidebarContainer from './containers/SidebarContainer';
 import { newAnnotation } from './actions';
-
-const store = new Store({ portName: 'notist' });
 
 const sidebar = document.createElement('div');
 sidebar.setAttribute('id', 'annotation-sidebar');
 $('body').prepend(sidebar);
 
+const store = new Store({ portName: 'notist' });
 store.ready().then(() =>
   render(
     <Provider store={store}>
       <MuiThemeProvider>
-        <Sidebar />
+        <SidebarContainer />
       </MuiThemeProvider>
     </Provider>
     , document.getElementById('annotation-sidebar')));
 
-const annotateButton = document.createElement('button');
-const textNode = document.createTextNode('Annotate');
-annotateButton.appendChild(textNode);
-annotateButton.setAttribute('id', 'annotate-button');
-let annotationDisabled = false;
-
-const isValidSelection = (selection) => {
-  return selection.anchorNode && selection.anchorNode.nodeType === Node.TEXT_NODE
-    && selection.toString().length !== 0;
+// This adderModule method is based on the main module from the Annotator library:
+// https://github.com/openannotation/annotator/blob/5ef5edf157fe728b2d6d95d01e26a55c508c0c44/src/ui/main.js#L208
+// Modified to create a new annotation when the user clicks the annotation adder, rather than showing an editor
+const adderModule = () => {
+  return {
+    start: (app) => {
+      const adder = new annotator.ui.adder.Adder({
+        onCreate: annotation => app.annotations.create(annotation),
+      });
+      adder.attach();
+      const textselector = new annotator.ui.textselector.TextSelector(document.body, {
+        onSelection: (ranges, event) => {
+          if (ranges.length > 0) {
+            const annotation = {
+              ranges: ranges.map(r => r.serialize(document.body, '.annotator-hl')),
+              articleText: document.getSelection().toString(),
+            };
+            adder.load(annotation, annotator.util.mousePosition(event));
+          } else {
+            adder.hide();
+          }
+        },
+      });
+    },
+    annotationCreated: (annotation) => {
+      store.dispatch(newAnnotation(annotation.articleText, annotation.ranges));
+    },
+  };
 };
 
-document.onmouseup = (e) => {
-  if (annotationDisabled || e.target.id === 'annotate-button') { return; }
-  const text = document.getSelection();
-  if (isValidSelection(text)) {
-    annotateButton.onclick = () => store.dispatch(newAnnotation(text.toString()));
-    const range = text.getRangeAt(0);
-    range.collapse(false);
-    range.insertNode(annotateButton);
+const notistAnnotator = new annotator.App();
+notistAnnotator.include(adderModule);
+notistAnnotator.start();
+
+const highlighter = new annotator.ui.highlighter.Highlighter(document.body);
+let currentAnnotations;
+const handleAnnotationsChanged = () => {
+  const previousAnnotations = currentAnnotations;
+  currentAnnotations = store.getState().articles.annotations;
+  if (currentAnnotations !== previousAnnotations) {
+    if (previousAnnotations) {
+      previousAnnotations.forEach((a) => {
+        highlighter.undraw(a);
+      });
+    }
+    currentAnnotations.forEach((a) => {
+      highlighter.draw(a);
+    });
   }
 };
-
-$('#annotation-sidebar').hover(
-  () => { annotationDisabled = true; },
-  () => { annotationDisabled = false; },
-);
-
-document.onmousedown = (e) => {
-  if (e.target.id !== 'annotate-button') {
-    $('#annotate-button').remove();
-  }
-};
+store.subscribe(handleAnnotationsChanged);
