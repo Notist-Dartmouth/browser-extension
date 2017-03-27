@@ -20,24 +20,9 @@ store.ready().then(() =>
     </Provider>
     , document.getElementById('annotation-sidebar')));
 
-// Based on the annotationFactory method from the Annotator library - https://github.com/openannotation/annotator/blob/master/src/ui/main.js
-// Returns the selected text and its range in the document
-const makeAnnotation = (ranges) => {
-  const text = [];
-  const serializedRanges = [];
-  for (let i = 0, len = ranges.length; i < len; i += 1) {
-    const r = ranges[i];
-    text.push(r.text());
-    serializedRanges.push(r.serialize(document.body, '.annotator-hl'));
-  }
-  return {
-    quote: text.join(' / '),
-    ranges: serializedRanges,
-  };
-};
-
-// Based on the main module from the Annotator library - https://github.com/openannotation/annotator/blob/master/src/ui/main.js
-// Modified to create a new annotation when the user clicks the annotation adder, rather than showing the editor
+// This adderModule method is based on the main module from the Annotator library:
+// https://github.com/openannotation/annotator/blob/5ef5edf157fe728b2d6d95d01e26a55c508c0c44/src/ui/main.js#L208
+// Modified to create a new annotation when the user clicks the annotation adder, rather than showing an editor
 const adderModule = () => {
   return {
     start: (app) => {
@@ -48,7 +33,10 @@ const adderModule = () => {
       const textselector = new annotator.ui.textselector.TextSelector(document.body, {
         onSelection: (ranges, event) => {
           if (ranges.length > 0) {
-            const annotation = makeAnnotation(ranges);
+            const annotation = {
+              ranges: ranges.map(r => r.serialize(document.body, '.annotator-hl')),
+              articleText: document.getSelection().toString(),
+            };
             adder.load(annotation, annotator.util.mousePosition(event));
           } else {
             adder.hide();
@@ -57,7 +45,7 @@ const adderModule = () => {
       });
     },
     annotationCreated: (annotation) => {
-      store.dispatch(newAnnotation(annotation.quote, annotation.ranges));
+      store.dispatch(newAnnotation(annotation.articleText, annotation.ranges));
     },
   };
 };
