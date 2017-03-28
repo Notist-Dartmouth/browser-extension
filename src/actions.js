@@ -141,3 +141,18 @@ export function updateArticleUrl(url) {
     url,
   };
 }
+
+export function updateUser(groupIds, username) {
+  return {
+    type: types.UPDATE_USER,
+    groupIds,
+    username,
+  };
+}
+
+export function updateAuthStatus(isAuthenticated) {
+  return {
+    type: types.UPDATE_AUTH_STATUS,
+    isAuthenticated,
+  };
+}
