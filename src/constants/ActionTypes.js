@@ -16,3 +16,4 @@ export const UPDATE_ARTICLE_URL = 'UPDATE_ARTICLE_URL';
 // user
 export const UPDATE_USER = 'UPDATE_USER';
 export const UPDATE_AUTH_STATUS = 'UPDATE_AUTH_STATUS';
+export const FETCH_USER = 'FETCH_USER';

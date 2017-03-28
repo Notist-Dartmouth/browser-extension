@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Sidebar from '../components/Sidebar';
-import { fetchAnnotations } from '../actions';
+import { fetchAnnotations, fetchUser } from '../actions';
 
 class SidebarContainer extends Component {
 
@@ -11,6 +11,7 @@ class SidebarContainer extends Component {
 
   componentDidMount() {
     this.props.dispatch(fetchAnnotations());
+    this.props.dispatch(fetchUser());
   }
 
   render() {

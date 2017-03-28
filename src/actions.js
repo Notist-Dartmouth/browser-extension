@@ -11,10 +11,10 @@ const headers = {
 
 let apiHost;
 // @if ENVIRONMENT='production'
-apiHost = 'notist.herokuapp.com';
+apiHost = 'http://notist.herokuapp.com';
 // @endif
 // @if ENVIRONMENT='development'
-apiHost = 'localhost:3000';
+apiHost = 'http://localhost:3000';
 // @endif
 
 function receiveAnnotation(annotation) {
@@ -39,7 +39,7 @@ function receiveReply(reply) {
 }
 
 function sendCreateAnnotationRequest(dispatch, body) {
-  return fetch(path.join('http://', apiHost, 'api/annotation'), {
+  return fetch(path.join(apiHost, 'api/annotation'), {
     method: 'POST',
     credentials: 'include',
     headers,
@@ -88,7 +88,7 @@ export function fetchAnnotationsAsync() {
     if (isFetchingAnnotations) {
       return Promise.resolve();
     } else {
-      const urlString = path.join('http://', apiHost, 'api/article/annotations');
+      const urlString = path.join(apiHost, 'api/article/annotations');
       const annotationsEndpoint = new URL(urlString);
       annotationsEndpoint.search = new URLSearchParams(`?uri=${currentArticleUrl}`);
       return fetch(annotationsEndpoint, {
@@ -154,5 +154,25 @@ export function updateAuthStatus(isAuthenticated) {
   return {
     type: types.UPDATE_AUTH_STATUS,
     isAuthenticated,
+  };
+}
+
+export function fetchUserAsync() {
+  return (dispatch, getState) => fetch(path.join(apiHost, '/api/user'), {
+    method: 'GET',
+    credentials: 'include',
+    headers,
+  })
+  .then(res => console.log(res))
+  .then((user) => {
+    dispatch(updateUser(user.groups, user.username));
+    dispatch(updateAuthStatus(true));
+  })
+  .catch(error => dispatch(updateAuthStatus(false)));
+}
+
+export function fetchUser() {
+  return {
+    type: types.FETCH_USER,
   };
 }

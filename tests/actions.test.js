@@ -145,4 +145,42 @@ describe('async actions', () => {
       expect(store.getActions()).toEqual([]);
     });
   });
+
+  it('creates UPDATE_AUTH_STATUS if user is not logged in', () => {
+    nock('http://localhost:3000/')
+      .get('api/user')
+      .reply(401, {});
+    const store = mockStore({});
+    store.dispatch(actions.fetchUserAsync()).then(() => {
+      expect(store.getActions()).toEqual([
+        {
+          type: types.UPDATE_AUTH_STATUS,
+          isAuthenticated: false,
+        }
+      ]);
+    })
+  });
+
+  it('creates UPDATE_AUTH_STATUS and UPDATE_USER if logged in', () => {
+    nock('http://localhost:3000/')
+      .get('api/user')
+      .reply(200, {
+        groups: [1, 44, 23, 1],
+        username: 'Athelstan',
+      });
+    const store = mockStore({});
+    store.dispatch(actions.fetchUserAsync()).then(() => {
+      expect(store.getActions()).toEqual([
+        {
+          type: types.UPDATE_AUTH_STATUS,
+          isAuthenticated: true,
+        },
+        {
+          type: types.UPDATE_USER,
+          groupIds: [1, 44, 23, 1],
+          username: 'Athelstan',
+        },
+      ]);
+    });
+  });
 });

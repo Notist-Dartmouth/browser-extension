@@ -34,7 +34,10 @@ export default class Sidebar extends React.Component {
         />
         <Card hidden={this.props.isAuthenticated}>
           <CardText>
-            login to create and edit annotations.
+            <a
+              href={'/* @echo API_HOST *//login'}
+              style={{ color: 'blue', textDecoration: 'none' }}
+            >Login</a> to create and edit annotations.
           </CardText>
         </Card>
         <AnnotationFormContainer />
