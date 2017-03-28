@@ -14,12 +14,19 @@ class SidebarContainer extends Component {
   }
 
   render() {
-    return (<Sidebar />);
+    return (<Sidebar isAuthenticated={this.props.isAuthenticated} />);
   }
 }
 
 SidebarContainer.propTypes = {
+  isAuthenticated: PropTypes.bool.isRequired,
+  username: PropTypes.string,
   dispatch: PropTypes.func.isRequired,
 };
 
-export default connect()(SidebarContainer);
+function mapStateToProps(state) {
+  const { username, isAuthenticated } = state.user;
+  return { username, isAuthenticated };
+}
+
+export default connect(mapStateToProps)(SidebarContainer);
