@@ -1,4 +1,4 @@
-import fetch from 'isomorphic-fetch';
+import 'whatwg-fetch';
 import path from 'path';
 import { URL } from 'isomorphic-url';
 import URLSearchParams from 'url-search-params';
@@ -163,7 +163,7 @@ export function fetchUserAsync() {
     credentials: 'include',
     headers,
   })
-  .then(res => console.log(res))
+  .then(res => res.json())
   .then((user) => {
     dispatch(updateUser(user.groups, user.username));
     dispatch(updateAuthStatus(true));

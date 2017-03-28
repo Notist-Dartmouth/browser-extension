@@ -1,5 +1,5 @@
 import configureMockStore from 'redux-mock-store';
-import nock from 'nock';
+import fetchMock from 'fetch-mock';
 import thunk from 'redux-thunk';
 import * as types from '../src/constants/ActionTypes';
 import * as actions from '../src/actions';
@@ -46,15 +46,13 @@ describe('actions', () => {
 describe('async actions', () => {
 
   afterEach(() => {
-    nock.cleanAll();
+    fetchMock.restore();
   });
 
   it('creates RECEIVE_ANNOTATION after creating new annotation', () => {
     const articleText = 'Who let the dogs out?';
     const text = 'roof roof roof roof';
-    nock('http://localhost:3000/')
-      .post('/api/annotation')
-      .reply(200, { SUCCESS: {
+    fetchMock.post('*', { SUCCESS: {
         articleText,
         text,
       } } );
@@ -83,9 +81,7 @@ describe('async actions', () => {
       text: 'this is cool',
       parent: '123435235',
     }
-    nock('http://localhost:3000/')
-      .post('/api/annotation')
-      .reply(200, { SUCCESS: reply } );
+    fetchMock.post('*', { SUCCESS: reply } );
 
     const expectedActions = [
       {
@@ -114,9 +110,7 @@ describe('async actions', () => {
         text: 'now hes a super star',
       }
     ];
-    nock('http://localhost:3000/')
-      .get('/api/article/annotations')
-      .reply(200, annotations);
+    fetchMock.get('*', annotations);
 
     const expectedActions = [
       {
@@ -147,9 +141,7 @@ describe('async actions', () => {
   });
 
   it('creates UPDATE_AUTH_STATUS if user is not logged in', () => {
-    nock('http://localhost:3000/')
-      .get('api/user')
-      .reply(401, {});
+    fetchMock.get('*', {});
     const store = mockStore({});
     store.dispatch(actions.fetchUserAsync()).then(() => {
       expect(store.getActions()).toEqual([
@@ -162,12 +154,10 @@ describe('async actions', () => {
   });
 
   it('creates UPDATE_AUTH_STATUS and UPDATE_USER if logged in', () => {
-    nock('http://localhost:3000/')
-      .get('api/user')
-      .reply(200, {
-        groups: [1, 44, 23, 1],
-        username: 'Athelstan',
-      });
+    fetchMock.get('*', {
+      groups: [1, 44, 23, 1],
+      username: 'Athelstan',
+    });
     const store = mockStore({});
     store.dispatch(actions.fetchUserAsync()).then(() => {
       expect(store.getActions()).toEqual([
