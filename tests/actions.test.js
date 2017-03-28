@@ -141,7 +141,7 @@ describe('async actions', () => {
   });
 
   it('creates UPDATE_AUTH_STATUS if user is not logged in', () => {
-    fetchMock.get('*', {});
+    fetchMock.get('*', 401);
     const store = mockStore({});
     store.dispatch(actions.fetchUserAsync()).then(() => {
       expect(store.getActions()).toEqual([
@@ -162,13 +162,13 @@ describe('async actions', () => {
     store.dispatch(actions.fetchUserAsync()).then(() => {
       expect(store.getActions()).toEqual([
         {
-          type: types.UPDATE_AUTH_STATUS,
-          isAuthenticated: true,
-        },
-        {
           type: types.UPDATE_USER,
           groupIds: [1, 44, 23, 1],
           username: 'Athelstan',
+        },
+        {
+          type: types.UPDATE_AUTH_STATUS,
+          isAuthenticated: true,
         },
       ]);
     });
