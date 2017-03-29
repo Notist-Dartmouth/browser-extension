@@ -17,6 +17,13 @@ apiHost = 'http://notist.herokuapp.com';
 apiHost = 'http://localhost:3000';
 // @endif
 
+export function updateAuthStatus(isAuthenticated) {
+  return {
+    type: types.UPDATE_AUTH_STATUS,
+    isAuthenticated,
+  };
+}
+
 function receiveAnnotation(annotation) {
   return {
     type: types.RECEIVE_ANNOTATION,
@@ -53,8 +60,9 @@ function sendCreateAnnotationRequest(dispatch, body) {
       } else {
         dispatch(receiveAnnotation(json.SUCCESS));
       }
-    } // TODO: error handling
-  });
+    }
+  })
+  .catch(error => dispatch(updateAuthStatus(false)));
 }
 
 export function createAnnotationAsync(parent, articleText, ranges, text) {
@@ -150,25 +158,25 @@ export function updateUser(groupIds, username) {
   };
 }
 
-export function updateAuthStatus(isAuthenticated) {
-  return {
-    type: types.UPDATE_AUTH_STATUS,
-    isAuthenticated,
-  };
-}
-
 export function fetchUserAsync() {
-  return (dispatch, getState) => fetch(path.join(apiHost, '/api/user'), {
-    method: 'GET',
-    credentials: 'include',
-    headers,
-  })
-  .then(res => res.json())
-  .then((user) => {
-    dispatch(updateUser(user.groups, user.username));
-    dispatch(updateAuthStatus(true));
-  })
-  .catch(error => dispatch(updateAuthStatus(false)));
+  return (dispatch, getState) => {
+    const { isFetchingUser } = getState().user;
+    if (isFetchingUser) {
+      return Promise.resolve();
+    } else {
+      return fetch(path.join(apiHost, '/api/user'), {
+        method: 'GET',
+        credentials: 'include',
+        headers,
+      })
+      .then(res => res.json())
+      .then((user) => {
+        dispatch(updateUser(user.groups, user.username));
+        dispatch(updateAuthStatus(true));
+      })
+      .catch(error => dispatch(updateAuthStatus(false)));
+    }
+  };
 }
 
 export function fetchUser() {

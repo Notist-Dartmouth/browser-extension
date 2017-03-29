@@ -208,6 +208,7 @@ describe('articles reducer', () => {
 describe('user reducer', () => {
   it('should return initial state by default', () => {
     expect(userReducer(undefined, {})).toEqual({
+      isFetchingUser: false,
       isAuthenticated: false,
       groupIds: [],
       username: '',
@@ -220,6 +221,7 @@ describe('user reducer', () => {
       isAuthenticated: true,
     };
     expect(userReducer(undefined, loginAction)).toEqual({
+      isFetchingUser: false,
       isAuthenticated: true,
       groupIds: [],
       username: '',
@@ -229,10 +231,12 @@ describe('user reducer', () => {
       isAuthenticated: false,
     };
     expect(userReducer({
+      isFetchingUser: true,
       isAuthenticated: true,
       groupIds: [1, 23, 4],
       username: 'peter',
     }, logoutAction)).toEqual({
+      isFetchingUser: false,
       isAuthenticated: false,
       groupIds: [1, 23, 4],
       username: 'peter',

@@ -76,6 +76,23 @@ describe('async actions', () => {
     });
   });
 
+  it('creates UPDATE_AUTH_STATUS if not logged in and creating annotation', () => {
+    fetchMock.post('*', 401);
+    const store = mockStore({
+      articles: {
+        currentArticleUrl: 'www.tcpip.com',
+      },
+    });
+    store.dispatch(actions.createAnnotationAsync(null, 'the', null, 'walk')).then(() => {
+      expect(store.getActions()).toEqual([
+        {
+          type: types.UPDATE_AUTH_STATUS,
+          isAuthenticated: false,
+        }
+      ]);
+    });
+  });
+
   it('creates RECEIVE_REPLY after replying to an annotation', () => {
     const reply = {
       text: 'this is cool',
@@ -140,9 +157,11 @@ describe('async actions', () => {
     });
   });
 
-  it('creates UPDATE_AUTH_STATUS if user is not logged in', () => {
+  it('creates UPDATE_AUTH_STATUS if not logged in and fetching user info', () => {
     fetchMock.get('*', 401);
-    const store = mockStore({});
+    const store = mockStore({
+      user: { isFetchingUser: false },
+    });
     store.dispatch(actions.fetchUserAsync()).then(() => {
       expect(store.getActions()).toEqual([
         {
@@ -158,7 +177,9 @@ describe('async actions', () => {
       groups: [1, 44, 23, 1],
       username: 'Athelstan',
     });
-    const store = mockStore({});
+    const store = mockStore({
+      user: { isFetchingUser: false },
+    });
     store.dispatch(actions.fetchUserAsync()).then(() => {
       expect(store.getActions()).toEqual([
         {
@@ -171,6 +192,15 @@ describe('async actions', () => {
           isAuthenticated: true,
         },
       ]);
+    });
+  });
+
+  it('does not create UPDATE_USER if already fetching user', () => {
+    const store = mockStore({
+      user: { isFetchingUser: true },
+    });
+    store.dispatch(actions.fetchUserAsync()).then(() => {
+      expect(store.getActions()).toEqual([]);
     });
   });
 });
