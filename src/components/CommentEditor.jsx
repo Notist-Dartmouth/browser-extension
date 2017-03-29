@@ -4,6 +4,7 @@ import marked from 'marked';
 import RaisedButton from 'material-ui/RaisedButton';
 import ICONS from '../constants/Icons';
 import Icon from './Icon';
+import GroupDropdown from './GroupDropdown';
 
 class CommentEditor extends React.Component {
 
@@ -154,6 +155,7 @@ class CommentEditor extends React.Component {
           />
         </div>
         <div>
+          <GroupDropdown />
           <RaisedButton
             type="submit"
             onClick={this.handleSubmit}

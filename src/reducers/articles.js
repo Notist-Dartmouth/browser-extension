@@ -66,12 +66,9 @@ function annotationForm(state = {
   switch (action.type) {
     case types.NEW_ANNOTATION:
       return Object.assign({}, state, {
-        isCreatingAnnotation: true,
-        newAnnotation: {
-          articleText: action.articleText,
-          ranges: action.ranges,
-          groups: [],
-        },
+        articleText: action.articleText,
+        ranges: action.ranges,
+        groups: [],
       });
     default:
       return state;
@@ -100,6 +97,7 @@ function articles(state = {
       });
     case types.NEW_ANNOTATION:
       return Object.assign({}, state, {
+        isCreatingAnnotation: true,
         newAnnotation: annotationForm(state.newAnnotation, action),
       });
     case types.TOGGLE_NEW_COMMENT:
