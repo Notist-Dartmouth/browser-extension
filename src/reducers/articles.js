@@ -58,14 +58,35 @@ function articleUrl(state = '', action) {
   }
 }
 
+function annotationForm(state = {
+  articleText: '',
+  ranges: [],
+  groups: [],
+}, action) {
+  switch (action.type) {
+    case types.NEW_ANNOTATION:
+      return Object.assign({}, state, {
+        isCreatingAnnotation: true,
+        newAnnotation: {
+          articleText: action.articleText,
+          ranges: action.ranges,
+          groups: [],
+        },
+      });
+    default:
+      return state;
+  }
+}
+
 function articles(state = {
   isFetchingAnnotations: false,
   isCreatingAnnotation: false,
   annotations: [],
   currentArticleUrl: '',
-  currentSelection: {
+  newAnnotation: {
     articleText: '',
     ranges: [],
+    groups: [],
   },
 }, action) {
   switch (action.type) {
@@ -79,11 +100,7 @@ function articles(state = {
       });
     case types.NEW_ANNOTATION:
       return Object.assign({}, state, {
-        isCreatingAnnotation: true,
-        currentSelection: {
-          articleText: action.articleText,
-          ranges: action.ranges,
-        },
+        newAnnotation: annotationForm(state.newAnnotation, action),
       });
     case types.TOGGLE_NEW_COMMENT:
     case types.RECEIVE_REPLY:

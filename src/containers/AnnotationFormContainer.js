@@ -3,16 +3,17 @@ import AnnotationForm from '../components/AnnotationForm';
 import { toggleCreatingAnnotation, createAnnotation } from '../actions';
 
 function mapStateToProps(state) {
-  const { isCreatingAnnotation, currentSelection } = state.articles;
+  const { isCreatingAnnotation, newAnnotation } = state.articles;
   return {
     isCreatingAnnotation,
-    articleSelection: currentSelection,
+    newAnnotation,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    onCommentPost: (parent, articleText, ranges, text) => dispatch(createAnnotation(parent, articleText, ranges, text)),
+    onCommentPost: (parent, articleText, ranges, text, groups) =>
+      dispatch(createAnnotation(parent, articleText, ranges, text, groups)),
     onFormCancel: () => dispatch(toggleCreatingAnnotation()),
   };
 }

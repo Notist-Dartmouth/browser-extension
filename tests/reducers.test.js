@@ -11,9 +11,10 @@ describe('articles reducer', () => {
       isCreatingAnnotation: false,
       annotations: [],
       currentArticleUrl: '',
-      currentSelection: {
+      newAnnotation: {
         articleText: '',
         ranges: [],
+        groups: [],
       },
     };
     expect(articlesReducer(undefined, {})).toEqual(initialState);
@@ -34,9 +35,10 @@ describe('articles reducer', () => {
         },
       ],
       currentArticleUrl: '',
-      currentSelection: {
+      newAnnotation: {
         articleText: '',
         ranges: [],
+        groups: [],
       },
     };
     const action = {
@@ -65,9 +67,10 @@ describe('articles reducer', () => {
         },
       ],
       currentArticleUrl: '',
-      currentSelection: {
+      newAnnotation: {
         articleText: '',
         ranges: [],
+        groups: [],
       },
     }, {
       type: types.RECEIVE_REPLY,
@@ -99,9 +102,10 @@ describe('articles reducer', () => {
         },
       ],
       currentArticleUrl: '',
-      currentSelection: {
+      newAnnotation: {
         articleText: '',
         ranges: [],
+        groups: [],
       },
     });
   });
@@ -139,9 +143,10 @@ describe('articles reducer', () => {
         },
       ],
       currentArticleUrl: '',
-      currentSelection: {
+      newAnnotation: {
         articleText: '',
         ranges: [],
+        groups: [],
       },
     }, {
       type: types.RECEIVE_REPLY,
@@ -196,9 +201,10 @@ describe('articles reducer', () => {
         },
       ],
       currentArticleUrl: '',
-      currentSelection: {
+      newAnnotation: {
         articleText: '',
         ranges: [],
+        groups: [],
       },
     });
   });

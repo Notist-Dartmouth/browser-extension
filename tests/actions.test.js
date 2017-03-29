@@ -21,14 +21,16 @@ describe('actions', () => {
     }];
     const text = 'valar dohaeris';
     const parent = 4;
+    const groups = [1, 44, 2];
     const action = {
       type: types.CREATE_ANNOTATION,
       articleText,
       ranges,
       text,
       parent,
+      groups,
     };
-    expect(actions.createAnnotation(parent, articleText, ranges, text)).toEqual(action);
+    expect(actions.createAnnotation(parent, articleText, ranges, text, groups)).toEqual(action);
   });
 });
 
@@ -41,6 +43,7 @@ describe('async actions', () => {
   it('creates RECEIVE_ANNOTATION after creating new annotation', () => {
     const articleText = 'Who let the dogs out?';
     const text = 'roof roof roof roof';
+    const groups = [];
     nock('http://localhost:3000/')
       .post('/api/annotation')
       .reply(200, { SUCCESS: {
@@ -62,7 +65,7 @@ describe('async actions', () => {
         currentArticleUrl: 'www.gotgoats.com',
       },
     });
-    store.dispatch(actions.createAnnotationAsync(null, articleText, null, text)).then(() => {
+    store.dispatch(actions.createAnnotationAsync(null, articleText, null, text, groups)).then(() => {
       expect(store.getActions()).toEqual(expectedActions);
     });
   });
@@ -87,7 +90,7 @@ describe('async actions', () => {
         currentArticleUrl: 'www.gotgoats.com',
       },
     });
-    store.dispatch(actions.createAnnotationAsync(reply.parent, null, null, reply.text)).then(() => {
+    store.dispatch(actions.createAnnotationAsync(reply.parent, null, null, reply.text, [])).then(() => {
       expect(store.getActions()).toEqual(expectedActions);
     });
   });

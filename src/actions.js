@@ -57,7 +57,7 @@ function sendCreateAnnotationRequest(dispatch, body) {
   });
 }
 
-export function createAnnotationAsync(parent, articleText, ranges, text) {
+export function createAnnotationAsync(parent, articleText, ranges, text, groups) {
   return (dispatch, getState) => {
     const body = {
       parentId: parent,
@@ -65,20 +65,21 @@ export function createAnnotationAsync(parent, articleText, ranges, text) {
       ranges,
       text,
       uri: getState().articles.currentArticleUrl,
-      groups: [], // TODO: pass this function the selected group(s) and whether public or not
-      isPublic: true,
+      groups,
+      isPublic: true, // TODO: pass whether is public or not
     };
     return sendCreateAnnotationRequest(dispatch, JSON.stringify(body));
   };
 }
 
-export function createAnnotation(parent, articleText, ranges, text) {
+export function createAnnotation(parent, articleText, ranges, text, groups) {
   return {
     type: types.CREATE_ANNOTATION,
     articleText,
     ranges,
     parent,
     text,
+    groups,
   };
 }
 

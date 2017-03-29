@@ -72,10 +72,13 @@ class CommentEditor extends React.Component {
   }
 
   handleSubmit() {
+    const { articleText, ranges, groups } = this.props.newAnnotation;
     this.props.onCommentPost(this.props.parent,
-      this.props.articleSelection.articleText,
-      this.props.articleSelection.ranges,
-      this.getMarkdown());
+      articleText,
+      ranges,
+      this.getMarkdown(),
+      groups,
+    );
     this.setState({
       editorState: EditorState.createEmpty(),
       markdown: '',
@@ -170,15 +173,16 @@ CommentEditor.propTypes = {
   onCommentCancel: PropTypes.func.isRequired,
   onCommentPost: PropTypes.func.isRequired,
   parent: PropTypes.string,
-  articleSelection: PropTypes.shape({
+  newAnnotation: PropTypes.shape({
     articleText: PropTypes.string,
     ranges: PropTypes.array,
+    groups: PropTypes.array,
   }),
 };
 
 CommentEditor.defaultProps = {
   parent: null,
-  articleSelection: {},
+  newAnnotation: {},
 };
 
 export default CommentEditor;
