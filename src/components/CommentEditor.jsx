@@ -4,7 +4,7 @@ import marked from 'marked';
 import RaisedButton from 'material-ui/RaisedButton';
 import ICONS from '../constants/Icons';
 import Icon from './Icon';
-import GroupDropdown from './GroupDropdown';
+import GroupDropdown from './GroupDropdown/GroupDropdown';
 
 class CommentEditor extends React.Component {
 
@@ -147,15 +147,15 @@ class CommentEditor extends React.Component {
           <Editor
             ref={(editor) => { this.editor = editor; }}
             readOnly={this.state.isPreview}
-            stripPastedStyles={true}
+            stripPastedStyles
             placeholder={'Enter comment'}
             onChange={editorState => this.setState({ editorState })}
             editorState={this.state.editorState}
             handleKeyCommand={this.handleStyleCommand}
           />
         </div>
+        <GroupDropdown />
         <div>
-          <GroupDropdown />
           <RaisedButton
             type="submit"
             onClick={this.handleSubmit}
