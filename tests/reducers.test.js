@@ -1,4 +1,5 @@
 import articlesReducer from '../src/reducers/articles';
+import userReducer from '../src/reducers/user';
 import * as types from '../src/constants/ActionTypes';
 
 // These tests are based on redux documentation for testing reducers - http://redux.js.org/docs/recipes/WritingTests.html
@@ -200,6 +201,45 @@ describe('articles reducer', () => {
         articleText: '',
         ranges: [],
       },
+    });
+  });
+});
+
+describe('user reducer', () => {
+  it('should return initial state by default', () => {
+    expect(userReducer(undefined, {})).toEqual({
+      isFetchingUser: false,
+      isAuthenticated: false,
+      groups: [],
+      username: '',
+    });
+  });
+
+  it('should handle UPDATE_AUTH_STATUS', () => {
+    const loginAction = {
+      type: types.UPDATE_AUTH_STATUS,
+      isAuthenticated: true,
+    };
+    expect(userReducer(undefined, loginAction)).toEqual({
+      isFetchingUser: false,
+      isAuthenticated: true,
+      groups: [],
+      username: '',
+    });
+    const logoutAction = {
+      type: types.UPDATE_AUTH_STATUS,
+      isAuthenticated: false,
+    };
+    expect(userReducer({
+      isFetchingUser: true,
+      isAuthenticated: true,
+      groups: [],
+      username: 'peter',
+    }, logoutAction)).toEqual({
+      isFetchingUser: false,
+      isAuthenticated: false,
+      groups: [],
+      username: 'peter',
     });
   });
 });
