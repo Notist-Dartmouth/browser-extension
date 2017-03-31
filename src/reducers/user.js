@@ -3,7 +3,7 @@ import * as types from '../constants/ActionTypes';
 const initialState = {
   isFetchingUser: false,
   isAuthenticated: false,
-  groupIds: [],
+  groups: [],
   username: '',
 };
 
@@ -12,7 +12,7 @@ function user(state = initialState, action) {
     case types.UPDATE_USER:
       return Object.assign({}, state, {
         isFetchingUser: false,
-        groupIds: action.groupIds,
+        groups: action.groups,
         username: action.username,
       });
     case types.FETCH_USER:

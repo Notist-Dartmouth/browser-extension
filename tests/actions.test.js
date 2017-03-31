@@ -31,15 +31,15 @@ describe('actions', () => {
     expect(actions.createAnnotation(parent, articleText, ranges, text)).toEqual(action);
   });
 
-  it('should create action for updating username and groupIds of user', () => {
+  it('should create action for updating username and groups of user', () => {
     const username = 'billybobjones';
-    const groupIds = [1, 33, 42, 5];
+    const groups = [];
     const action = {
       type: types.UPDATE_USER,
-      groupIds,
+      groups,
       username,
     }
-    expect(actions.updateUser(groupIds, username)).toEqual(action);
+    expect(actions.updateUser(groups, username)).toEqual(action);
   });
 });
 
@@ -174,7 +174,7 @@ describe('async actions', () => {
 
   it('creates UPDATE_AUTH_STATUS and UPDATE_USER if logged in', () => {
     fetchMock.get('*', {
-      groups: [1, 44, 23, 1],
+      groups: [],
       username: 'Athelstan',
     });
     const store = mockStore({
@@ -184,7 +184,7 @@ describe('async actions', () => {
       expect(store.getActions()).toEqual([
         {
           type: types.UPDATE_USER,
-          groupIds: [1, 44, 23, 1],
+          groups: [],
           username: 'Athelstan',
         },
         {

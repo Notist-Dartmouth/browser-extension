@@ -11,7 +11,8 @@ class SidebarContainer extends Component {
 
   componentDidMount() {
     this.props.dispatch(fetchAnnotations());
-    this.props.dispatch(fetchUser());
+    // TODO: uncomment this once https://github.com/Notist/notist/pull/16 is merged
+    // this.props.dispatch(fetchUser());
   }
 
   render() {
@@ -21,13 +22,12 @@ class SidebarContainer extends Component {
 
 SidebarContainer.propTypes = {
   isAuthenticated: PropTypes.bool.isRequired,
-  username: PropTypes.string,
   dispatch: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state) {
-  const { username, isAuthenticated } = state.user;
-  return { username, isAuthenticated };
+  const { isAuthenticated } = state.user;
+  return { isAuthenticated };
 }
 
 export default connect(mapStateToProps)(SidebarContainer);

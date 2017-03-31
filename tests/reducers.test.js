@@ -210,7 +210,7 @@ describe('user reducer', () => {
     expect(userReducer(undefined, {})).toEqual({
       isFetchingUser: false,
       isAuthenticated: false,
-      groupIds: [],
+      groups: [],
       username: '',
     });
   });
@@ -223,7 +223,7 @@ describe('user reducer', () => {
     expect(userReducer(undefined, loginAction)).toEqual({
       isFetchingUser: false,
       isAuthenticated: true,
-      groupIds: [],
+      groups: [],
       username: '',
     });
     const logoutAction = {
@@ -233,12 +233,12 @@ describe('user reducer', () => {
     expect(userReducer({
       isFetchingUser: true,
       isAuthenticated: true,
-      groupIds: [1, 23, 4],
+      groups: [],
       username: 'peter',
     }, logoutAction)).toEqual({
       isFetchingUser: false,
       isAuthenticated: false,
-      groupIds: [1, 23, 4],
+      groups: [],
       username: 'peter',
     });
   });

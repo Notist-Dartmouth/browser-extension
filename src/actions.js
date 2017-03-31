@@ -150,10 +150,10 @@ export function updateArticleUrl(url) {
   };
 }
 
-export function updateUser(groupIds, username) {
+export function updateUser(groups, username) {
   return {
     type: types.UPDATE_USER,
-    groupIds,
+    groups,
     username,
   };
 }
