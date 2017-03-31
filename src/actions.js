@@ -52,7 +52,14 @@ function sendCreateAnnotationRequest(dispatch, body) {
     headers,
     body,
   })
-  .then(res => res.json())
+  .then((res) => {
+    if (res.status === 401) {
+      dispatch(updateAuthStatus(false));
+      return {};
+    } else {
+      return res.json();
+    }
+  })
   .then((json) => {
     if (json.SUCCESS) {
       if (json.SUCCESS.parent) {
@@ -61,8 +68,7 @@ function sendCreateAnnotationRequest(dispatch, body) {
         dispatch(receiveAnnotation(json.SUCCESS));
       }
     }
-  })
-  .catch(error => dispatch(updateAuthStatus(false)));
+  });
 }
 
 export function createAnnotationAsync(parent, articleText, ranges, text) {
