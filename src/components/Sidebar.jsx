@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import Drawer from 'material-ui/Drawer';
 import AppBar from 'material-ui/AppBar';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import NavigationChevronLeft from 'material-ui/svg-icons/navigation/chevron-left';
 import NavigationChevronRight from 'material-ui/svg-icons/navigation/chevron-right';
+import { Card, CardText } from 'material-ui/Card';
 import IconButton from 'material-ui/IconButton';
 import AnnotationListContainer from '../containers/AnnotationListContainer';
 import AnnotationFormContainer from '../containers/AnnotationFormContainer';
@@ -13,7 +14,7 @@ export default class Sidebar extends React.Component {
   constructor(props) {
     super(props);
     injectTapEventPlugin();
-    this.state = { open: false };
+    this.state = { open: true };
   }
 
   render() {
@@ -31,9 +32,21 @@ export default class Sidebar extends React.Component {
             </IconButton>
           }
         />
+        <Card hidden={this.props.isAuthenticated}>
+          <CardText>
+            <a
+              href={'/* @echo API_HOST *//login'}
+              style={{ color: 'blue', textDecoration: 'none' }}
+            >Login</a> to create and edit annotations.
+          </CardText>
+        </Card>
         <AnnotationFormContainer />
         <AnnotationListContainer />
       </Drawer>
     );
   }
 }
+
+Sidebar.propTypes = {
+  isAuthenticated: PropTypes.bool.isRequired,
+};

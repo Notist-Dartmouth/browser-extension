@@ -1,4 +1,4 @@
-import fetch from 'isomorphic-fetch';
+import 'whatwg-fetch';
 import path from 'path';
 import { URL } from 'isomorphic-url';
 import URLSearchParams from 'url-search-params';
@@ -11,11 +11,18 @@ const headers = {
 
 let apiHost;
 // @if ENVIRONMENT='production'
-apiHost = 'notist.herokuapp.com';
+apiHost = 'http://notist.herokuapp.com';
 // @endif
 // @if ENVIRONMENT='development'
-apiHost = 'localhost:3000';
+apiHost = 'http://localhost:3000';
 // @endif
+
+export function updateAuthStatus(isAuthenticated) {
+  return {
+    type: types.UPDATE_AUTH_STATUS,
+    isAuthenticated,
+  };
+}
 
 function receiveAnnotation(annotation) {
   return {
@@ -39,13 +46,20 @@ function receiveReply(reply) {
 }
 
 function sendCreateAnnotationRequest(dispatch, body) {
-  return fetch(path.join('http://', apiHost, 'api/annotation'), {
+  return fetch(path.join(apiHost, 'api/annotation'), {
     method: 'POST',
     credentials: 'include',
     headers,
     body,
   })
-  .then(res => res.json())
+  .then((res) => {
+    if (res.status === 401) {
+      dispatch(updateAuthStatus(false));
+      return {};
+    } else {
+      return res.json();
+    }
+  })
   .then((json) => {
     if (json.SUCCESS) {
       if (json.SUCCESS.parent) {
@@ -53,7 +67,7 @@ function sendCreateAnnotationRequest(dispatch, body) {
       } else {
         dispatch(receiveAnnotation(json.SUCCESS));
       }
-    } // TODO: error handling
+    }
   });
 }
 
@@ -89,7 +103,7 @@ export function fetchAnnotationsAsync() {
     if (isFetchingAnnotations) {
       return Promise.resolve();
     } else {
-      const urlString = path.join('http://', apiHost, 'api/article/annotations');
+      const urlString = path.join(apiHost, 'api/article/annotations');
       const annotationsEndpoint = new URL(urlString);
       annotationsEndpoint.search = new URLSearchParams(`?uri=${currentArticleUrl}`);
       return fetch(annotationsEndpoint, {
@@ -140,5 +154,40 @@ export function updateArticleUrl(url) {
   return {
     type: types.UPDATE_ARTICLE_URL,
     url,
+  };
+}
+
+export function updateUser(groups, username) {
+  return {
+    type: types.UPDATE_USER,
+    groups,
+    username,
+  };
+}
+
+export function fetchUserAsync() {
+  return (dispatch, getState) => {
+    const { isFetchingUser } = getState().user;
+    if (isFetchingUser) {
+      return Promise.resolve();
+    } else {
+      return fetch(path.join(apiHost, '/api/user'), {
+        method: 'GET',
+        credentials: 'include',
+        headers,
+      })
+      .then(res => res.json())
+      .then((user) => {
+        dispatch(updateUser(user.groups, user.username));
+        dispatch(updateAuthStatus(true));
+      })
+      .catch(error => dispatch(updateAuthStatus(false)));
+    }
+  };
+}
+
+export function fetchUser() {
+  return {
+    type: types.FETCH_USER,
   };
 }
