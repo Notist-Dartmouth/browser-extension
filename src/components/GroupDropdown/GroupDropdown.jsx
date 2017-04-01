@@ -1,7 +1,7 @@
 import React from 'react';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
-import GroupForm from './GroupForm';
+import GroupFormContainer from '../../containers/GroupFormContainer';
 import styles from './GroupDropdown.css';
 
 const GroupDropdown = props => (
@@ -12,7 +12,7 @@ const GroupDropdown = props => (
     <SelectField
       floatingLabelText="Groups"
     >
-      <GroupForm />
+      <GroupFormContainer />
     </SelectField>
   </div>
 );

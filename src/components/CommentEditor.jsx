@@ -5,6 +5,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import ICONS from '../constants/Icons';
 import Icon from './Icon';
 import GroupDropdown from './GroupDropdown/GroupDropdown';
+import ButtonFooter from './ButtonFooter';
 
 class CommentEditor extends React.Component {
 
@@ -155,17 +156,12 @@ class CommentEditor extends React.Component {
           />
         </div>
         <GroupDropdown />
-        <div>
-          <RaisedButton
-            type="submit"
-            onClick={this.handleSubmit}
-            label="Post"
-          />
-          <RaisedButton
-            onClick={this.props.onCommentCancel}
-            label="Cancel"
-          />
-        </div>
+        <ButtonFooter
+          primaryText="Post"
+          onPrimaryClicked={this.handleSubmit}
+          secondaryText="Cancel"
+          onSecondaryClicked={this.props.onCommentCancel}
+        />
       </div>
     );
   }
