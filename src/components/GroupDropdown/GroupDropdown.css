@@ -16,3 +16,7 @@
   visibility: visible;
   transition-delay: 1s;
 }
+
+.formElement {
+  text-align: center;
+}
