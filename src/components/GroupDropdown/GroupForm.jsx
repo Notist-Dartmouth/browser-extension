@@ -5,38 +5,43 @@ import SocialGroupAdd from 'material-ui/svg-icons/social/group-add';
 import styles from './GroupDropdown.css';
 import ButtonFooter from '../ButtonFooter';
 
-const GroupForm = props => (
-  <div className={styles.formElement}>
-    <FlatButton
-      primary
-      onClick={props.onToggleActive}
-      label="Create Group"
-      icon={<SocialGroupAdd />}
-    />
-    <div hidden={!props.active}>
-      <TextField
-        id="name"
-        className={styles.textField}
-        onChange={props.onChange}
-        hintText="Group name"
-        errorText={props.validName ? '' : 'Group name is required'}
-      />
-      <TextField
-        id="description"
-        className={styles.textField}
-        onChange={props.onChange}
-        hintText="Description"
-        multiLine
-      />
-      <ButtonFooter
-        primaryText="Submit"
-        onPrimaryClicked={props.onSubmit}
-        secondaryText="Cancel"
-        onSecondaryClicked={props.onToggleActive}
-      />
+const GroupForm = (props) => {
+  const textFieldStyle = {
+    width: '200px',
+  };
+  return (
+    <div className={styles.formElement}>
+      {!props.active && <FlatButton
+        primary
+        onClick={props.onToggleActive}
+        label="Create Group"
+        icon={<SocialGroupAdd />}
+      />}
+      <div hidden={!props.active}>
+        <TextField
+          id="name"
+          style={textFieldStyle}
+          onChange={props.onChange}
+          hintText="Group name"
+          errorText={props.validName ? '' : 'Group name is required'}
+        />
+        <TextField
+          id="description"
+          style={textFieldStyle}
+          onChange={props.onChange}
+          hintText="Description"
+          multiLine
+        />
+        <ButtonFooter
+          primaryText="Submit"
+          onPrimaryClicked={props.onSubmit}
+          secondaryText="Cancel"
+          onSecondaryClicked={props.onToggleActive}
+        />
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 GroupForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
