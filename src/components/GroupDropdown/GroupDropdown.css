@@ -3,20 +3,6 @@
   left: 20px;
 }
 
-.dropdown .hintText {
-  visibility: hidden;
-  padding: 5px;
-  z-index: 1;
-  width: auto;
-  font-size: 10px;
-  position: absolute;
-}
-
-.dropdown:hover .hintText {
-  visibility: visible;
-  transition-delay: 1s;
-}
-
 .formElement {
   text-align: center;
   padding: 10px;

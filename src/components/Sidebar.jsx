@@ -1,13 +1,10 @@
 import React, { PropTypes } from 'react';
 import Drawer from 'material-ui/Drawer';
-import AppBar from 'material-ui/AppBar';
 import injectTapEventPlugin from 'react-tap-event-plugin';
-import NavigationChevronLeft from 'material-ui/svg-icons/navigation/chevron-left';
-import NavigationChevronRight from 'material-ui/svg-icons/navigation/chevron-right';
 import { Card, CardText } from 'material-ui/Card';
-import IconButton from 'material-ui/IconButton';
 import AnnotationListContainer from '../containers/AnnotationListContainer';
 import AnnotationFormContainer from '../containers/AnnotationFormContainer';
+import HeaderBar from './HeaderBar';
 
 export default class Sidebar extends React.Component {
 
@@ -24,13 +21,9 @@ export default class Sidebar extends React.Component {
         openSecondary
         containerStyle={{ width: '300px', right: this.state.open ? 0 : '20px' }}
       >
-        <AppBar
-          title="Notist"
-          iconElementLeft={
-            <IconButton onClick={() => this.setState({ open: !this.state.open })}>
-              {this.state.open ? <NavigationChevronRight /> : <NavigationChevronLeft />}
-            </IconButton>
-          }
+        <HeaderBar
+          onOpenToggle={() => this.setState({ open: !this.state.open })}
+          isOpen={this.state.open}
         />
         <Card hidden={this.props.isAuthenticated}>
           <CardText>

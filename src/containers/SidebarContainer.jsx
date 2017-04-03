@@ -11,8 +11,7 @@ class SidebarContainer extends Component {
 
   componentDidMount() {
     this.props.dispatch(fetchAnnotations());
-    // TODO: uncomment this once https://github.com/Notist/notist/pull/16 is merged
-    // this.props.dispatch(fetchUser());
+    this.props.dispatch(fetchUser());
   }
 
   render() {
