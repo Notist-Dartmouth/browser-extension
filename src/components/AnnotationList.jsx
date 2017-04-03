@@ -21,10 +21,10 @@ const AnnotationList = props => (
   <List>
     <Subheader>
       {props.annotations.length} annotations
-      <GroupDropdown
+      {props.annotations.length > 0 && <GroupDropdown
         label="Filter by group"
         groups={mockGroups}
-      />
+      />}
     </Subheader>
     {props.annotations.map(a =>
       <Annotation

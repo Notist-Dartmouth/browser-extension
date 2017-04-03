@@ -1,6 +1,7 @@
 .dropdown {
-  position: relative;
-  left: 20px;
+  position: absolute;
+  left: 10%;
+  display: inline-block;
 }
 
 .formElement {
