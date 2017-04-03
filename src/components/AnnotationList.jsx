@@ -21,11 +21,21 @@ const AnnotationList = props => (
   <List>
     <Subheader>
       {props.annotations.length} annotations
-      {props.annotations.length > 0 && <GroupDropdown
+    </Subheader>
+    {props.annotations.length > 0 ?
+      <GroupDropdown
         label="Filter by group"
         groups={mockGroups}
-      />}
-    </Subheader>
+      /> :
+      <Subheader
+        style={{
+          fontSize: '150%',
+          lineHeight: '95%',
+          display: 'inline-block'
+        }}
+      >
+        Highlight text to create an annotation for this article
+      </Subheader>}
     {props.annotations.map(a =>
       <Annotation
         {...a}
