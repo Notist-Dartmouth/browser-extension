@@ -176,12 +176,18 @@ export function fetchUserAsync() {
         credentials: 'include',
         headers,
       })
-      .then(res => res.json())
+      .then((res) => {
+        if (res.status === 401) {
+          dispatch(updateAuthStatus(false));
+          return {};
+        } else {
+          return res.json();
+        }
+      })
       .then((user) => {
         dispatch(updateUser(user.groups, user.username));
         dispatch(updateAuthStatus(true));
-      })
-      .catch(error => dispatch(updateAuthStatus(false)));
+      });
     }
   };
 }

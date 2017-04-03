@@ -30,7 +30,7 @@ const AnnotationList = props => (
       <Subheader
         style={{
           fontSize: '150%',
-          lineHeight: '95%',
+          lineHeight: '100%',
           display: 'inline-block'
         }}
       >
