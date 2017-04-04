@@ -7,14 +7,16 @@ import styles from './GroupDropdown.css';
 const GroupDropdown = props => (
   <div className={styles.dropdown} >
     <SelectField
+      multiple
       value={props.selectedGroups}
       floatingLabelText={props.label}
-      multiple
+      onChange={props.onChange}
     >
       {props.groups.map(group => (
         <MenuItem
           key={group._id}
           value={group._id}
+          checked={props.selectedGroups && props.selectedGroups.includes(group)}
           primaryText={group.name}
           secondaryText={group.description}
         />
@@ -31,13 +33,14 @@ GroupDropdown.propTypes = {
     description: PropTypes.string,
   })),
   label: PropTypes.string,
+  onChange: PropTypes.func.isRequired,
   selectedGroups: PropTypes.arrayOf(PropTypes.string),
 };
 
 GroupDropdown.defaultProps = {
   groups: [],
   label: 'Select groups to post to',
-  selectedGroups: null,
+  selectedGroups: [],
 };
 
 export default GroupDropdown;

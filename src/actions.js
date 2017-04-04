@@ -142,6 +142,13 @@ export function toggleCreatingAnnotation() {
   };
 }
 
+export function selectAnnotationGroups(groups) {
+  return {
+    type: types.SELECT_ANNOTATION_GROUPS,
+    groups,
+  };
+}
+
 export function newAnnotation(articleText, ranges) {
   return {
     type: types.NEW_ANNOTATION,

@@ -3,7 +3,7 @@ import { Editor, EditorState, Modifier, ContentState, convertFromHTML } from 'dr
 import marked from 'marked';
 import ICONS from '../constants/Icons';
 import Icon from './Icon';
-import GroupDropdown from './GroupDropdown/GroupDropdown';
+import GroupDropdownContainer from '../containers/GroupDropdownContainer';
 import ButtonFooter from './ButtonFooter';
 
 class CommentEditor extends React.Component {
@@ -154,7 +154,7 @@ class CommentEditor extends React.Component {
             handleKeyCommand={this.handleStyleCommand}
           />
         </div>
-        <GroupDropdown />
+        <GroupDropdownContainer />
         <ButtonFooter
           primaryText="Post"
           onPrimaryClicked={this.handleSubmit}

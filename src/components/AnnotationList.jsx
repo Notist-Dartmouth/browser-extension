@@ -2,20 +2,7 @@ import React, { PropTypes } from 'react';
 import { List } from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
 import Annotation from './Annotation';
-import GroupDropdown from './GroupDropdown/GroupDropdown';
-
-const mockGroups = [
-  {
-    _id: '1',
-    name: 'notist',
-    description: 'cool man i like this',
-  },
-  {
-    _id: '2',
-    name: 'peter group',
-    description: 'just for me',
-  },
-];
+import GroupDropdownContainer from '../containers/GroupFormContainer';
 
 const AnnotationList = props => (
   <List>
@@ -23,15 +10,12 @@ const AnnotationList = props => (
       {props.annotations.length} annotations
     </Subheader>
     {props.annotations.length > 0 ?
-      <GroupDropdown
-        label="Filter by group"
-        groups={mockGroups}
-      /> :
+      <GroupDropdownContainer /> :
       <Subheader
         style={{
           fontSize: '150%',
           lineHeight: '100%',
-          display: 'inline-block'
+          display: 'inline-block',
         }}
       >
         Highlight text to create an annotation for this article

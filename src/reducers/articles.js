@@ -64,11 +64,14 @@ function annotationForm(state = {
   groups: [],
 }, action) {
   switch (action.type) {
+    case types.SELECT_ANNOTATION_GROUPS:
+      return Object.assign({}, state, {
+        groups: action.groups,
+      });
     case types.NEW_ANNOTATION:
       return Object.assign({}, state, {
         articleText: action.articleText,
         ranges: action.ranges,
-        groups: [],
       });
     default:
       return state;
@@ -95,6 +98,7 @@ function articles(state = {
       return Object.assign({}, state, {
         currentArticleUrl: articleUrl(state.currentArticleUrl, action),
       });
+    case types.SELECT_ANNOTATION_GROUPS:
     case types.NEW_ANNOTATION:
       return Object.assign({}, state, {
         isCreatingAnnotation: true,
