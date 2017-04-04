@@ -10,6 +10,14 @@ const styles = StyleSheet.create({
     left: '10%',
     display: 'inline-block',
   },
+  header: {
+    fontSize: '20px',
+    lineHeight: '20px',
+    color: 'inherit',
+    padding: '10px',
+    textAlign: 'center',
+    fontWeight: 'bold',
+  },
 });
 
 const GroupDropdown = props => (
@@ -20,6 +28,9 @@ const GroupDropdown = props => (
       floatingLabelText={props.label}
       onChange={props.onChange}
     >
+      <div className={css(styles.header)}>
+        <span>Groups</span>
+      </div>
       {props.groups.map(group => (
         <MenuItem
           key={group._id}
