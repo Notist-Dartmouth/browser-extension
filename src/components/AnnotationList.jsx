@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import { List } from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
 import Annotation from './Annotation';
-import GroupDropdownContainer from '../containers/GroupFormContainer';
+import GroupDropdownContainer from '../containers/GroupDropdownContainer';
 
 const AnnotationList = props => (
   <List>
@@ -10,7 +10,7 @@ const AnnotationList = props => (
       {props.annotations.length} annotations
     </Subheader>
     {props.annotations.length > 0 ?
-      <GroupDropdownContainer /> :
+      <GroupDropdownContainer label="Filter by group" /> :
       <Subheader
         style={{
           fontSize: '150%',

@@ -38,6 +38,7 @@
   },
   "homepage": "https://github.com/Notist/browser-extension#readme",
   "dependencies": {
+    "aphrodite": "^1.2.0",
     "draft-js": "^0.10.0",
     "es6-promise": "^4.0.5",
     "immutable": "^3.8.1",

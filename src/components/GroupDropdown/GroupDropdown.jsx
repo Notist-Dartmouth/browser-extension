@@ -1,11 +1,19 @@
 import React, { PropTypes } from 'react';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
+import { StyleSheet, css } from 'aphrodite';
 import GroupFormContainer from '../../containers/GroupFormContainer';
-import styles from './GroupDropdown.css';
+
+const styles = StyleSheet.create({
+  dropdown: {
+    position: 'relative',
+    left: '10%',
+    display: 'inline-block',
+  },
+});
 
 const GroupDropdown = props => (
-  <div className={styles.dropdown} >
+  <div className={css(styles.dropdown)} >
     <SelectField
       multiple
       value={props.selectedGroups}
@@ -16,7 +24,7 @@ const GroupDropdown = props => (
         <MenuItem
           key={group._id}
           value={group._id}
-          checked={props.selectedGroups && props.selectedGroups.includes(group)}
+          checked={props.selectedGroups.includes(group._id)}
           primaryText={group.name}
           secondaryText={group.description}
         />
@@ -32,14 +40,13 @@ GroupDropdown.propTypes = {
     name: PropTypes.string,
     description: PropTypes.string,
   })),
-  label: PropTypes.string,
+  label: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
   selectedGroups: PropTypes.arrayOf(PropTypes.string),
 };
 
 GroupDropdown.defaultProps = {
   groups: [],
-  label: 'Select groups to post to',
   selectedGroups: [],
 };
 
