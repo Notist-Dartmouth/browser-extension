@@ -74,7 +74,7 @@ function sendCreateAnnotationRequest(dispatch, body) {
 export function createAnnotationAsync(parent, articleText, ranges, text, groups) {
   return (dispatch, getState) => {
     const body = {
-      parentId: parent,
+      parent,
       articleText,
       ranges,
       text,
@@ -192,8 +192,10 @@ export function fetchUserAsync() {
         }
       })
       .then((user) => {
-        dispatch(updateUser(user.groups, user.username));
-        dispatch(updateAuthStatus(true));
+        if (user.groups && user.username) {
+          dispatch(updateUser(user.groups, user.username));
+          dispatch(updateAuthStatus(true));
+        }
       });
     }
   };
