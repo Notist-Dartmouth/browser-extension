@@ -29,7 +29,10 @@ const GroupDropdown = props => (
       floatingLabelText={props.label}
       onChange={props.onChange}
     >
-      <div className={css(styles.header)}>
+      <div
+        className={css(styles.header)}
+        hidden={props.groups.length === 0}
+      >
         <span>Groups</span>
       </div>
       {props.groups.map(group => (

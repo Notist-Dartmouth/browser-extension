@@ -58,17 +58,15 @@ const GroupForm = props => (
         <span>Group Type</span>
       </div>
       <RadioButtonGroup
-        id="visibility"
         name="visibility"
-        defaultSelected="personal"
-        onChange={props.onChange}
+        valueSelected={props.visibilitySelected}
+        onChange={props.onRadioToggle}
       >
         <RadioButton
           className={css(styles.radioButton)}
           value="public"
           label="Public"
           labelStyle={styles.radioLabel}
-          onChange={props.onChange}
         />
         <RadioButton
           className={css(styles.radioButton)}
@@ -90,6 +88,7 @@ const GroupForm = props => (
 GroupForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   onToggleActive: PropTypes.func.isRequired,
+  onRadioToggle: PropTypes.func.isRequired,
   onChange: PropTypes.func.isRequired,
   validName: PropTypes.bool.isRequired,
   active: PropTypes.bool.isRequired,

@@ -16,9 +16,19 @@ class GroupFormContainer extends React.Component {
       description: '',
       visibilitySelected: '',
     };
+    this.handleRadioToggle = this.handleRadioToggle.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleToggleActive = this.handleToggleActive.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleRadioToggle(e, newValue) {
+    this.setState({
+      isPublic: newValue === 'public' ? !this.state.isPublic : false,
+      isPersonal: newValue === 'personal' ? !this.state.isPersonal : false,
+      visibilitySelected: (newValue === 'public' && this.state.isPublic) ||
+        (newValue === 'personal' && this.state.isPersonal) ? '' : newValue,
+    });
   }
 
   handleChange(e, newValue) {
@@ -29,13 +39,6 @@ class GroupFormContainer extends React.Component {
       }
     } else if (e.target.id === 'description') {
       this.setState({ description: newValue });
-    } else if (e.target.id === 'visibility') {
-      this.setState({
-        isPublic: newValue === 'public' ? !this.state.isPublic : false,
-        isPersonal: newValue === 'personal' ? !this.state.isPersonal : false,
-        visibilitySelected: (newValue === 'public' && this.state.isPublic) ||
-          (newValue === 'personal' && this.state.isPersonal) ? '' : newValue,
-      });
     }
   }
 
@@ -46,6 +49,7 @@ class GroupFormContainer extends React.Component {
   handleSubmit() {
     if (this.state.name.length === 0) {
       this.setState({ validName: false });
+      return;
     }
     const { name, description, isPersonal, isPublic } = this.state;
     const newGroup = { name, description, isPersonal, isPublic };
@@ -58,6 +62,7 @@ class GroupFormContainer extends React.Component {
         onSubmit={this.handleSubmit}
         onChange={this.handleChange}
         onToggleActive={this.handleToggleActive}
+        onRadioToggle={this.handleRadioToggle}
         validName={this.state.validName}
         active={this.state.active}
         visibilitySelected={this.state.visibilitySelected}
