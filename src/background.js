@@ -7,6 +7,7 @@ import {
   fetchAnnotationsAsync,
   fetchUserAsync,
   updateArticleUrl,
+  createGroupAsync,
 } from './actions';
 
 const aliases = {
@@ -14,6 +15,7 @@ const aliases = {
     createAnnotationAsync(action.parent, action.articleText, action.ranges, action.text, action.groups),
   FETCH_ANNOTATIONS: () => fetchAnnotationsAsync(),
   FETCH_USER: () => fetchUserAsync(),
+  CREATE_GROUP: action => createGroupAsync(action.group),
 };
 
 const store = createStore(

@@ -204,3 +204,33 @@ export function fetchUser() {
     type: types.FETCH_USER,
   };
 }
+
+export function createGroup(group) {
+  return {
+    type: types.CREATE_GROUP,
+    group,
+  };
+}
+
+function handleCreateGroupSuccess(group) {
+  return {
+    type: types.RECEIVE_GROUP,
+    group,
+  };
+}
+
+export function createGroupAsync(group) {
+  return (dispatch, getState) =>
+    fetch(path.join(apiHost, '/api/group'), {
+      method: 'POST',
+      credentials: 'include',
+      headers,
+      body: JSON.stringify(group),
+    })
+    .then(res => res.json())
+    .then((savedGroup) => {
+      if (savedGroup.SUCCESS) {
+        dispatch(handleCreateGroupSuccess(savedGroup.SUCCESS));
+      }
+    });
+}

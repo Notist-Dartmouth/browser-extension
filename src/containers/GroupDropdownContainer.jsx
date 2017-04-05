@@ -7,7 +7,11 @@ class GroupDropdownContainer extends Component {
 
   constructor(props) {
     super(props);
-    this.handleFormSelect = (e, index, values) => props.dispatch(selectAnnotationGroups(values));
+    this.handleFormSelect = (e, index, values) => {
+      if (values && values.length > 0) {
+        props.dispatch(selectAnnotationGroups(values));
+      }
+    };
     this.handleFilterSelect = (e, index, values) => console.log(`filtering by ${values}`);
   }
 
@@ -30,6 +34,8 @@ GroupDropdownContainer.propTypes = {
     _id: PropTypes.string,
     name: PropTypes.string,
     description: PropTypes.string,
+    isPublic: PropTypes.bool,
+    isPersonal: PropTypes.bool,
   })).isRequired,
   label: PropTypes.string,
   isCreatingAnnotation: PropTypes.bool,
@@ -41,23 +47,11 @@ GroupDropdownContainer.defaultProps = {
 };
 
 function mapStateToProps(state) {
-  // dummy groups
-  const mockGroups = [
-    {
-      _id: '1',
-      name: 'notist',
-      description: 'cool man i like this',
-    },
-    {
-      _id: '2',
-      name: 'peter group',
-      description: 'just for me',
-    },
-  ];
   const { isCreatingAnnotation, newAnnotation } = state.articles;
+  const { groups } = state.user;
   return {
     selectedGroups: isCreatingAnnotation ? newAnnotation.groups : [],
-    groups: mockGroups,
+    groups,
     isCreatingAnnotation,
   };
 }

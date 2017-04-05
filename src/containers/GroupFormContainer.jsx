@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
+import { connect } from 'react-redux';
 import GroupForm from '../components/GroupDropdown/GroupForm';
+import { createGroup } from '../actions';
 
 class GroupFormContainer extends React.Component {
 
@@ -8,8 +10,11 @@ class GroupFormContainer extends React.Component {
     this.state = {
       name: '',
       active: false,
+      isPublic: false,
+      isPersonal: false,
       validName: true,
       description: '',
+      visibilitySelected: '',
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleToggleActive = this.handleToggleActive.bind(this);
@@ -24,6 +29,13 @@ class GroupFormContainer extends React.Component {
       }
     } else if (e.target.id === 'description') {
       this.setState({ description: newValue });
+    } else if (e.target.id === 'visibility') {
+      this.setState({
+        isPublic: newValue === 'public' ? !this.state.isPublic : false,
+        isPersonal: newValue === 'personal' ? !this.state.isPersonal : false,
+        visibilitySelected: (newValue === 'public' && this.state.isPublic) ||
+          (newValue === 'personal' && this.state.isPersonal) ? '' : newValue,
+      });
     }
   }
 
@@ -35,8 +47,9 @@ class GroupFormContainer extends React.Component {
     if (this.state.name.length === 0) {
       this.setState({ validName: false });
     }
-    // TODO: dispatch async action to create group
-    console.log(`${this.state.name} created`);
+    const { name, description, isPersonal, isPublic } = this.state;
+    const newGroup = { name, description, isPersonal, isPublic };
+    this.props.dispatch(createGroup(newGroup));
   }
 
   render() {
@@ -47,9 +60,14 @@ class GroupFormContainer extends React.Component {
         onToggleActive={this.handleToggleActive}
         validName={this.state.validName}
         active={this.state.active}
+        visibilitySelected={this.state.visibilitySelected}
       />
     );
   }
 }
 
-export default GroupFormContainer;
+GroupFormContainer.propTypes = {
+  dispatch: PropTypes.func.isRequired,
+};
+
+export default connect()(GroupFormContainer);

@@ -11,6 +11,7 @@ const styles = StyleSheet.create({
     display: 'inline-block',
   },
   header: {
+    fontFamily: 'inherit',
     fontSize: '20px',
     lineHeight: '20px',
     color: 'inherit',
@@ -50,6 +51,8 @@ GroupDropdown.propTypes = {
     _id: PropTypes.string,
     name: PropTypes.string,
     description: PropTypes.string,
+    isPublic: PropTypes.bool,
+    isPersonal: PropTypes.bool,
   })),
   label: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,

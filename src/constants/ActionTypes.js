@@ -18,3 +18,7 @@ export const UPDATE_ARTICLE_URL = 'UPDATE_ARTICLE_URL';
 export const UPDATE_USER = 'UPDATE_USER';
 export const UPDATE_AUTH_STATUS = 'UPDATE_AUTH_STATUS';
 export const FETCH_USER = 'FETCH_USER';
+
+// groups
+export const CREATE_GROUP = 'CREATE_GROUP';
+export const RECEIVE_GROUP = 'RECEIVE_GROUP';
