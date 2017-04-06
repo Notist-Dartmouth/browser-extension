@@ -236,3 +236,10 @@ export function createGroupAsync(group) {
       }
     });
 }
+
+export function filterAnnotations(groups) {
+  return {
+    type: types.FILTER_GROUP,
+    groups,
+  };
+}

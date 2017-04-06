@@ -10,6 +10,7 @@ describe('articles reducer', () => {
     const initialState = {
       isFetchingAnnotations: false,
       isCreatingAnnotation: false,
+      groupsFilter: [],
       annotations: [],
       currentArticleUrl: '',
       newAnnotation: {

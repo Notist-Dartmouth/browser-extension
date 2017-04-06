@@ -9,8 +9,8 @@ const AnnotationList = props => (
     <Subheader>
       {props.annotations.length} annotations
     </Subheader>
-    {props.annotations.length > 0 ?
-      <GroupDropdownContainer label="Filter by group" /> :
+    <GroupDropdownContainer label="Filter by group" />
+    {props.annotations.length === 0 &&
       <Subheader
         style={{
           fontSize: '150%',

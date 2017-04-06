@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import GroupDropdown from '../components/GroupDropdown/GroupDropdown';
-import { selectAnnotationGroups } from '../actions';
+import { selectAnnotationGroups, filterAnnotations } from '../actions';
 
 class GroupDropdownContainer extends Component {
 
@@ -12,7 +12,7 @@ class GroupDropdownContainer extends Component {
         props.dispatch(selectAnnotationGroups(values));
       }
     };
-    this.handleFilterSelect = (e, index, values) => console.log(`filtering by ${values}`);
+    this.handleFilterSelect = (e, index, groups) => props.dispatch(filterAnnotations(groups));
   }
 
   render() {
@@ -47,10 +47,10 @@ GroupDropdownContainer.defaultProps = {
 };
 
 function mapStateToProps(state) {
-  const { isCreatingAnnotation, newAnnotation } = state.articles;
+  const { isCreatingAnnotation, newAnnotation, groupsFilter } = state.articles;
   const { groups } = state.user;
   return {
-    selectedGroups: isCreatingAnnotation ? newAnnotation.groups : [],
+    selectedGroups: isCreatingAnnotation ? newAnnotation.groups : groupsFilter,
     groups,
     isCreatingAnnotation,
   };

@@ -22,3 +22,4 @@ export const FETCH_USER = 'FETCH_USER';
 // groups
 export const CREATE_GROUP = 'CREATE_GROUP';
 export const RECEIVE_GROUP = 'RECEIVE_GROUP';
+export const FILTER_GROUP = 'FILTER_GROUP';

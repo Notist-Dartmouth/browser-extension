@@ -81,6 +81,7 @@ function annotationForm(state = {
 function articles(state = {
   isFetchingAnnotations: false,
   isCreatingAnnotation: false,
+  groupsFilter: [],
   annotations: [],
   currentArticleUrl: '',
   newAnnotation: {
@@ -103,6 +104,10 @@ function articles(state = {
       return Object.assign({}, state, {
         isCreatingAnnotation: true,
         newAnnotation: annotationForm(state.newAnnotation, action),
+      });
+    case types.FILTER_GROUP:
+      return Object.assign({}, state, {
+        groupsFilter: action.groups,
       });
     case types.TOGGLE_NEW_COMMENT:
     case types.RECEIVE_REPLY:
