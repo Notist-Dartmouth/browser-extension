@@ -2,6 +2,7 @@ import React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 import { Store } from 'react-chrome-redux';
+import _ from 'underscore';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import SidebarContainer from './containers/SidebarContainer';
 import { newAnnotation } from './actions';
@@ -56,18 +57,21 @@ notistAnnotator.start();
 
 const highlighter = new annotator.ui.highlighter.Highlighter(document.body);
 let currentAnnotations;
+
 const handleAnnotationsChanged = () => {
   const previousAnnotations = currentAnnotations;
-  currentAnnotations = store.getState().articles.annotations;
+  const { annotations, groupsFilter } = store.getState().articles;
+  currentAnnotations = groupsFilter.length > 0 ?
+    annotations.filter(a => _.intersection(a.groups, groupsFilter).length > 0) :
+    annotations;
   if (currentAnnotations !== previousAnnotations) {
     if (previousAnnotations) {
       previousAnnotations.forEach((a) => {
         highlighter.undraw(a);
       });
     }
-    currentAnnotations.forEach((a) => {
-      highlighter.draw(a);
-    });
+    currentAnnotations.forEach(a => highlighter.draw(a));
   }
 };
+
 store.subscribe(handleAnnotationsChanged);

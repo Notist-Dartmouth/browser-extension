@@ -1,21 +1,13 @@
 import { connect } from 'react-redux';
+import _ from 'underscore';
 import AnnotationList from '../components/AnnotationList';
 import { toggleNewComment, createAnnotation } from '../actions';
-
-function inFilter(annotationGroups, groupsFilter) {
-  for (let i = 0; i < annotationGroups.length; i += 1) {
-    if (groupsFilter.includes(annotationGroups[i])) {
-      return true;
-    }
-  }
-  return false;
-}
 
 function mapStateToProps(state) {
   const { annotations, groupsFilter } = state.articles;
   return {
     annotations: groupsFilter.length === 0 ? annotations
-      : annotations.filter(a => inFilter(a.groups, groupsFilter)),
+      : annotations.filter(a => _.intersection(groupsFilter, a.groups).length > 0),
   };
 }
 

@@ -26,6 +26,7 @@ describe('articles reducer', () => {
     const expectedNewState = {
       isFetchingAnnotations: false,
       isCreatingAnnotation: false,
+      groupsFilter: [],
       annotations: [
         {
           _id: '12343532',
@@ -58,6 +59,7 @@ describe('articles reducer', () => {
     expect(articlesReducer({
       isFetchingAnnotations: false,
       isCreatingAnnotation: false,
+      groupsFilter: [],
       annotations: [
         {
           _id: '1',
@@ -84,6 +86,7 @@ describe('articles reducer', () => {
     })).toEqual({
       isFetchingAnnotations: false,
       isCreatingAnnotation: false,
+      groupsFilter: [],
       annotations: [
         {
           _id: '1',
@@ -116,6 +119,7 @@ describe('articles reducer', () => {
     expect(articlesReducer({
       isFetchingAnnotations: false,
       isCreatingAnnotation: false,
+      groupsFilter: [],
       annotations: [
         {
           _id: '1',
@@ -164,6 +168,7 @@ describe('articles reducer', () => {
     })).toEqual({
       isFetchingAnnotations: false,
       isCreatingAnnotation: false,
+      groupsFilter: [],
       annotations: [
         {
           _id: '1',
