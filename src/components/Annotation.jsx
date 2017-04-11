@@ -1,9 +1,33 @@
 import React, { PropTypes } from 'react';
 import { ListItem } from 'material-ui/List';
 import { Editor, EditorState, ContentState, convertFromHTML } from 'draft-js';
+import { StyleSheet, css } from 'aphrodite';
 import marked from 'marked';
-import RaisedButton from 'material-ui/RaisedButton';
+import IconButton from 'material-ui/IconButton';
+import ContentReply from 'material-ui/svg-icons/content/reply';
+import ActionDelete from 'material-ui/svg-icons/action/delete';
 import CommentEditor from './CommentEditor';
+
+const styles = StyleSheet.create({
+  articleText: {
+    fontStyle: 'italic',
+    borderLeft: 'thick solid #F98C25',
+    paddingLeft: 10,
+    paddingBottom: 20,
+  },
+  commentText: {
+    paddingBottom: 20,
+  },
+  replyBar: {
+    position: 'absolute',
+    right: 10,
+    bottom: 0,
+  },
+  icon: {
+    width: 48,
+    height: 48,
+  },
+});
 
 class Annotation extends React.Component {
 
@@ -26,16 +50,10 @@ class Annotation extends React.Component {
         depth={this.props.depth + 1}
         onCommentPost={this.props.onCommentPost}
         onCommentToggle={this.props.onCommentToggle}
-      />
-    );
+      />);
   }
 
   render() {
-    const styles = {
-      articleText: {
-        fontStyle: 'italic',
-      },
-    };
     return (
       <ListItem
         style={{ paddingLeft: 20 * this.props.depth }}
@@ -50,15 +68,29 @@ class Annotation extends React.Component {
         nestedItems={this.childAnnotations()}
       >
         <div>
-          {this.props.depth === 0 && <div style={styles.articleText}>{this.props.articleText}</div>}
+          {this.props.depth === 0 && <div className={css(styles.articleText)}>{this.props.articleText}</div>}
           <br />
-          <Editor
-            readOnly={true}
-            editorState={this.state.commentEditorState}
-          />
-          {!this.props.newCommentVisible &&
-            <RaisedButton onClick={() => this.props.onCommentToggle(this.props._id)} label="Reply" />
-          }
+          <div className={css(styles.commentText)}>
+            <Editor
+              readOnly
+              editorState={this.state.commentEditorState}
+            />
+          </div>
+          <div className={css(styles.replyBar)}>
+            <IconButton
+              iconStyle={styles.icon}
+              onClick={() => this.props.onCommentToggle(this.props._id)}
+              tooltip="Reply"
+            >
+              <ContentReply />
+            </IconButton>
+            <IconButton
+              iconStyle={styles.icon}
+              tooltip="Delete"
+            >
+              <ActionDelete />
+            </IconButton>
+          </div>
         </div>
       </ListItem>
     );
