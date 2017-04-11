@@ -1,12 +1,11 @@
 import React, { PropTypes } from 'react';
 import { ListItem } from 'material-ui/List';
+import FlatButton from 'material-ui/FlatButton';
 import { Editor, EditorState, ContentState, convertFromHTML } from 'draft-js';
 import { StyleSheet, css } from 'aphrodite';
 import marked from 'marked';
-import IconButton from 'material-ui/IconButton';
-import ContentReply from 'material-ui/svg-icons/content/reply';
-import ActionDelete from 'material-ui/svg-icons/action/delete';
 import CommentEditor from './CommentEditor';
+import ReplyBar from './ReplyBar';
 
 const styles = StyleSheet.create({
   articleText: {
@@ -17,15 +16,6 @@ const styles = StyleSheet.create({
   },
   commentText: {
     paddingBottom: 20,
-  },
-  replyBar: {
-    position: 'absolute',
-    right: 10,
-    bottom: 0,
-  },
-  icon: {
-    width: 48,
-    height: 48,
   },
 });
 
@@ -38,8 +28,12 @@ class Annotation extends React.Component {
       commentBlocks.contentBlocks,
       commentBlocks.entityMap,
     );
-    this.state = { commentEditorState: EditorState.createWithContent(commentContentState) };
+    this.state = {
+      commentEditorState: EditorState.createWithContent(commentContentState),
+      isExpanded: false,
+    };
     this.childAnnotations = this.childAnnotations.bind(this);
+    this.toggleExpanded = () => this.setState({ isExpanded: !this.state.isExpanded });
   }
 
   childAnnotations() {
@@ -66,6 +60,7 @@ class Annotation extends React.Component {
         }
         nestedListStyle={{ marginLeft: 20, borderLeft: '1px dashed black' }}
         nestedItems={this.childAnnotations()}
+        rightToggle={null}
       >
         <div>
           {this.props.depth === 0 && <div className={css(styles.articleText)}>{this.props.articleText}</div>}
@@ -76,21 +71,14 @@ class Annotation extends React.Component {
               editorState={this.state.commentEditorState}
             />
           </div>
-          <div className={css(styles.replyBar)}>
-            <IconButton
-              iconStyle={styles.icon}
-              onClick={() => this.props.onCommentToggle(this.props._id)}
-              tooltip="Reply"
-            >
-              <ContentReply />
-            </IconButton>
-            <IconButton
-              iconStyle={styles.icon}
-              tooltip="Delete"
-            >
-              <ActionDelete />
-            </IconButton>
-          </div>
+          {
+            this.props.childAnnotations.length > 0 &&
+            <FlatButton
+              onClick={this.toggleExpanded}
+              label={`Show Replies (${this.props.childAnnotations.length})`}
+            />
+          }
+          <ReplyBar onReplyClicked={() => this.props.onCommentToggle(this.props._id)} />
         </div>
       </ListItem>
     );
