@@ -154,7 +154,7 @@ class CommentEditor extends React.Component {
             handleKeyCommand={this.handleStyleCommand}
           />
         </div>
-        <GroupDropdownContainer />
+        {!this.props.parent && <GroupDropdownContainer /> }
         <ButtonFooter
           primaryText="Post"
           onPrimaryClicked={this.handleSubmit}
