@@ -8,11 +8,19 @@ import CommentEditor from './CommentEditor';
 import ReplyBar from './ReplyBar';
 
 const styles = StyleSheet.create({
+  listItem: {
+    cursor: 'auto',
+    backgroundColor: 'none',
+  },
   articleText: {
     fontStyle: 'italic',
     borderLeft: 'thick solid #F98C25',
     paddingLeft: 10,
     paddingBottom: 20,
+  },
+  expandButton: {
+    position: 'absolute',
+    bottom: 0,
   },
   commentText: {
     paddingBottom: 20,
@@ -50,6 +58,7 @@ class Annotation extends React.Component {
   render() {
     return (
       <ListItem
+        className={css(styles.listItem)}
         style={{ paddingLeft: 20 * this.props.depth }}
         secondaryText={this.props.newCommentVisible &&
           <CommentEditor
@@ -60,7 +69,8 @@ class Annotation extends React.Component {
         }
         nestedListStyle={{ marginLeft: 20, borderLeft: '1px dashed black' }}
         nestedItems={this.childAnnotations()}
-        rightToggle={null}
+        open={this.state.isExpanded}
+        onNestedListToggle={this.toggleExpanded}
       >
         <div>
           {this.props.depth === 0 && <div className={css(styles.articleText)}>{this.props.articleText}</div>}
@@ -71,14 +81,16 @@ class Annotation extends React.Component {
               editorState={this.state.commentEditorState}
             />
           </div>
+          <ReplyBar onReplyClicked={() => this.props.onCommentToggle(this.props._id)} />
           {
-            this.props.childAnnotations.length > 0 &&
+            this.props.childAnnotations.length > 0 && !this.state.isExpanded &&
             <FlatButton
+              className={css(styles.expandButton)}
+              primary
               onClick={this.toggleExpanded}
               label={`Show Replies (${this.props.childAnnotations.length})`}
             />
           }
-          <ReplyBar onReplyClicked={() => this.props.onCommentToggle(this.props._id)} />
         </div>
       </ListItem>
     );
