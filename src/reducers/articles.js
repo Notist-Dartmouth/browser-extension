@@ -44,6 +44,14 @@ function annotations(state = [], action) {
       return state.map(a => annotation(Object.assign({}, a, {
         childAnnotations: annotations(a.childAnnotations, action),
       }), action));
+    case types.DELETE_ANNOTATION: {
+      const ids = state.map(a => a._id);
+      return ids.includes(action.annotationId) ?
+        state.filter(a => a._id !== action.annotationId) :
+        state.map(a => annotation(Object.assign({}, a, {
+          childAnnotations: annotations(a.childAnnotations, action),
+        }), action));
+    }
     default:
       return state;
   }

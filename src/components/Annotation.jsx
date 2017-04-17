@@ -49,6 +49,7 @@ class Annotation extends React.Component {
       <Annotation
         {...a}
         key={a._id}
+        author={a.author._id || a.author}
         depth={this.props.depth + 1}
         onCommentPost={this.props.onCommentPost}
         onCommentToggle={this.props.onCommentToggle}
