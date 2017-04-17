@@ -24,6 +24,7 @@ const AnnotationList = props => (
       <Annotation
         {...a}
         key={a._id}
+        author={a.author}
         onCommentPost={props.onCommentPost}
         onCommentToggle={props.onCommentToggle}
       />)}

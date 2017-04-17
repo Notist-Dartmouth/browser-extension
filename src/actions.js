@@ -88,6 +88,13 @@ export function createAnnotationAsync(parent, articleText, ranges, text, groups)
   };
 }
 
+export function deleteAnnotation(annotationId) {
+  return {
+    type: types.DELETE_ANNOTATION,
+    annotationId,
+  };
+}
+
 export function createAnnotation(parent, articleText, ranges, text, groups) {
   return {
     type: types.CREATE_ANNOTATION,
