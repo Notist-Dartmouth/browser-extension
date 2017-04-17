@@ -90,6 +90,13 @@ export function createAnnotationAsync(parent, articleText, ranges, text, groups)
 
 export function deleteAnnotation(annotationId) {
   return {
+    type: types.REQUEST_DELETE_ANNOTATION,
+    annotationId,
+  };
+}
+
+export function handleDeleteAnnotationSuccess(annotationId) {
+  return {
     type: types.DELETE_ANNOTATION,
     annotationId,
   };
@@ -104,7 +111,11 @@ export function deleteAnnotationAsync(annotationId) {
       headers,
     })
     .then(res => res.json())
-    .then(a => console.log(a));
+    .then((json) => {
+      if (json.SUCCESS) {
+        dispatch(handleDeleteAnnotationSuccess(annotationId));
+      }
+    });
   };
 }
 

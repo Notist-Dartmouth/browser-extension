@@ -112,6 +112,7 @@ function articles(state = {
     case types.TOGGLE_NEW_COMMENT:
     case types.RECEIVE_REPLY:
     case types.RECEIVE_ANNOTATION:
+    case types.DELETE_ANNOTATION:
       return Object.assign({}, state, {
         annotations: annotations(state.annotations, action),
         isCreatingAnnotation: false,
