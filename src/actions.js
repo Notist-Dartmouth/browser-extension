@@ -95,6 +95,19 @@ export function deleteAnnotation(annotationId) {
   };
 }
 
+export function deleteAnnotationAsync(annotationId) {
+  return (dispatch, getState) => {
+    const deleteEndpoint = path.join(apiHost, `api/annotation/${annotationId}`);
+    return fetch(deleteEndpoint, {
+      method: 'DELETE',
+      credentials: 'include',
+      headers,
+    })
+    .then(res => res.json())
+    .then(a => console.log(a));
+  };
+}
+
 export function createAnnotation(parent, articleText, ranges, text, groups) {
   return {
     type: types.CREATE_ANNOTATION,
@@ -203,7 +216,7 @@ export function fetchUserAsync() {
         if (user.ERROR) {
           console.log(user.ERROR); // TODO: display error message in sidebar
         } else {
-          dispatch(updateUser(newUser));
+          dispatch(updateUser(user));
           dispatch(updateAuthStatus(true));
         }
       });
