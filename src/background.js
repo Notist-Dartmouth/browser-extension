@@ -10,6 +10,8 @@ import {
   createGroupAsync,
 } from './actions';
 
+/* eslint-disable no-undef */
+
 const aliases = {
   CREATE_ANNOTATION: action =>
     createAnnotationAsync(action.parent, action.articleText, action.ranges, action.text, action.groups),

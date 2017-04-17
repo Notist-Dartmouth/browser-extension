@@ -9,6 +9,8 @@ const headers = {
   Accept: 'application/json',
 };
 
+/* eslint-disable no-undef */
+
 let apiHost;
 // @if ENVIRONMENT='production'
 apiHost = 'http://notist.herokuapp.com';
@@ -164,11 +166,10 @@ export function updateArticleUrl(url) {
   };
 }
 
-export function updateUser(groups, username) {
+export function updateUser(newUser) {
   return {
     type: types.UPDATE_USER,
-    groups,
-    username,
+    newUser,
   };
 }
 
@@ -192,8 +193,10 @@ export function fetchUserAsync() {
         }
       })
       .then((user) => {
-        if (user.groups && user.username) {
-          dispatch(updateUser(user.groups, user.username));
+        if (user.ERROR) {
+          console.log(user.ERROR); // TODO: display error message in sidebar
+        } else {
+          dispatch(updateUser(newUser));
           dispatch(updateAuthStatus(true));
         }
       });
