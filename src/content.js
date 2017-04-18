@@ -7,6 +7,10 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import SidebarContainer from './containers/SidebarContainer';
 import { newAnnotation } from './actions';
 
+/* eslint-disable no-undef */
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/jsx-filename-extension */
+
 const sidebar = document.createElement('div');
 sidebar.setAttribute('id', 'annotation-sidebar');
 $('body').prepend(sidebar);
@@ -24,32 +28,30 @@ store.ready().then(() =>
 // This adderModule method is based on the main module from the Annotator library:
 // https://github.com/openannotation/annotator/blob/5ef5edf157fe728b2d6d95d01e26a55c508c0c44/src/ui/main.js#L208
 // Modified to create a new annotation when the user clicks the annotation adder, rather than showing an editor
-const adderModule = () => {
-  return {
-    start: (app) => {
-      const adder = new annotator.ui.adder.Adder({
-        onCreate: annotation => app.annotations.create(annotation),
-      });
-      adder.attach();
-      const textselector = new annotator.ui.textselector.TextSelector(document.body, {
-        onSelection: (ranges, event) => {
-          if (ranges.length > 0) {
-            const annotation = {
-              ranges: ranges.map(r => r.serialize(document.body, '.annotator-hl')),
-              articleText: document.getSelection().toString(),
-            };
-            adder.load(annotation, annotator.util.mousePosition(event));
-          } else {
-            adder.hide();
-          }
-        },
-      });
-    },
-    annotationCreated: (annotation) => {
-      store.dispatch(newAnnotation(annotation.articleText, annotation.ranges));
-    },
-  };
-};
+const adderModule = () => ({
+  start: (app) => {
+    const adder = new annotator.ui.adder.Adder({
+      onCreate: annotation => app.annotations.create(annotation),
+    });
+    adder.attach();
+    const textselector = new annotator.ui.textselector.TextSelector(document.body, {
+      onSelection: (ranges, event) => {
+        if (ranges.length > 0) {
+          const annotation = {
+            ranges: ranges.map(r => r.serialize(document.body, '.annotator-hl')),
+            articleText: document.getSelection().toString(),
+          };
+          adder.load(annotation, annotator.util.mousePosition(event));
+        } else {
+          adder.hide();
+        }
+      },
+    });
+  },
+  annotationCreated: (annotation) => {
+    store.dispatch(newAnnotation(annotation.articleText, annotation.ranges));
+  },
+});
 
 const notistAnnotator = new annotator.App();
 notistAnnotator.include(adderModule);

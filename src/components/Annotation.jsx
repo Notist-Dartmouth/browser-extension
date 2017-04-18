@@ -49,6 +49,7 @@ class Annotation extends React.Component {
       <Annotation
         {...a}
         key={a._id}
+        author={a.author._id || a.author}
         depth={this.props.depth + 1}
         onCommentPost={this.props.onCommentPost}
         onCommentToggle={this.props.onCommentToggle}
@@ -81,7 +82,11 @@ class Annotation extends React.Component {
               editorState={this.state.commentEditorState}
             />
           </div>
-          <ReplyBar onReplyClicked={() => this.props.onCommentToggle(this.props._id)} />
+          <ReplyBar
+            onReplyClicked={() => this.props.onCommentToggle(this.props._id)}
+            authorId={this.props.author}
+            annotationId={this.props._id}
+          />
           {
             this.props.childAnnotations.length > 0 && !this.state.isExpanded &&
             <FlatButton
@@ -106,6 +111,7 @@ Annotation.propTypes = {
   onCommentPost: PropTypes.func.isRequired,
   onCommentToggle: PropTypes.func.isRequired,
   _id: PropTypes.string.isRequired,
+  author: PropTypes.string.isRequired,
 };
 
 Annotation.defaultProps = {

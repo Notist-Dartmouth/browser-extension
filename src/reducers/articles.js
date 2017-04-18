@@ -44,6 +44,14 @@ function annotations(state = [], action) {
       return state.map(a => annotation(Object.assign({}, a, {
         childAnnotations: annotations(a.childAnnotations, action),
       }), action));
+    case types.DELETE_ANNOTATION: {
+      const ids = state.map(a => a._id);
+      return ids.includes(action.annotationId) ?
+        state.filter(a => a._id !== action.annotationId) :
+        state.map(a => annotation(Object.assign({}, a, {
+          childAnnotations: annotations(a.childAnnotations, action),
+        }), action));
+    }
     default:
       return state;
   }
@@ -112,6 +120,7 @@ function articles(state = {
     case types.TOGGLE_NEW_COMMENT:
     case types.RECEIVE_REPLY:
     case types.RECEIVE_ANNOTATION:
+    case types.DELETE_ANNOTATION:
       return Object.assign({}, state, {
         annotations: annotations(state.annotations, action),
         isCreatingAnnotation: false,

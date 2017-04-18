@@ -1,6 +1,6 @@
 import * as types from '../constants/ActionTypes';
 
-function groups(state = [], action) {
+function userGroups(state = [], action) {
   switch (action.type) {
     case types.RECEIVE_GROUP:
       return [
@@ -17,19 +17,23 @@ const initialState = {
   isAuthenticated: false,
   groups: [],
   username: '',
+  _id: null,
 };
 
 function user(state = initialState, action) {
   switch (action.type) {
-    case types.UPDATE_USER:
+    case types.UPDATE_USER: {
+      const { groups, username, _id } = action.newUser;
       return Object.assign({}, state, {
         isFetchingUser: false,
-        groups: action.groups,
-        username: action.username,
+        groups,
+        username,
+        _id,
       });
+    }
     case types.RECEIVE_GROUP:
       return Object.assign({}, state, {
-        groups: groups(state.groups, action),
+        groups: userGroups(state.groups, action),
       });
     case types.FETCH_USER:
       return Object.assign({}, state, {

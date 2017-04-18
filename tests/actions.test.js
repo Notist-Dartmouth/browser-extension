@@ -10,7 +10,6 @@ const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 
 describe('actions', () => {
-
   it('should create action for creating an annotation', () => {
     const articleText = 'valar morghulis';
     const ranges = [{
@@ -33,20 +32,21 @@ describe('actions', () => {
     expect(actions.createAnnotation(parent, articleText, ranges, text, groups)).toEqual(action);
   });
 
-  it('should create action for updating username and groups of user', () => {
-    const username = 'billybobjones';
-    const groups = [];
+  it('should create action for updating user information', () => {
+    const newUser = {
+      username: 'billybobjones',
+      groups: [],
+      _id: '1243fds',
+    };
     const action = {
       type: types.UPDATE_USER,
-      groups,
-      username,
-    }
-    expect(actions.updateUser(groups, username)).toEqual(action);
+      newUser,
+    };
+    expect(actions.updateUser(newUser)).toEqual(action);
   });
 });
 
 describe('async actions', () => {
-
   afterEach(() => {
     fetchMock.restore();
   });
@@ -91,7 +91,7 @@ describe('async actions', () => {
         {
           type: types.UPDATE_AUTH_STATUS,
           isAuthenticated: false,
-        }
+        },
       ]);
     });
   });
@@ -100,14 +100,14 @@ describe('async actions', () => {
     const reply = {
       text: 'this is cool',
       parent: '123435235',
-    }
-    fetchMock.post('*', { SUCCESS: reply } );
+    };
+    fetchMock.post('*', { SUCCESS: reply });
 
     const expectedActions = [
       {
         type: types.RECEIVE_REPLY,
         reply,
-      }
+      },
     ];
     const store = mockStore({
       articles: {
@@ -128,7 +128,7 @@ describe('async actions', () => {
       {
         articleText: 'he wasnt good enough for her',
         text: 'now hes a super star',
-      }
+      },
     ];
     fetchMock.get('*', annotations);
 
@@ -136,7 +136,7 @@ describe('async actions', () => {
       {
         type: types.RECEIVE_ANNOTATIONS,
         annotations,
-      }
+      },
     ];
     const store = mockStore({
       articles: {
@@ -170,9 +170,9 @@ describe('async actions', () => {
         {
           type: types.UPDATE_AUTH_STATUS,
           isAuthenticated: false,
-        }
+        },
       ]);
-    })
+    });
   });
 
   it('creates UPDATE_AUTH_STATUS and UPDATE_USER if logged in', () => {

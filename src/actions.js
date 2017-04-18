@@ -9,6 +9,8 @@ const headers = {
   Accept: 'application/json',
 };
 
+/* eslint-disable no-undef */
+
 let apiHost;
 // @if ENVIRONMENT='production'
 apiHost = 'http://notist.herokuapp.com';
@@ -83,6 +85,37 @@ export function createAnnotationAsync(parent, articleText, ranges, text, groups)
       isPublic: true, // TODO: pass whether is public or not
     };
     return sendCreateAnnotationRequest(dispatch, JSON.stringify(body));
+  };
+}
+
+export function deleteAnnotation(annotationId) {
+  return {
+    type: types.REQUEST_DELETE_ANNOTATION,
+    annotationId,
+  };
+}
+
+export function handleDeleteAnnotationSuccess(annotationId) {
+  return {
+    type: types.DELETE_ANNOTATION,
+    annotationId,
+  };
+}
+
+export function deleteAnnotationAsync(annotationId) {
+  return (dispatch, getState) => {
+    const deleteEndpoint = path.join(apiHost, `api/annotation/${annotationId}`);
+    return fetch(deleteEndpoint, {
+      method: 'DELETE',
+      credentials: 'include',
+      headers,
+    })
+    .then(res => res.json())
+    .then((json) => {
+      if (json.SUCCESS) {
+        dispatch(handleDeleteAnnotationSuccess(annotationId));
+      }
+    });
   };
 }
 
@@ -164,11 +197,10 @@ export function updateArticleUrl(url) {
   };
 }
 
-export function updateUser(groups, username) {
+export function updateUser(newUser) {
   return {
     type: types.UPDATE_USER,
-    groups,
-    username,
+    newUser,
   };
 }
 
@@ -192,8 +224,10 @@ export function fetchUserAsync() {
         }
       })
       .then((user) => {
-        if (user.groups && user.username) {
-          dispatch(updateUser(user.groups, user.username));
+        if (user.ERROR) {
+          console.log(user.ERROR); // TODO: display error message in sidebar
+        } else {
+          dispatch(updateUser(user));
           dispatch(updateAuthStatus(true));
         }
       });

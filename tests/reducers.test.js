@@ -5,7 +5,6 @@ import * as types from '../src/constants/ActionTypes';
 // These tests are based on redux documentation for testing reducers - http://redux.js.org/docs/recipes/WritingTests.html
 
 describe('articles reducer', () => {
-
   it('should return initial state', () => {
     const initialState = {
       isFetchingAnnotations: false,
@@ -220,6 +219,7 @@ describe('articles reducer', () => {
 describe('user reducer', () => {
   it('should return initial state by default', () => {
     expect(userReducer(undefined, {})).toEqual({
+      _id: null,
       isFetchingUser: false,
       isAuthenticated: false,
       groups: [],
@@ -233,6 +233,7 @@ describe('user reducer', () => {
       isAuthenticated: true,
     };
     expect(userReducer(undefined, loginAction)).toEqual({
+      _id: null,
       isFetchingUser: false,
       isAuthenticated: true,
       groups: [],
