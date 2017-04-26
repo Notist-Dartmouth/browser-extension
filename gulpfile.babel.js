@@ -25,7 +25,7 @@ gulp.task('clean', cb =>
     rimraf('dist/', cb));
 
 gulp.task('image', ['clean'], () =>
-  gulp.src('src/images/favicon.ico').pipe(gulp.dest('./dist')));
+  gulp.src('./src/images/*').pipe(gulp.dest('./dist')));
 
 gulp.task('manifest', ['clean'], () =>
   gulp.src('manifest.json').pipe(gulp.dest('./dist')));
