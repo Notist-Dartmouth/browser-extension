@@ -28,6 +28,9 @@
     }
   ],
   "browser_action": {
-    "default_title": "Annotate"
+    "default_icon": {
+      "16": "favicon-16.png"
+    },
+    "default_title": "Notist"
   }
 }

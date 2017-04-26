@@ -33,5 +33,9 @@ const store = createStore(
 );
 wrapStore(store, { portName: 'notist' });
 
+chrome.browserAction.onClicked.addListener(() => {
+  console.log('Action clicked');
+});
+
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) =>
   store.dispatch(updateArticleUrl(tab.url)));
