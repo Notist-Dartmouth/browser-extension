@@ -3,6 +3,9 @@
   "name": "Notist",
   "description": "Web Annotation",
   "version": "1.0",
+  "browser_action": {
+    "default_icon": "favicon.ico"
+  },
   "background": {
     "scripts": ["background.js"]
   },
