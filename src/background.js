@@ -33,9 +33,16 @@ const store = createStore(
 );
 wrapStore(store, { portName: 'notist' });
 
-chrome.browserAction.onClicked.addListener(() => {
-  console.log('Action clicked');
-});
+let contentEnabled = true;
+
+const toggleEnabled = () => {
+  contentEnabled = !contentEnabled;
+  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    chrome.tabs.sendMessage(tabs[0].id, { contentEnabled });
+  });
+};
+
+chrome.browserAction.onClicked.addListener(() => toggleEnabled());
 
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) =>
   store.dispatch(updateArticleUrl(tab.url)));

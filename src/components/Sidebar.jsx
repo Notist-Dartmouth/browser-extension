@@ -1,6 +1,5 @@
 import React, { PropTypes } from 'react';
 import Drawer from 'material-ui/Drawer';
-import injectTapEventPlugin from 'react-tap-event-plugin';
 import { Card, CardText } from 'material-ui/Card';
 import AnnotationListContainer from '../containers/AnnotationListContainer';
 import AnnotationFormContainer from '../containers/AnnotationFormContainer';
@@ -10,7 +9,6 @@ export default class Sidebar extends React.Component {
 
   constructor(props) {
     super(props);
-    injectTapEventPlugin();
     this.state = { open: true };
   }
 

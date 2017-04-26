@@ -2,6 +2,7 @@ import React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 import { Store } from 'react-chrome-redux';
+import injectTapEventPlugin from 'react-tap-event-plugin';
 import _ from 'underscore';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import SidebarContainer from './containers/SidebarContainer';
@@ -11,19 +12,11 @@ import { newAnnotation } from './actions';
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/jsx-filename-extension */
 
-const sidebar = document.createElement('div');
-sidebar.setAttribute('id', 'annotation-sidebar');
-$('body').prepend(sidebar);
-
 const store = new Store({ portName: 'notist' });
-store.ready().then(() =>
-  render(
-    <Provider store={store}>
-      <MuiThemeProvider>
-        <SidebarContainer />
-      </MuiThemeProvider>
-    </Provider>
-    , document.getElementById('annotation-sidebar')));
+let contentEnabled = true;
+let sidebar;
+
+injectTapEventPlugin();
 
 // This adderModule method is based on the main module from the Annotator library:
 // https://github.com/openannotation/annotator/blob/5ef5edf157fe728b2d6d95d01e26a55c508c0c44/src/ui/main.js#L208
@@ -36,7 +29,7 @@ const adderModule = () => ({
     adder.attach();
     const textselector = new annotator.ui.textselector.TextSelector(document.body, {
       onSelection: (ranges, event) => {
-        if (ranges.length > 0) {
+        if (ranges.length > 0 && contentEnabled) {
           const annotation = {
             ranges: ranges.map(r => r.serialize(document.body, '.annotator-hl')),
             articleText: document.getSelection().toString(),
@@ -60,12 +53,16 @@ notistAnnotator.start();
 const highlighter = new annotator.ui.highlighter.Highlighter(document.body);
 let currentAnnotations;
 
-const handleAnnotationsChanged = () => {
-  const previousAnnotations = currentAnnotations;
+const getCurrentAnnotations = () => {
   const { annotations, groupsFilter } = store.getState().articles;
-  currentAnnotations = groupsFilter.length > 0 ?
+  return groupsFilter.length > 0 ?
     annotations.filter(a => _.intersection(a.groups, groupsFilter).length > 0) :
     annotations;
+};
+
+const handleAnnotationsChanged = () => {
+  const previousAnnotations = currentAnnotations;
+  currentAnnotations = getCurrentAnnotations();
   if (currentAnnotations !== previousAnnotations) {
     if (previousAnnotations) {
       previousAnnotations.forEach((a) => {
@@ -77,3 +74,39 @@ const handleAnnotationsChanged = () => {
 };
 
 store.subscribe(handleAnnotationsChanged);
+
+const enableContent = () => {
+  contentEnabled = true;
+  sidebar = document.createElement('div');
+  sidebar.setAttribute('id', 'annotation-sidebar');
+  $('body').prepend(sidebar);
+
+  store.ready().then(() =>
+    render(
+      <Provider store={store}>
+        <MuiThemeProvider>
+          <SidebarContainer />
+        </MuiThemeProvider>
+      </Provider>
+      , document.getElementById('annotation-sidebar')));
+
+  const annotations = store.getState().articles ? getCurrentAnnotations() : [];
+  annotations.forEach(a => highlighter.draw(a));
+};
+
+const disableContent = () => {
+  contentEnabled = false;
+  document.body.removeChild(sidebar);
+  const annotations = store.getState().articles ? getCurrentAnnotations() : [];
+  annotations.forEach(a => highlighter.undraw(a));
+};
+
+enableContent();
+
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.contentEnabled) {
+    enableContent();
+  } else {
+    disableContent();
+  }
+});

@@ -5,10 +5,6 @@ import { fetchAnnotations, fetchUser } from '../actions';
 
 class SidebarContainer extends Component {
 
-  constructor(props) {
-    super(props);
-  }
-
   componentDidMount() {
     this.props.dispatch(fetchAnnotations());
     this.props.dispatch(fetchUser());
