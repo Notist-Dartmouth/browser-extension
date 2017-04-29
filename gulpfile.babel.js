@@ -24,10 +24,13 @@ const prodConfig = {
 gulp.task('clean', cb =>
     rimraf('dist/', cb));
 
+gulp.task('image', ['clean'], () =>
+  gulp.src('./src/images/*').pipe(gulp.dest('./dist')));
+
 gulp.task('manifest', ['clean'], () =>
   gulp.src('manifest.json').pipe(gulp.dest('./dist')));
 
-gulp.task('lib', ['manifest'], () =>
+gulp.task('lib', ['manifest', 'image'], () =>
   gulp.src('./src/lib/**/*.{js,css}')
     .pipe(gulp.dest('dist/lib')));
 

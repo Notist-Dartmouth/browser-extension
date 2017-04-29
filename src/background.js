@@ -33,5 +33,36 @@ const store = createStore(
 );
 wrapStore(store, { portName: 'notist' });
 
+let contentEnabled = true;
+
+const toggleEnabled = () => {
+  contentEnabled = !contentEnabled;
+  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    if (contentEnabled) {
+      chrome.browserAction.setIcon({ path: 'favicon-16.png' });
+    } else {
+      chrome.browserAction.setIcon({ path: 'favicon-gray-16.png' });
+    }
+    chrome.tabs.sendMessage(tabs[0].id, { contentEnabled });
+  });
+};
+
+const setNumAnnotations = (nAnnotations) => {
+  chrome.browserAction.setBadgeText({
+    text: nAnnotations > 0 ? `${nAnnotations}` : '',
+  });
+};
+
+chrome.browserAction.onClicked.addListener(() => toggleEnabled());
+
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) =>
   store.dispatch(updateArticleUrl(tab.url)));
+
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.type === 'CONTENT_STATUS') {
+    sendResponse({ contentEnabled });
+  } else if (request.type === 'SET_BADGE') {
+    console.log(request.nAnnotations);
+    setNumAnnotations(request.nAnnotations);
+  }
+});
