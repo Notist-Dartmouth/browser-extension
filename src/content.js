@@ -13,7 +13,7 @@ import { newAnnotation } from './actions';
 /* eslint-disable react/jsx-filename-extension */
 
 const store = new Store({ portName: 'notist' });
-let contentEnabled = true;
+let contentEnabled = false;
 let sidebar;
 
 injectTapEventPlugin();
@@ -96,17 +96,26 @@ const enableContent = () => {
 
 const disableContent = () => {
   contentEnabled = false;
-  document.body.removeChild(sidebar);
+  if (document.body.contains(sidebar)) {
+    document.body.removeChild(sidebar);
+  }
   const annotations = store.getState().articles ? getCurrentAnnotations() : [];
   annotations.forEach(a => highlighter.undraw(a));
 };
 
-enableContent();
-
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.contentEnabled) {
+const updateContent = (isEnabled) => {
+  if (isEnabled) {
     enableContent();
   } else {
     disableContent();
   }
+};
+
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  updateContent(request.contentEnabled);
+});
+
+chrome.runtime.sendMessage({ type: 'CONTENT_STATUS' }, (response) => {
+  contentEnabled = response.contentEnabled;
+  updateContent(contentEnabled);
 });

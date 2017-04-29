@@ -1,11 +1,11 @@
 {
   "manifest_version": 2,
   "name": "Notist",
-  "description": "Web Annotation",
+  "description": "Annotate websites and online articles",
   "version": "1.0",
   "icons": {
     "16": "favicon-16.png",
-    "48": "favicon-48.ico",
+    "48": "favicon-48.png",
     "128": "favicon-128.png"
   },
   "background": {
