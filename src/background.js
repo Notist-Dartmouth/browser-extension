@@ -38,14 +38,31 @@ let contentEnabled = true;
 const toggleEnabled = () => {
   contentEnabled = !contentEnabled;
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    if (contentEnabled) {
+      chrome.browserAction.setIcon({ path: 'favicon-16.png' });
+    } else {
+      chrome.browserAction.setIcon({ path: 'favicon-gray-16.png' });
+    }
     chrome.tabs.sendMessage(tabs[0].id, { contentEnabled });
   });
 };
 
+const setNumAnnotations = (tabId) => {
+  const n = store.getState().articles.annotations.length;
+  chrome.browserAction.setBadgeText({
+    text: n > 0 ? `${n}` : '',
+    tabId,
+  });
+};
+
+setNumAnnotations(null);
+
 chrome.browserAction.onClicked.addListener(() => toggleEnabled());
 
-chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) =>
-  store.dispatch(updateArticleUrl(tab.url)));
+chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+  store.dispatch(updateArticleUrl(tab.url));
+  setNumAnnotations(tabId);
+});
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.type === 'CONTENT_STATUS') {

@@ -116,6 +116,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 });
 
 chrome.runtime.sendMessage({ type: 'CONTENT_STATUS' }, (response) => {
-  contentEnabled = response.contentEnabled;
+  contentEnabled = response ? response.contentEnabled : false;
   updateContent(contentEnabled);
 });
