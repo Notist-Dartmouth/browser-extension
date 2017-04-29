@@ -13,8 +13,19 @@ import { newAnnotation } from './actions';
 /* eslint-disable react/jsx-filename-extension */
 
 const store = new Store({ portName: 'notist' });
-let contentEnabled = false;
-let sidebar;
+let contentEnabled = true;
+const sidebar = document.createElement('div');
+sidebar.setAttribute('id', 'annotation-sidebar');
+$('body').prepend(sidebar);
+
+store.ready().then(() =>
+  render(
+    <Provider store={store}>
+      <MuiThemeProvider>
+        <SidebarContainer />
+      </MuiThemeProvider>
+    </Provider>
+    , document.getElementById('annotation-sidebar')));
 
 injectTapEventPlugin();
 
@@ -76,39 +87,15 @@ const handleAnnotationsChanged = () => {
 
 store.subscribe(handleAnnotationsChanged);
 
-const enableContent = () => {
-  contentEnabled = true;
-  sidebar = document.createElement('div');
-  sidebar.setAttribute('id', 'annotation-sidebar');
-  $('body').prepend(sidebar);
-
-  store.ready().then(() =>
-    render(
-      <Provider store={store}>
-        <MuiThemeProvider>
-          <SidebarContainer />
-        </MuiThemeProvider>
-      </Provider>
-      , document.getElementById('annotation-sidebar')));
-
-  const annotations = store.getState().articles ? getCurrentAnnotations() : [];
-  annotations.forEach(a => highlighter.draw(a));
-};
-
-const disableContent = () => {
-  contentEnabled = false;
-  if (document.body.contains(sidebar)) {
-    document.body.removeChild(sidebar);
-  }
-  const annotations = store.getState().articles ? getCurrentAnnotations() : [];
-  annotations.forEach(a => highlighter.undraw(a));
-};
-
 const updateContent = (isEnabled) => {
-  if (isEnabled) {
-    enableContent();
+  contentEnabled = isEnabled;
+  const annotations = store.getState().articles ? getCurrentAnnotations() : [];
+  if (contentEnabled) {
+    $('#annotation-sidebar').show();
+    annotations.forEach(a => highlighter.draw(a));
   } else {
-    disableContent();
+    $('#annotation-sidebar').hide();
+    annotations.forEach(a => highlighter.undraw(a));
   }
 };
 
@@ -116,7 +103,5 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   updateContent(request.contentEnabled);
 });
 
-chrome.runtime.sendMessage({ type: 'CONTENT_STATUS' }, (response) => {
-  contentEnabled = response ? response.contentEnabled : false;
-  updateContent(contentEnabled);
-});
+chrome.runtime.sendMessage({ type: 'CONTENT_STATUS' }, response =>
+  updateContent(response.contentEnabled || false));
