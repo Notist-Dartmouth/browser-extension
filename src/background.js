@@ -47,24 +47,22 @@ const toggleEnabled = () => {
   });
 };
 
-const setNumAnnotations = (tabId) => {
-  const n = store.getState().articles.annotations.length;
+const setNumAnnotations = (nAnnotations) => {
   chrome.browserAction.setBadgeText({
-    text: n > 0 ? `${n}` : '',
-    tabId,
+    text: nAnnotations > 0 ? `${nAnnotations}` : '',
   });
 };
 
 chrome.browserAction.onClicked.addListener(() => toggleEnabled());
 
-chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-  store.dispatch(updateArticleUrl(tab.url));
-  setNumAnnotations(tabId);
-});
+chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) =>
+  store.dispatch(updateArticleUrl(tab.url)));
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.type === 'CONTENT_STATUS') {
-    setNumAnnotations(null);
     sendResponse({ contentEnabled });
+  } else if (request.type === 'SET_BADGE') {
+    console.log(request.nAnnotations);
+    setNumAnnotations(request.nAnnotations);
   }
 });

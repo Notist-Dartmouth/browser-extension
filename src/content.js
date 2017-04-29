@@ -64,6 +64,7 @@ const handleAnnotationsChanged = () => {
   const previousAnnotations = currentAnnotations;
   currentAnnotations = getCurrentAnnotations();
   if (currentAnnotations !== previousAnnotations) {
+    chrome.runtime.sendMessage({ type: 'SET_BADGE', nAnnotations: currentAnnotations.length });
     if (previousAnnotations) {
       previousAnnotations.forEach((a) => {
         highlighter.undraw(a);
