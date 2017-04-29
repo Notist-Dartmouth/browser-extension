@@ -55,8 +55,6 @@ const setNumAnnotations = (tabId) => {
   });
 };
 
-setNumAnnotations(null);
-
 chrome.browserAction.onClicked.addListener(() => toggleEnabled());
 
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
@@ -66,6 +64,7 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.type === 'CONTENT_STATUS') {
+    setNumAnnotations(null);
     sendResponse({ contentEnabled });
   }
 });
