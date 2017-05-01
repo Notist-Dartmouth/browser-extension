@@ -1,11 +1,15 @@
 import React, { PropTypes } from 'react';
 import { List } from 'material-ui/List';
+import { css } from 'aphrodite';
 import Subheader from 'material-ui/Subheader';
 import Annotation from './Annotation';
+import sharedStyles from '../styles';
 import GroupDropdownContainer from '../containers/GroupDropdownContainer';
 
 const AnnotationList = props => (
-  <List>
+  <List
+    className={css(sharedStyles.reset)}
+  >
     <Subheader>
       {props.annotations.length} annotations
     </Subheader>
