@@ -1,20 +1,32 @@
 import React, { PropTypes } from 'react';
 import { Card, CardTitle, CardText } from 'material-ui/Card';
+import { StyleSheet, css } from 'aphrodite';
 import CommentEditor from './CommentEditor';
 
-const AnnotationForm = (props) => {
-  return (
-    <Card hidden={!props.isCreatingAnnotation}>
-      <CardTitle title="New Annotation" />
-      <CardText>{`"${props.newAnnotation.articleText}"`}</CardText>
-      <CommentEditor
-        newAnnotation={props.newAnnotation}
-        onCommentPost={props.onCommentPost}
-        onCommentCancel={props.onFormCancel}
-      />
-    </Card>
+const styles = StyleSheet.create({
+  articleText: {
+    fontStyle: 'italic',
+    borderLeft: 'thick solid #F98C25',
+    paddingLeft: 10,
+    paddingBottom: 10,
+  },
+});
+
+const AnnotationForm = props => (
+  <Card hidden={!props.isCreatingAnnotation}>
+    <CardTitle title="New Annotation" />
+    <CardText>
+      <div className={css(styles.articleText)} >
+        {props.newAnnotation.articleText}
+      </div>
+    </CardText>
+    <CommentEditor
+      newAnnotation={props.newAnnotation}
+      onCommentPost={props.onCommentPost}
+      onCommentCancel={props.onFormCancel}
+    />
+  </Card>
   );
-};
 
 AnnotationForm.propTypes = {
   onCommentPost: PropTypes.func.isRequired,

@@ -148,7 +148,7 @@ class CommentEditor extends React.Component {
             onClick={() => this.togglePreview()}
           >
             <Icon icon={ICONS.MARKDOWN} viewBoxSize={1024} />
-            {this.state.isPreview ? 'Write' : 'Preview'}
+            {this.state.isPreview ? ' Write' : ' Preview'}
           </FlatButton>
         </div>
         <div style={editorStyle} onClick={() => { this.editor.focus(); }}>
