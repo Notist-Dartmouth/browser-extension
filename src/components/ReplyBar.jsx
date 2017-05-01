@@ -4,7 +4,6 @@ import ContentReply from 'material-ui/svg-icons/content/reply';
 import ActionDelete from 'material-ui/svg-icons/action/delete';
 import { StyleSheet, css } from 'aphrodite';
 import { connect } from 'react-redux';
-import sharedStyles from '../styles';
 import { deleteAnnotation } from '../actions';
 
 const styles = StyleSheet.create({
@@ -18,15 +17,14 @@ const styles = StyleSheet.create({
     height: 48,
   },
   button: {
-    padding: 12,
-    border: 10,
+    boxShadow: 'initial',
   },
 });
 
 const ReplyBar = props => (
   <div className={css(styles.replyBar)}>
     <IconButton
-      className={css(sharedStyles.reset, styles.button)}
+      className={css(styles.button)}
       iconStyle={styles.icon}
       onClick={props.onReplyClicked}
       tooltip="Reply"
@@ -34,7 +32,7 @@ const ReplyBar = props => (
       <ContentReply />
     </IconButton>
     <IconButton
-      className={css(sharedStyles.reset, styles.button)}
+      className={css(styles.button)}
       iconStyle={styles.icon}
       tooltip="Delete"
       disabled={props.authorId !== props.userId}
