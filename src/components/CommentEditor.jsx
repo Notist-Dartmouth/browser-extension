@@ -1,7 +1,11 @@
 import React, { PropTypes } from 'react';
 import { Editor, EditorState, Modifier, ContentState, convertFromHTML } from 'draft-js';
 import marked from 'marked';
+import FlatButton from 'material-ui/FlatButton';
+import IconButton from 'material-ui/IconButton';
+import { css } from 'aphrodite';
 import ICONS from '../constants/Icons';
+import sharedStyles from '../styles';
 import Icon from './Icon';
 import GroupDropdownContainer from '../containers/GroupDropdownContainer';
 import ButtonFooter from './ButtonFooter';
@@ -14,8 +18,6 @@ class CommentEditor extends React.Component {
         return text ? `**${text}**` : '**Bold**';
       case 'italic':
         return text ? `*${text}*` : '*Italic*';
-      case 'link':
-        return text ? `[${text}](your-link-here)` : '[](your-link-here)';
       default:
         return text;
     }
@@ -129,19 +131,25 @@ class CommentEditor extends React.Component {
     return (
       <div>
         <div>
-          <button onClick={() => this.handleStyleCommand('bold')}>
+          <IconButton
+            className={css(sharedStyles.button)}
+            onClick={() => this.handleStyleCommand('bold')}
+          >
             <Icon icon={ICONS.BOLD} />
-          </button>
-          <button onClick={() => this.handleStyleCommand('italic')}>
+          </IconButton>
+          <IconButton
+            className={css(sharedStyles.button)}
+            onClick={() => this.handleStyleCommand('italic')}
+          >
             <Icon icon={ICONS.ITALIC} />
-          </button>
-          <button onClick={() => this.handleStyleCommand('link')}>
-            <Icon icon={ICONS.LINK} />
-          </button>
-          <button onClick={() => this.togglePreview()}>
+          </IconButton>
+          <FlatButton
+            className={css(sharedStyles.button)}
+            onClick={() => this.togglePreview()}
+          >
             <Icon icon={ICONS.MARKDOWN} viewBoxSize={1024} />
             {this.state.isPreview ? 'Write' : 'Preview'}
-          </button>
+          </FlatButton>
         </div>
         <div style={editorStyle} onClick={() => { this.editor.focus(); }}>
           <Editor
