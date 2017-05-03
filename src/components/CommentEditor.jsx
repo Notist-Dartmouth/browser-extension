@@ -3,9 +3,7 @@ import { Editor, EditorState, Modifier, ContentState, convertFromHTML } from 'dr
 import marked from 'marked';
 import FlatButton from 'material-ui/FlatButton';
 import IconButton from 'material-ui/IconButton';
-import { css } from 'aphrodite';
 import ICONS from '../constants/Icons';
-import sharedStyles from '../styles';
 import Icon from './Icon';
 import GroupDropdownContainer from '../containers/GroupDropdownContainer';
 import ButtonFooter from './ButtonFooter';
@@ -132,19 +130,16 @@ class CommentEditor extends React.Component {
       <div>
         <div>
           <IconButton
-            className={css(sharedStyles.button)}
             onClick={() => this.handleStyleCommand('bold')}
           >
             <Icon icon={ICONS.BOLD} />
           </IconButton>
           <IconButton
-            className={css(sharedStyles.button)}
             onClick={() => this.handleStyleCommand('italic')}
           >
             <Icon icon={ICONS.ITALIC} />
           </IconButton>
           <FlatButton
-            className={css(sharedStyles.button)}
             onClick={() => this.togglePreview()}
           >
             <Icon icon={ICONS.MARKDOWN} viewBoxSize={1024} />

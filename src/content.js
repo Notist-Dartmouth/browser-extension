@@ -1,5 +1,6 @@
 import React from 'react';
 import { render } from 'react-dom';
+import ShadowDOM from 'react-shadow';
 import { Provider } from 'react-redux';
 import { Store } from 'react-chrome-redux';
 import injectTapEventPlugin from 'react-tap-event-plugin';
@@ -17,14 +18,19 @@ let contentEnabled = true;
 const sidebar = document.createElement('div');
 sidebar.setAttribute('id', 'annotation-sidebar');
 $('body').prepend(sidebar);
+document.getElementById('annotation-sidebar').style.all = 'initial';
 
 store.ready().then(() =>
   render(
-    <Provider store={store}>
-      <MuiThemeProvider>
-        <SidebarContainer />
-      </MuiThemeProvider>
-    </Provider>
+    <ShadowDOM>
+      <div>
+        <Provider store={store}>
+          <MuiThemeProvider>
+            <SidebarContainer />
+          </MuiThemeProvider>
+        </Provider>
+      </div>
+    </ShadowDOM>
     , document.getElementById('annotation-sidebar')));
 
 injectTapEventPlugin();

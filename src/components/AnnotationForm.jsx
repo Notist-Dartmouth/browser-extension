@@ -1,22 +1,21 @@
 import React, { PropTypes } from 'react';
 import { Card, CardTitle, CardText } from 'material-ui/Card';
-import { StyleSheet, css } from 'aphrodite';
 import CommentEditor from './CommentEditor';
 
-const styles = StyleSheet.create({
+const styles = {
   articleText: {
     fontStyle: 'italic',
     borderLeft: 'thick solid #F98C25',
     paddingLeft: 10,
     paddingBottom: 10,
   },
-});
+};
 
 const AnnotationForm = props => (
   <Card hidden={!props.isCreatingAnnotation}>
     <CardTitle title="New Annotation" />
     <CardText>
-      <div className={css(styles.articleText)} >
+      <div style={styles.articleText} >
         {props.newAnnotation.articleText}
       </div>
     </CardText>

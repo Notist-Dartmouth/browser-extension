@@ -1,12 +1,11 @@
 import React, { PropTypes } from 'react';
 import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
-import { StyleSheet, css } from 'aphrodite';
 import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton';
 import SocialGroupAdd from 'material-ui/svg-icons/social/group-add';
 import ButtonFooter from '../ButtonFooter';
 
-const styles = StyleSheet.create({
+const styles = {
   formElement: {
     textAlign: 'center',
     padding: '10px',
@@ -29,10 +28,10 @@ const styles = StyleSheet.create({
     padding: '5px',
     width: '60%',
   },
-});
+};
 
 const GroupForm = props => (
-  <div className={css(styles.formElement)}>
+  <div style={styles.formElement}>
     {!props.active && <FlatButton
       primary
       onClick={props.onToggleActive}
@@ -42,19 +41,19 @@ const GroupForm = props => (
     <div hidden={!props.active}>
       <TextField
         id="name"
-        className={css(styles.textField)}
+        style={styles.textField}
         onChange={props.onChange}
         hintText="Group name"
         errorText={props.validName ? '' : 'Group name is required'}
       />
       <TextField
         id="description"
-        className={css(styles.textField)}
+        style={styles.textField}
         onChange={props.onChange}
         hintText="Description"
         multiLine
       />
-      <div className={css(styles.label)}>
+      <div style={styles.label}>
         <span>Group Type</span>
       </div>
       <RadioButtonGroup
@@ -63,13 +62,13 @@ const GroupForm = props => (
         onChange={props.onRadioToggle}
       >
         <RadioButton
-          className={css(styles.radioButton)}
+          style={styles.radioButton}
           value="public"
           label="Public"
           labelStyle={styles.radioLabel}
         />
         <RadioButton
-          className={css(styles.radioButton)}
+          style={styles.radioButton}
           value="personal"
           label="Personal"
           labelStyle={styles.radioLabel}

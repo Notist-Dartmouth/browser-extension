@@ -2,16 +2,11 @@ import React, { PropTypes } from 'react';
 import { ListItem } from 'material-ui/List';
 import FlatButton from 'material-ui/FlatButton';
 import { Editor, EditorState, ContentState, convertFromHTML } from 'draft-js';
-import { StyleSheet, css } from 'aphrodite';
 import marked from 'marked';
 import CommentEditor from './CommentEditor';
 import ReplyBar from './ReplyBar';
 
-const styles = StyleSheet.create({
-  listItem: {
-    cursor: 'auto',
-    backgroundColor: 'none',
-  },
+const styles = {
   articleText: {
     fontStyle: 'italic',
     borderLeft: 'thick solid #F98C25',
@@ -25,7 +20,7 @@ const styles = StyleSheet.create({
   commentText: {
     paddingBottom: 20,
   },
-});
+};
 
 class Annotation extends React.Component {
 
@@ -57,10 +52,17 @@ class Annotation extends React.Component {
   }
 
   render() {
+    const listItemStyle = {
+      listItem: {
+        cursor: 'auto',
+        backgroundColor: 'none',
+        paddingLeft: 20 * this.props.depth,
+      },
+    };
+
     return (
       <ListItem
-        className={css(styles.listItem)}
-        style={{ paddingLeft: 20 * this.props.depth }}
+        style={listItemStyle}
         secondaryText={this.props.newCommentVisible &&
           <CommentEditor
             onCommentPost={this.props.onCommentPost}
@@ -74,9 +76,9 @@ class Annotation extends React.Component {
         onNestedListToggle={this.toggleExpanded}
       >
         <div>
-          {this.props.depth === 0 && <div className={css(styles.articleText)}>{this.props.articleText}</div>}
+          {this.props.depth === 0 && <div style={styles.articleText}>{this.props.articleText}</div>}
           <br />
-          <div className={css(styles.commentText)}>
+          <div style={styles.commentText}>
             <Editor
               readOnly
               editorState={this.state.commentEditorState}
@@ -90,7 +92,7 @@ class Annotation extends React.Component {
           {
             this.props.childAnnotations.length > 0 && !this.state.isExpanded &&
             <FlatButton
-              className={css(styles.expandButton)}
+              style={styles.expandButton}
               primary
               onClick={this.toggleExpanded}
               label={`Show Replies (${this.props.childAnnotations.length})`}
