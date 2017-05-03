@@ -8,6 +8,24 @@ import Icon from './Icon';
 import GroupDropdownContainer from '../containers/GroupDropdownContainer';
 import ButtonFooter from './ButtonFooter';
 
+const styles = {
+  container: {
+    marginLeft: '20px',
+    marginRight: '15px',
+  },
+  controlBar: {
+    border: '1px solid',
+  },
+  editorStyle: {
+    border: '1px solid',
+    borderTop: 'none',
+    minHeight: '100px',
+    cursor: 'text',
+    padding: '5px',
+    fontFamily: 'sans-serif',
+  },
+};
+
 class CommentEditor extends React.Component {
 
   static textToMarkdown(text, markdownCmd) {
@@ -118,17 +136,9 @@ class CommentEditor extends React.Component {
   }
 
   render() {
-    const editorStyle = {
-      border: '1px solid #ddd',
-      minHeight: '100px',
-      cursor: 'text',
-      padding: '5px',
-      fontFamily: 'sans-serif',
-    };
-
     return (
-      <div>
-        <div>
+      <div style={styles.container}>
+        <div style={styles.controlBar}>
           <IconButton
             onClick={() => this.handleStyleCommand('bold')}
           >
@@ -146,7 +156,7 @@ class CommentEditor extends React.Component {
             {this.state.isPreview ? ' Write' : ' Preview'}
           </FlatButton>
         </div>
-        <div style={editorStyle} onClick={() => { this.editor.focus(); }}>
+        <div style={styles.editorStyle} onClick={() => { this.editor.focus(); }}>
           <Editor
             ref={(editor) => { this.editor = editor; }}
             readOnly={this.state.isPreview}

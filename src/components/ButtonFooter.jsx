@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import FlatButton from 'material-ui/FlatButton';
 
 const ButtonFooter = props => (
-  <div>
+  <div style={{ textAlign: 'center' }}>
     <FlatButton
       label={props.secondaryText}
       onClick={props.onSecondaryClicked}
