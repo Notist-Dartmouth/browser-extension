@@ -2,33 +2,26 @@ import React, { PropTypes } from 'react';
 import IconButton from 'material-ui/IconButton';
 import ContentReply from 'material-ui/svg-icons/content/reply';
 import ActionDelete from 'material-ui/svg-icons/action/delete';
-import { StyleSheet, css } from 'aphrodite';
 import { connect } from 'react-redux';
 import { deleteAnnotation } from '../actions';
 
-const styles = StyleSheet.create({
+const styles = {
   replyBar: {
     position: 'absolute',
     right: 10,
     bottom: 0,
   },
-  icon: {
-    width: 48,
-    height: 48,
-  },
-});
+};
 
 const ReplyBar = props => (
-  <div className={css(styles.replyBar)}>
+  <div style={styles.replyBar}>
     <IconButton
-      iconStyle={styles.icon}
       onClick={props.onReplyClicked}
       tooltip="Reply"
     >
       <ContentReply />
     </IconButton>
     <IconButton
-      iconStyle={styles.icon}
       tooltip="Delete"
       disabled={props.authorId !== props.userId}
       onClick={() => props.onDeleteClicked(props.annotationId)}

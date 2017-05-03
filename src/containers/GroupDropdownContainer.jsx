@@ -8,7 +8,7 @@ class GroupDropdownContainer extends Component {
   constructor(props) {
     super(props);
     this.handleFormSelect = (e, index, values) => {
-      if (values && values.length > 0) {
+      if (values) {
         props.dispatch(selectAnnotationGroups(values));
       }
     };

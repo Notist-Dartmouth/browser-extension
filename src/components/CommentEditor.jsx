@@ -1,10 +1,30 @@
 import React, { PropTypes } from 'react';
 import { Editor, EditorState, Modifier, ContentState, convertFromHTML } from 'draft-js';
 import marked from 'marked';
+import FlatButton from 'material-ui/FlatButton';
+import IconButton from 'material-ui/IconButton';
 import ICONS from '../constants/Icons';
 import Icon from './Icon';
 import GroupDropdownContainer from '../containers/GroupDropdownContainer';
 import ButtonFooter from './ButtonFooter';
+
+const styles = {
+  container: {
+    marginLeft: '20px',
+    marginRight: '15px',
+  },
+  controlBar: {
+    border: '1px solid',
+  },
+  editorStyle: {
+    border: '1px solid',
+    borderTop: 'none',
+    minHeight: '100px',
+    cursor: 'text',
+    padding: '5px',
+    fontFamily: 'sans-serif',
+  },
+};
 
 class CommentEditor extends React.Component {
 
@@ -14,8 +34,6 @@ class CommentEditor extends React.Component {
         return text ? `**${text}**` : '**Bold**';
       case 'italic':
         return text ? `*${text}*` : '*Italic*';
-      case 'link':
-        return text ? `[${text}](your-link-here)` : '[](your-link-here)';
       default:
         return text;
     }
@@ -118,32 +136,27 @@ class CommentEditor extends React.Component {
   }
 
   render() {
-    const editorStyle = {
-      border: '1px solid #ddd',
-      minHeight: '100px',
-      cursor: 'text',
-      padding: '5px',
-      fontFamily: 'sans-serif',
-    };
-
     return (
-      <div>
-        <div>
-          <button onClick={() => this.handleStyleCommand('bold')}>
+      <div style={styles.container}>
+        <div style={styles.controlBar}>
+          <IconButton
+            onClick={() => this.handleStyleCommand('bold')}
+          >
             <Icon icon={ICONS.BOLD} />
-          </button>
-          <button onClick={() => this.handleStyleCommand('italic')}>
+          </IconButton>
+          <IconButton
+            onClick={() => this.handleStyleCommand('italic')}
+          >
             <Icon icon={ICONS.ITALIC} />
-          </button>
-          <button onClick={() => this.handleStyleCommand('link')}>
-            <Icon icon={ICONS.LINK} />
-          </button>
-          <button onClick={() => this.togglePreview()}>
+          </IconButton>
+          <FlatButton
+            onClick={() => this.togglePreview()}
+          >
             <Icon icon={ICONS.MARKDOWN} viewBoxSize={1024} />
-            {this.state.isPreview ? 'Write' : 'Preview'}
-          </button>
+            {this.state.isPreview ? ' Write' : ' Preview'}
+          </FlatButton>
         </div>
-        <div style={editorStyle} onClick={() => { this.editor.focus(); }}>
+        <div style={styles.editorStyle} onClick={() => { this.editor.focus(); }}>
           <Editor
             ref={(editor) => { this.editor = editor; }}
             readOnly={this.state.isPreview}

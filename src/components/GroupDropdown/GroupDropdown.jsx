@@ -1,10 +1,9 @@
 import React, { PropTypes } from 'react';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
-import { StyleSheet, css } from 'aphrodite';
 import GroupFormContainer from '../../containers/GroupFormContainer';
 
-const styles = StyleSheet.create({
+const styles = {
   dropdown: {
     position: 'relative',
     left: '10%',
@@ -19,10 +18,10 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontWeight: 'bold',
   },
-});
+};
 
 const GroupDropdown = props => (
-  <div className={css(styles.dropdown)} >
+  <div style={styles.dropdown} >
     <SelectField
       multiple
       value={props.selectedGroups}
@@ -30,7 +29,7 @@ const GroupDropdown = props => (
       onChange={props.onChange}
     >
       <div
-        className={css(styles.header)}
+        style={styles.header}
         hidden={props.groups.length === 0}
       >
         <span>Groups</span>
