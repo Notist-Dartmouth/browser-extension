@@ -82,7 +82,9 @@ class CommentEditor extends React.Component {
         <div
           style={styles.editorStyle}
           hidden={!this.state.isPreview}
-          dangerouslySetInnerHTML={{ __html: marked(this.state.markdown) }}
+          dangerouslySetInnerHTML={{
+            __html: this.state.markdown.length > 0 ? marked(this.state.markdown) : marked('Nothing to preview'),
+          }}
         />
         {!this.props.parent && <GroupDropdownContainer /> }
         <ButtonFooter
