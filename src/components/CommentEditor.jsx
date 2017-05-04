@@ -12,10 +12,10 @@ const styles = {
     marginRight: '15px',
   },
   controlBar: {
-    border: '1px solid',
+    border: '1px solid gray',
   },
   editorStyle: {
-    border: '1px solid',
+    border: '1px solid gray',
     borderTop: 'none',
     minHeight: '100px',
     width: '97%',
@@ -35,7 +35,6 @@ class CommentEditor extends React.Component {
       markdown: '',
     };
     this.onEditorChange = event => this.setState({ markdown: event.target.value });
-    this.togglePreview = this.togglePreview.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
@@ -53,31 +52,37 @@ class CommentEditor extends React.Component {
     this.props.onCommentCancel();
   }
 
-  togglePreview() {
-    this.setState({ isPreview: !this.state.isPreview });
-  }
-
   render() {
     return (
       <div style={styles.container}>
         <div style={styles.controlBar}>
-          <FlatButton
-            onClick={() => this.togglePreview()}
-          >
+          <span style={{ paddingLeft: '10px' }}>
             <Icon icon={ICONS.MARKDOWN} viewBoxSize={1024} />
-            {' Preview'}
-          </FlatButton>
-          <div
-            style={{ paddingLeft: '10px' }}
-            hidden={!this.state.isPreview}
-            dangerouslySetInnerHTML={{ __html: marked(this.state.markdown) }}
+          </span>
+          <FlatButton
+            onClick={() => this.setState({ isPreview: true })}
+            label="Preview"
+            primary
+            disabled={this.state.isPreview}
+          />
+          <FlatButton
+            onClick={() => this.setState({ isPreview: false })}
+            label="Write"
+            primary
+            disabled={!this.state.isPreview}
           />
         </div>
         <textarea
           style={styles.editorStyle}
+          hidden={this.state.isPreview}
           value={this.state.markdown}
           onChange={this.onEditorChange}
           placeholder="Enter Comment"
+        />
+        <div
+          style={styles.editorStyle}
+          hidden={!this.state.isPreview}
+          dangerouslySetInnerHTML={{ __html: marked(this.state.markdown) }}
         />
         {!this.props.parent && <GroupDropdownContainer /> }
         <ButtonFooter
