@@ -1,7 +1,6 @@
 import React, { PropTypes } from 'react';
 import { ListItem } from 'material-ui/List';
 import FlatButton from 'material-ui/FlatButton';
-import { Editor, EditorState, ContentState, convertFromHTML } from 'draft-js';
 import marked from 'marked';
 import CommentEditor from './CommentEditor';
 import ReplyBar from './ReplyBar';
@@ -26,13 +25,8 @@ class Annotation extends React.Component {
 
   constructor(props) {
     super(props);
-    const commentBlocks = convertFromHTML(marked(props.text));
-    const commentContentState = ContentState.createFromBlockArray(
-      commentBlocks.contentBlocks,
-      commentBlocks.entityMap,
-    );
+
     this.state = {
-      commentEditorState: EditorState.createWithContent(commentContentState),
       isExpanded: false,
     };
     this.childAnnotations = this.childAnnotations.bind(this);
@@ -78,12 +72,10 @@ class Annotation extends React.Component {
         <div>
           {this.props.depth === 0 && <div style={styles.articleText}>{this.props.articleText}</div>}
           <br />
-          <div style={styles.commentText}>
-            <Editor
-              readOnly
-              editorState={this.state.commentEditorState}
-            />
-          </div>
+          <div
+            style={styles.commentText}
+            dangerouslySetInnerHTML={{ __html: marked(this.props.text) }}
+          />
           <ReplyBar
             onReplyClicked={() => this.props.onCommentToggle(this.props._id)}
             authorId={this.props.author}
