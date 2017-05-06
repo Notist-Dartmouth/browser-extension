@@ -13,7 +13,7 @@ const headers = {
 
 let apiHost;
 // @if ENVIRONMENT='production'
-apiHost = 'http://notist.herokuapp.com';
+apiHost = 'https://notist.herokuapp.com';
 // @endif
 // @if ENVIRONMENT='development'
 apiHost = 'http://localhost:3000';
@@ -218,7 +218,7 @@ export function fetchUserAsync() {
       .then((res) => {
         if (res.status === 401) {
           dispatch(updateAuthStatus(false));
-          return {};
+          return { ERROR: 'Unable to login' };
         } else {
           return res.json();
         }
