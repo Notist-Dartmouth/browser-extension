@@ -87,7 +87,9 @@ const handleAnnotationsChanged = () => {
         highlighter.undraw(a);
       });
     }
-    currentAnnotations.forEach(a => highlighter.draw(a));
+    if (contentEnabled) {
+      currentAnnotations.forEach(a => highlighter.draw(a));
+    }
   }
 };
 

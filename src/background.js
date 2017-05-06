@@ -62,6 +62,7 @@ chrome.tabs.onActivated.addListener(activeInfo =>
   chrome.tabs.get(activeInfo.tabId, (tab) => {
     store.dispatch(updateArticleUrl(tab.url));
     store.dispatch(fetchAnnotationsAsync());
+    chrome.tabs.sendMessage(activeInfo.tabId, { contentEnabled });
   }));
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
