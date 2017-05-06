@@ -124,8 +124,9 @@ function articles(state = {
       return Object.assign({}, state, {
         annotations: annotations(state.annotations, action),
         isCreatingAnnotation: false,
+        isFetchingAnnotations: false,
       });
-    case types.FETCH_ANNOTATIONS:
+    case types.REQUEST_ANNOTATIONS:
       return Object.assign({}, state, {
         isFetchingAnnotations: true,
       });

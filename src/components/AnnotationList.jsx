@@ -9,6 +9,11 @@ const AnnotationList = props => (
     <Subheader>
       {props.annotations.length} annotations
     </Subheader>
+    { props.isFetchingAnnotations &&
+      <h3 style={{ textAlign: 'center' }}>
+        Loading...
+      </h3>
+    }
     <GroupDropdownContainer label="Filter by group" />
     {props.annotations.length === 0 &&
       <Subheader
@@ -35,6 +40,7 @@ AnnotationList.propTypes = {
   annotations: PropTypes.arrayOf(PropTypes.object).isRequired,
   onCommentPost: PropTypes.func.isRequired,
   onCommentToggle: PropTypes.func.isRequired,
+  isFetchingAnnotations: PropTypes.bool.isRequired,
 };
 
 export default AnnotationList;

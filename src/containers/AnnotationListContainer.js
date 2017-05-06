@@ -4,10 +4,11 @@ import AnnotationList from '../components/AnnotationList';
 import { toggleNewComment, createAnnotation } from '../actions';
 
 function mapStateToProps(state) {
-  const { annotations, groupsFilter } = state.articles;
+  const { annotations, groupsFilter, isFetchingAnnotations } = state.articles;
   return {
     annotations: groupsFilter.length === 0 ? annotations
       : annotations.filter(a => _.intersection(groupsFilter, a.groups).length > 0),
+    isFetchingAnnotations,
   };
 }
 

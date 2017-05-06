@@ -33,6 +33,12 @@ function receiveAnnotation(annotation) {
   };
 }
 
+function requestAnnotations() {
+  return {
+    type: types.REQUEST_ANNOTATIONS,
+  };
+}
+
 function receiveAnnotations(annotations) {
   return {
     type: types.RECEIVE_ANNOTATIONS,
@@ -48,6 +54,7 @@ function receiveReply(reply) {
 }
 
 function sendCreateAnnotationRequest(dispatch, body) {
+  dispatch(requestAnnotations());
   return fetch(path.join(apiHost, 'api/annotation'), {
     method: 'POST',
     credentials: 'include',
@@ -139,6 +146,7 @@ export function fetchAnnotationsAsync() {
       const urlString = path.join(apiHost, 'api/article/annotations');
       const annotationsEndpoint = new URL(urlString);
       annotationsEndpoint.search = new URLSearchParams(`?uri=${currentArticleUrl}`);
+      dispatch(requestAnnotations());
       return fetch(annotationsEndpoint, {
         method: 'GET',
         credentials: 'include',
