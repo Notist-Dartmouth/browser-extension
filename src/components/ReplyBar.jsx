@@ -34,9 +34,13 @@ const ReplyBar = props => (
 ReplyBar.propTypes = {
   onReplyClicked: PropTypes.func.isRequired,
   authorId: PropTypes.string.isRequired,
-  userId: PropTypes.string.isRequired,
+  userId: PropTypes.string,
   annotationId: PropTypes.string.isRequired,
   onDeleteClicked: PropTypes.func.isRequired,
+};
+
+ReplyBar.defaultProps = {
+  userId: '',
 };
 
 function mapStateToProps(state) {

@@ -9,7 +9,7 @@ const AnnotationList = props => (
     <Subheader>
       {props.annotations.length} annotations
     </Subheader>
-    { props.isFetchingAnnotations &&
+    { props.isFetchingAnnotations && props.isAuthenticated &&
       <h3 style={{ textAlign: 'center' }}>
         Loading...
       </h3>
@@ -41,6 +41,7 @@ AnnotationList.propTypes = {
   onCommentPost: PropTypes.func.isRequired,
   onCommentToggle: PropTypes.func.isRequired,
   isFetchingAnnotations: PropTypes.bool.isRequired,
+  isAuthenticated: PropTypes.bool.isRequired,
 };
 
 export default AnnotationList;
