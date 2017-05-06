@@ -59,13 +59,15 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) =>
   store.dispatch(updateArticleUrl(tab.url)));
 
 chrome.tabs.onActivated.addListener(activeInfo =>
-  chrome.tabs.get(activeInfo.tabId, tab => store.dispatch(updateArticleUrl(tab.url))));
+  chrome.tabs.get(activeInfo.tabId, (tab) => {
+    store.dispatch(updateArticleUrl(tab.url));
+    store.dispatch(fetchAnnotationsAsync());
+  }));
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.type === 'CONTENT_STATUS') {
     sendResponse({ contentEnabled });
   } else if (request.type === 'SET_BADGE') {
-    console.log(request.nAnnotations);
     setNumAnnotations(request.nAnnotations);
   }
 });
