@@ -17,7 +17,7 @@ const prodConfig = {
   context: {
     ENVIRONMENT: 'production',
     API_HOST: 'http://notist.herokuapp.com',
-    FRONTEND_HOST: 'http://notist-frontend.herokuapp.com',
+    FRONTEND_HOST: 'http://notist.io',
   },
 };
 
