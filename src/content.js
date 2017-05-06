@@ -96,15 +96,17 @@ const handleAnnotationsChanged = () => {
 store.subscribe(handleAnnotationsChanged);
 
 const updateContent = (isEnabled) => {
-  contentEnabled = isEnabled;
   const annotations = store.getState().articles ? getCurrentAnnotations() : [];
-  if (contentEnabled) {
-    $('#annotation-sidebar').show();
-    annotations.forEach(a => highlighter.draw(a));
+  if (isEnabled) {
+    if (!contentEnabled) {
+      $('#annotation-sidebar').show();
+      annotations.forEach(a => highlighter.draw(a));
+    }
   } else {
     $('#annotation-sidebar').hide();
     annotations.forEach(a => highlighter.undraw(a));
   }
+  contentEnabled = isEnabled;
 };
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
