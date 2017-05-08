@@ -48,6 +48,7 @@ class GroupFormContainer extends React.Component {
     const { name, description, isPersonal, isPublic } = this.state;
     const newGroup = { name, description, isPersonal, isPublic };
     this.props.dispatch(createGroup(newGroup));
+    this.props.onNewGroupClicked();
   }
 
   render() {

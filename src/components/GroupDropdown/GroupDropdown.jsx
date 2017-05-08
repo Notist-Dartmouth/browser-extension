@@ -27,7 +27,7 @@ const GroupDropdown = props => (
       multiple
       value={props.selectedGroups}
       floatingLabelText={props.label}
-      onChange={props.onChange}
+      onChange={props.active ? null : props.onChange}
     >
       <div
         style={styles.header}

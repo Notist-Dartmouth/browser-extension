@@ -62,14 +62,12 @@ const GroupForm = props => (
         onChange={props.onRadioToggle}
       >
         <RadioButton
-          id="public"
           style={styles.radioButton}
           value="public"
           label="Public"
           labelStyle={styles.radioLabel}
         />
         <RadioButton
-          id="public"
           style={styles.radioButton}
           value="personal"
           label="Personal"
