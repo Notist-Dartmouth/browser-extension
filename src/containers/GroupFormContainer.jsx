@@ -9,7 +9,6 @@ class GroupFormContainer extends React.Component {
     super(props);
     this.state = {
       name: '',
-      active: false,
       isPublic: false,
       isPersonal: false,
       validName: true,
@@ -18,7 +17,6 @@ class GroupFormContainer extends React.Component {
     };
     this.handleRadioToggle = this.handleRadioToggle.bind(this);
     this.handleChange = this.handleChange.bind(this);
-    this.handleToggleActive = this.handleToggleActive.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
@@ -42,10 +40,6 @@ class GroupFormContainer extends React.Component {
     }
   }
 
-  handleToggleActive() {
-    this.setState({ active: !this.state.active });
-  }
-
   handleSubmit() {
     if (this.state.name.length === 0) {
       this.setState({ validName: false });
@@ -61,10 +55,10 @@ class GroupFormContainer extends React.Component {
       <GroupForm
         onSubmit={this.handleSubmit}
         onChange={this.handleChange}
-        onToggleActive={this.handleToggleActive}
         onRadioToggle={this.handleRadioToggle}
         validName={this.state.validName}
-        active={this.state.active}
+        active={this.props.active}
+        onToggleActive={this.props.onNewGroupClicked}
         visibilitySelected={this.state.visibilitySelected}
       />
     );
@@ -72,6 +66,8 @@ class GroupFormContainer extends React.Component {
 }
 
 GroupFormContainer.propTypes = {
+  active: PropTypes.bool.isRequired,
+  onNewGroupClicked: PropTypes.func.isRequired,
   dispatch: PropTypes.func.isRequired,
 };
 

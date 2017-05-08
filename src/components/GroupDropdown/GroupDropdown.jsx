@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
 import SelectField from 'material-ui/SelectField';
+import _ from 'underscore';
 import MenuItem from 'material-ui/MenuItem';
 import GroupFormContainer from '../../containers/GroupFormContainer';
 
@@ -30,20 +31,25 @@ const GroupDropdown = props => (
     >
       <div
         style={styles.header}
-        hidden={props.groups.length === 0}
+        hidden={!props.active && props.groups.length === 0}
       >
-        <span>Groups</span>
+        <span>{props.active ? 'New Group' : 'My Groups'}</span>
       </div>
-      {props.groups.map(group => (
-        <MenuItem
-          key={group._id}
-          value={group._id}
-          checked={props.selectedGroups.includes(group._id)}
-          primaryText={group.name}
-          secondaryText={group.description}
-        />
-      ))}
-      <GroupFormContainer />
+      <div hidden={props.active} >
+        {props.groups.map(group => (
+          <MenuItem
+            key={group._id}
+            value={group._id}
+            checked={_.indexOf(props.selectedGroups, group._id) > -1}
+            primaryText={group.name}
+            secondaryText={group.description}
+          />
+        ))}
+      </div>
+      <GroupFormContainer
+        active={props.active}
+        onNewGroupClicked={props.onNewGroupClicked}
+      />
     </SelectField>
   </div>
 );
@@ -56,6 +62,8 @@ GroupDropdown.propTypes = {
     isPublic: PropTypes.bool,
     isPersonal: PropTypes.bool,
   })),
+  active: PropTypes.bool.isRequired,
+  onNewGroupClicked: PropTypes.func.isRequired,
   label: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
   selectedGroups: PropTypes.arrayOf(PropTypes.string),

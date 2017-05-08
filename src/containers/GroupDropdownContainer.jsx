@@ -7,18 +7,32 @@ class GroupDropdownContainer extends Component {
 
   constructor(props) {
     super(props);
+    this.state = {
+      active: false,
+    };
     this.handleFormSelect = (e, index, values) => {
-      if (values) {
+      if (!e.target.id) {
         props.dispatch(selectAnnotationGroups(values));
       }
     };
-    this.handleFilterSelect = (e, index, groups) => props.dispatch(filterAnnotations(groups));
+    this.handleFilterSelect = (e, index, groups) => {
+      if (!e.target.id) {
+        props.dispatch(filterAnnotations(groups));
+      }
+    };
+    this.handleToggleActive = this.handleToggleActive.bind(this);
+  }
+
+  handleToggleActive() {
+    this.setState({ active: !this.state.active });
   }
 
   render() {
     return (
       <GroupDropdown
         label={this.props.label}
+        active={this.state.active}
+        onNewGroupClicked={this.handleToggleActive}
         groups={this.props.groups}
         onChange={this.props.isCreatingAnnotation ? this.handleFormSelect : this.handleFilterSelect}
         selectedGroups={this.props.selectedGroups}
