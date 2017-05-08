@@ -31,25 +31,24 @@ const GroupDropdown = props => (
     >
       <div
         style={styles.header}
-        hidden={!props.active && props.groups.length === 0}
       >
         <span>{props.active ? 'New Group' : 'My Groups'}</span>
       </div>
-      <div hidden={props.active} >
-        {props.groups.map(group => (
-          <MenuItem
-            key={group._id}
-            value={group._id}
-            checked={_.indexOf(props.selectedGroups, group._id) > -1}
-            primaryText={group.name}
-            secondaryText={group.description}
-          />
-        ))}
+      <div>
+        <GroupFormContainer
+          active={props.active}
+          onNewGroupClicked={props.onNewGroupClicked}
+        />
       </div>
-      <GroupFormContainer
-        active={props.active}
-        onNewGroupClicked={props.onNewGroupClicked}
-      />
+      {props.groups.map(group => (
+        <MenuItem
+          key={group._id}
+          value={group._id}
+          checked={_.indexOf(props.selectedGroups, group._id) > -1}
+          primaryText={group.name}
+          secondaryText={group.description}
+        />
+      ))}
     </SelectField>
   </div>
 );

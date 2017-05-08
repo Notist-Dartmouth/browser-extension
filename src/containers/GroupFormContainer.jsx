@@ -30,6 +30,7 @@ class GroupFormContainer extends React.Component {
   }
 
   handleChange(e, newValue) {
+    e.preventDefault();
     if (e.target.id === 'name') {
       this.setState({ name: newValue });
       if (this.state.name.length > 0) {
