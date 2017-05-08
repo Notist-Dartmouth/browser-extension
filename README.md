@@ -15,3 +15,16 @@
 * 'gulp prod'
 * go to chrome://extensions
 * load the unpacked extension ('dist' directory)
+
+
+## To parse facebook:
+
+after running `gulp X`:
+
+- copy `index.html` in `/src/index.html` into `dist/index.html`
+
+- navigate to `chrome-extension://id/index.html` but replace `id` with the actual one for notist from `chrome://extensions/`
+
+- be logged into facebook on the browser (just need cookie, facebook doesn't need to be open)
+
+- press the button and check out the console log
