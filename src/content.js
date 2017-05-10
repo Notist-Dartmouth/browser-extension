@@ -28,7 +28,7 @@ store.ready().then(() =>
         right: '0px',
         top: '0px',
         left: 'auto',
-        zIndex: 10000000,
+        zIndex: Number.MAX_SAFE_INTEGER,
         height: '100%',
         width: '30%',
       }}
