@@ -31,7 +31,7 @@ store.ready().then(() =>
         left: 'auto',
         zIndex: Number.MAX_SAFE_INTEGER,
         height: '100%',
-        width: '35%',
+        width: '350px',
       }}
     >
       <Provider store={store}>
