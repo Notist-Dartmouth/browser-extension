@@ -41,14 +41,12 @@ const GroupForm = props => (
     <div hidden={!props.active}>
       <TextField
         id="name"
-        style={styles.textField}
         onChange={props.onChange}
         hintText="Group name"
         errorText={props.validName ? '' : 'Group name is required'}
       />
       <TextField
         id="description"
-        style={styles.textField}
         onChange={props.onChange}
         hintText="Description"
         multiLine
