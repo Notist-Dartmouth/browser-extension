@@ -9,7 +9,7 @@ export default class Sidebar extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { open: true };
+    this.state = { open: false };
   }
 
   render() {
@@ -17,7 +17,7 @@ export default class Sidebar extends React.Component {
       <Drawer
         open={this.state.open}
         openSecondary
-        containerStyle={{ width: '100%', right: this.state.open ? 0 : '5px' }}
+        containerStyle={{ width: '100%', right: this.state.open ? 0 : '7px' }}
       >
         <HeaderBar
           onOpenToggle={() => this.setState({ open: !this.state.open })}

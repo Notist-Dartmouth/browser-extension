@@ -13,6 +13,9 @@ const styles = {
     left: '10%',
     display: 'inline-block',
   },
+  chip: {
+    display: 'inline-block',
+  },
   header: {
     fontFamily: 'inherit',
     fontSize: '20px',

@@ -16,15 +16,17 @@ class GroupDropdownContainer extends Component {
     this.handleFilterSelect = (e, groups) => {
       props.dispatch(filterAnnotations(groups));
     };
-    this.handleChipDelete = (key, selectedGroups) => {
-      const newSelection = selectedGroups.filter(gId => gId !== key);
-      if (props.isCreatingAnnotation) {
-        props.dispatch(selectAnnotationGroups(newSelection));
-      } else {
-        props.dispatch(filterAnnotations(newSelection));
-      }
-    };
+    this.handleChipDelete = this.handleChipDelete.bind(this);
     this.handleToggleActive = this.handleToggleActive.bind(this);
+  }
+
+  handleChipDelete(key, selectedGroups) {
+    const newSelection = selectedGroups.filter(gId => gId !== key);
+    if (this.props.isCreatingAnnotation) {
+      this.props.dispatch(selectAnnotationGroups(newSelection));
+    } else {
+      this.props.dispatch(filterAnnotations(newSelection));
+    }
   }
 
   handleToggleActive() {
