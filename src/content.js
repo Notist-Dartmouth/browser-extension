@@ -24,6 +24,7 @@ store.ready().then(() =>
   render(
     <Frame
       style={{
+        border: 'none',
         position: 'fixed',
         right: '0px',
         top: '0px',

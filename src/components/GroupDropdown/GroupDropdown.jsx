@@ -54,9 +54,11 @@ class GroupDropdown extends Component {
       <div>
         <div>
           <FlatButton
-            label={this.props.selectedGroups.length > 0 ? this.getGroupNames() : this.props.label}
+            label={this.props.label}
+            primary
             onClick={this.toggleCollapsed}
           />
+          <span>{this.props.selectedGroups.length > 0 ? this.getGroupNames() : ''}</span>
         </div>
         {!this.state.isCollapsed && <Paper
           zDepth={2}

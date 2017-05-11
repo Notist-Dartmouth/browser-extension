@@ -52,7 +52,7 @@ GroupDropdownContainer.propTypes = {
 };
 
 GroupDropdownContainer.defaultProps = {
-  label: 'Select groups to post to',
+  label: 'Share with group',
   isCreatingAnnotation: false,
 };
 

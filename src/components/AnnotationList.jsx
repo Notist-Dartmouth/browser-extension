@@ -15,6 +15,7 @@ const AnnotationList = props => (
       </h3>
     }
     <GroupDropdownContainer label="Filter by group" />
+    <br />
     {props.annotations.length === 0 &&
       <Subheader
         style={{

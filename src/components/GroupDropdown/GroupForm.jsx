@@ -7,26 +7,20 @@ import ButtonFooter from '../ButtonFooter';
 
 const styles = {
   formElement: {
-    textAlign: 'center',
-    padding: '10px',
-  },
-  textField: {
-    width: '200px',
+    textAlign: 'left',
+    paddingLeft: '15px',
   },
   label: {
     fontSize: '18px',
+    paddingLeft: '15px',
     fontFamily: 'inherit',
     color: 'inherit',
     textAlign: 'left',
-    padding: '10px',
   },
   radioLabel: {
-    fontSize: '14px',
+    fontSize: '18px',
+    paddingLeft: '15px',
     fontFamily: 'inherit',
-  },
-  radioButton: {
-    padding: '5px',
-    width: '60%',
   },
 };
 
@@ -54,6 +48,7 @@ const GroupForm = props => (
       <div style={styles.label}>
         <span>Group Type</span>
       </div>
+      <br />
       <RadioButtonGroup
         name="visibility"
         valueSelected={props.visibilitySelected}
