@@ -16,6 +16,14 @@ class GroupDropdownContainer extends Component {
     this.handleFilterSelect = (e, groups) => {
       props.dispatch(filterAnnotations(groups));
     };
+    this.handleChipDelete = (key, selectedGroups) => {
+      const newSelection = selectedGroups.filter(gId => gId !== key);
+      if (props.isCreatingAnnotation) {
+        props.dispatch(selectAnnotationGroups(newSelection));
+      } else {
+        props.dispatch(filterAnnotations(newSelection));
+      }
+    };
     this.handleToggleActive = this.handleToggleActive.bind(this);
   }
 
@@ -28,6 +36,7 @@ class GroupDropdownContainer extends Component {
       <GroupDropdown
         label={this.props.label}
         active={this.state.active}
+        handleChipDelete={this.handleChipDelete}
         onNewGroupClicked={this.handleToggleActive}
         groups={this.props.groups}
         onChange={this.props.isCreatingAnnotation ? this.handleFormSelect : this.handleFilterSelect}

@@ -2,6 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import Menu from 'material-ui/Menu';
 import Paper from 'material-ui/Paper';
 import FlatButton from 'material-ui/FlatButton';
+import Chip from 'material-ui/Chip';
 import _ from 'underscore';
 import MenuItem from 'material-ui/MenuItem';
 import GroupFormContainer from '../../containers/GroupFormContainer';
@@ -32,12 +33,11 @@ class GroupDropdown extends Component {
     };
     this.toggleCollapsed = this.toggleCollapsed.bind(this);
     this.handleChange = this.handleChange.bind(this);
-    this.getGroupNames = this.getGroupNames.bind(this);
+    this.getSelectedGroups = this.getSelectedGroups.bind(this);
   }
 
-  getGroupNames() {
-    return this.props.groups.filter(g => _.indexOf(this.props.selectedGroups, g._id) > -1)
-      .map(g => g.name).join(', ');
+  getSelectedGroups() {
+    return this.props.groups.filter(g => _.indexOf(this.props.selectedGroups, g._id) > -1);
   }
 
   handleChange(e, values) {
@@ -58,7 +58,15 @@ class GroupDropdown extends Component {
             primary
             onClick={this.toggleCollapsed}
           />
-          <span>{this.props.selectedGroups.length > 0 ? this.getGroupNames() : ''}</span>
+          <span>
+            {this.getSelectedGroups().map(g =>
+              (<Chip
+                key={g._id}
+                onRequestDelete={() => this.props.handleChipDelete(g._id, this.props.selectedGroups)}
+              >
+                {g.name}
+              </Chip>))}
+          </span>
         </div>
         {!this.state.isCollapsed && <Paper
           zDepth={2}
@@ -107,6 +115,7 @@ GroupDropdown.propTypes = {
   })),
   active: PropTypes.bool.isRequired,
   onNewGroupClicked: PropTypes.func.isRequired,
+  handleChipDelete: PropTypes.func.isRequired,
   label: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
   selectedGroups: PropTypes.arrayOf(PropTypes.string),
