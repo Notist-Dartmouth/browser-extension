@@ -30,6 +30,7 @@ class Annotation extends React.Component {
       isExpanded: false,
     };
     this.childAnnotations = this.childAnnotations.bind(this);
+    this.getAuthorDisplayName = this.getAuthorDisplayName.bind(this);
     this.toggleExpanded = () => this.setState({ isExpanded: !this.state.isExpanded });
   }
 
@@ -43,6 +44,19 @@ class Annotation extends React.Component {
         onCommentPost={this.props.onCommentPost}
         onCommentToggle={this.props.onCommentToggle}
       />);
+  }
+
+  getAuthorDisplayName() {
+    if (this.props.author && this.props.author.name) {
+      const filteredName = this.props.author.name.split(' ');
+      if (filteredName.length >= 2 && filteredName[1].charAt(0)) {
+        return `${filteredName[0]} ${filteredName[1].charAt(0)}.`;
+      } else {
+        return this.props.author.name;
+      }
+    } else {
+      return 'Anonymous';
+    }
   }
 
   render() {
@@ -70,9 +84,9 @@ class Annotation extends React.Component {
         onNestedListToggle={this.toggleExpanded}
       >
         <div>
-          {this.props.author && <div>
-            <b>{this.props.author.name}</b>
-          </div>}
+          <div>
+            <b>{this.getAuthorDisplayName()}</b>
+          </div>
           <br />
           {this.props.depth === 0 && <div style={styles.articleText}>{this.props.articleText}</div>}
           <br />
