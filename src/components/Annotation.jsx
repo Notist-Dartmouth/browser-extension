@@ -70,9 +70,9 @@ class Annotation extends React.Component {
         onNestedListToggle={this.toggleExpanded}
       >
         <div>
-          <div>
+          {this.props.author && <div>
             <b>{this.props.author.name}</b>
-          </div>
+          </div>}
           <br />
           {this.props.depth === 0 && <div style={styles.articleText}>{this.props.articleText}</div>}
           <br />
@@ -82,7 +82,7 @@ class Annotation extends React.Component {
           />
           <ReplyBar
             onReplyClicked={() => this.props.onCommentToggle(this.props._id)}
-            authorId={this.props.author._id}
+            authorId={this.props.author ? this.props.author._id : ''}
             annotationId={this.props._id}
           />
           {
@@ -112,7 +112,7 @@ Annotation.propTypes = {
   author: PropTypes.shape({
     _id: PropTypes.string,
     name: PropTypes.string,
-  }).isRequired,
+  }),
 };
 
 Annotation.defaultProps = {
@@ -121,6 +121,10 @@ Annotation.defaultProps = {
   depth: 0,
   childAnnotations: [],
   newCommentVisible: false,
+  author: {
+    _id: '',
+    name: '',
+  },
 };
 
 export default Annotation;
