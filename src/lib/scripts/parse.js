@@ -18,7 +18,7 @@ function get(url, done) {
 	var delay = Math.max(lastRequestTime + requestInterval - (+new Date()), 0) + Math.random() * requestInterval;
 	lastRequestTime = delay + (+new Date());
 	timeoutHistory.push(setTimeout(function () {
-		xhr.send();
+		xhr.send(); // TODO: should probably catch error 
 	}, delay));
 }
 
@@ -60,9 +60,9 @@ function getPageLikes(pageId, done, onFetch) {
 	console.log('getPageLikes', pageId);
 	get('https://mbasic.facebook.com/profile.php?id=' + pageId, function (text) {
 		var $t = $(text);
-		// MARK
-		var url2 = 'https://mbasic.facebook.com' + $t.find('a[href$="about?refid=17"]').attr('href');
-		url2 = url2.replace(/about\?refid=17/, 'socialcontext');
+		// MARK -- changed refid = 8, TODO: implement some type of regex?
+		var url2 = 'https://mbasic.facebook.com' + $t.find('a[href$="about?refid=8"]').attr('href');
+		url2 = url2.replace(/about\?refid=8/, 'socialcontext');
 		onFetch();
 
 		get(url2, function (text2) {
