@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import { Store } from 'react-chrome-redux';
 import _ from 'underscore';
 import SidebarContainer from './containers/SidebarContainer';
-import { newAnnotation } from './actions';
+import { newAnnotation, toggleCollapsed } from './actions';
 
 /* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
@@ -51,6 +51,9 @@ const adderModule = () => ({
     });
   },
   annotationCreated: (annotation) => {
+    if (store.getState().sidebar.collapsed) {
+      store.dispatch(toggleCollapsed());
+    }
     store.dispatch(newAnnotation(annotation.articleText, annotation.ranges));
   },
 });
