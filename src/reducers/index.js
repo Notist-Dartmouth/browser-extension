@@ -7,7 +7,7 @@ function sidebar(state = { collapsed: true }, action) {
   switch (action.type) {
     case types.TOGGLE_COLLAPSED:
       return Object.assign({}, state, {
-        isCollapsed: !state.isCollapsed,
+        collapsed: !state.collapsed,
       });
     default:
       return state;

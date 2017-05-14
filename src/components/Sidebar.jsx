@@ -5,40 +5,37 @@ import AnnotationListContainer from '../containers/AnnotationListContainer';
 import AnnotationFormContainer from '../containers/AnnotationFormContainer';
 import HeaderBar from './HeaderBar';
 
-export default class Sidebar extends React.Component {
-
-  constructor(props) {
-    super(props);
-    this.state = { open: false };
-  }
-
-  render() {
-    return (
-      <Drawer
-        open={this.state.open}
-        openSecondary
-        containerStyle={{ width: '100%' }}
-      >
-        <HeaderBar
-          onOpenToggle={() => this.setState({ open: !this.state.open })}
-          isOpen={this.state.open}
-        />
-        <Card hidden={this.props.isAuthenticated}>
-          <CardText>
-            <a
-              target="_parent"
-              href={'/* @echo FRONTEND_HOST *//login'}
-              style={{ color: 'blue', textDecoration: 'none' }}
-            >Login</a> to create and edit annotations.
-          </CardText>
-        </Card>
-        <AnnotationFormContainer />
-        <AnnotationListContainer />
-      </Drawer>
-    );
-  }
-}
+const Sidebar = props => (
+  <Drawer
+    open={!props.collapsed}
+    openSecondary
+    containerStyle={{
+      width: '100%',
+      transform: 'none',
+    }}
+  >
+    <HeaderBar
+      onOpenToggle={props.onCollapsedToggle}
+      isOpen={!props.collapsed}
+    />
+    <Card hidden={props.isAuthenticated}>
+      <CardText>
+        <a
+          target="_parent"
+          href={'/* @echo FRONTEND_HOST *//login'}
+          style={{ color: 'blue', textDecoration: 'none' }}
+        >Login</a> to create and edit annotations.
+      </CardText>
+    </Card>
+    <AnnotationFormContainer />
+    <AnnotationListContainer />
+  </Drawer>
+);
 
 Sidebar.propTypes = {
   isAuthenticated: PropTypes.bool.isRequired,
+  onCollapsedToggle: PropTypes.func.isRequired,
+  collapsed: PropTypes.bool.isRequired,
 };
+
+export default Sidebar;

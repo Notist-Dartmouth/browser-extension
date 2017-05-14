@@ -1,11 +1,9 @@
 import React from 'react';
 import { render } from 'react-dom';
-import Frame from 'react-frame-component';
+import injectTapEventPlugin from 'react-tap-event-plugin';
 import { Provider } from 'react-redux';
 import { Store } from 'react-chrome-redux';
-import injectTapEventPlugin from 'react-tap-event-plugin';
 import _ from 'underscore';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import SidebarContainer from './containers/SidebarContainer';
 import { newAnnotation } from './actions';
 
@@ -23,25 +21,10 @@ document.getElementById('annotation-sidebar').style.all = 'initial';
 
 store.ready().then(() =>
   render(
-    <Frame
-      style={{
-        border: 'none',
-        position: 'fixed',
-        right: '0px',
-        top: '0px',
-        left: 'auto',
-        zIndex: Number.MAX_SAFE_INTEGER,
-        height: '100%',
-        width: collapsed ? '100px' : '350px',
-      }}
-    >
-      <Provider store={store}>
-        <MuiThemeProvider>
-          <SidebarContainer />
-        </MuiThemeProvider>
-      </Provider>
-    </Frame>
-    , document.getElementById('annotation-sidebar')));
+    <Provider store={store} >
+      <SidebarContainer />
+    </Provider>,
+    document.getElementById('annotation-sidebar')));
 
 injectTapEventPlugin();
 
