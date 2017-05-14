@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import Drawer from 'material-ui/Drawer';
 import { Card, CardText } from 'material-ui/Card';
 import AnnotationListContainer from '../containers/AnnotationListContainer';

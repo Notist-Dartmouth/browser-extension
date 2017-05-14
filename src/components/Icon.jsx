@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 
 // This component is based on the Icon component described in this article:
 // https://medium.com/@david.gilbertson/icons-as-react-components-de3e33cb8792#.z11dp5ddx
