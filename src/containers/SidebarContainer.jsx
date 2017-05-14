@@ -22,7 +22,8 @@ class SidebarContainer extends Component {
           left: 'auto',
           zIndex: Number.MAX_SAFE_INTEGER,
           height: '100%',
-          width: this.props.collapsed ? '100px' : '350px',
+          transition: '500ms',
+          width: this.props.collapsed ? '50px' : '350px',
         }}
       >
         <MuiThemeProvider>

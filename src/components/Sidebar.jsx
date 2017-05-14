@@ -10,7 +10,7 @@ const Sidebar = props => (
     open={!props.collapsed}
     openSecondary
     containerStyle={{
-      width: '100%',
+      width: '98%',
       transform: 'none',
     }}
   >
@@ -27,8 +27,8 @@ const Sidebar = props => (
         >Login</a> to create and edit annotations.
       </CardText>
     </Card>
-    <AnnotationFormContainer />
-    <AnnotationListContainer />
+    { !props.collapsed && <AnnotationFormContainer /> }
+    { !props.collapsed && <AnnotationListContainer /> }
   </Drawer>
 );
 

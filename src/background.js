@@ -68,8 +68,6 @@ chrome.tabs.onActivated.addListener(activeInfo =>
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.type === 'CONTENT_STATUS') {
     sendResponse({ contentEnabled });
-  } else if (request.type === 'IS_COLLAPSED') {
-    sendResponse({ collapsed: store.getState().sidebar.collapsed });
   } else if (request.type === 'SET_BADGE') {
     setNumAnnotations(request.nAnnotations);
   }
