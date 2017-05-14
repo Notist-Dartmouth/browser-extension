@@ -15,6 +15,7 @@ import { newAnnotation } from './actions';
 
 const store = new Store({ portName: 'notist' });
 let contentEnabled = true;
+let collapsed = true;
 const sidebar = document.createElement('div');
 sidebar.setAttribute('id', 'annotation-sidebar');
 $('body').prepend(sidebar);
@@ -31,7 +32,7 @@ store.ready().then(() =>
         left: 'auto',
         zIndex: Number.MAX_SAFE_INTEGER,
         height: '100%',
-        width: '350px',
+        width: collapsed ? '100px' : '350px',
       }}
     >
       <Provider store={store}>
@@ -124,3 +125,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
 chrome.runtime.sendMessage({ type: 'CONTENT_STATUS' }, response =>
   updateContent(response.contentEnabled || false));
+
+chrome.runtime.sendMessage({ type: 'IS_COLLAPSED' }, (response) => {
+  collapsed = response.collapsed;
+});

@@ -34,18 +34,6 @@ class Annotation extends React.Component {
     this.toggleExpanded = () => this.setState({ isExpanded: !this.state.isExpanded });
   }
 
-  childAnnotations() {
-    return this.props.childAnnotations.map(a =>
-      <Annotation
-        {...a}
-        key={a._id}
-        author={a.author}
-        depth={this.props.depth + 1}
-        onCommentPost={this.props.onCommentPost}
-        onCommentToggle={this.props.onCommentToggle}
-      />);
-  }
-
   getAuthorDisplayName() {
     if (this.props.author && this.props.author.name) {
       const filteredName = this.props.author.name.split(' ');
@@ -57,6 +45,18 @@ class Annotation extends React.Component {
     } else {
       return 'Anonymous';
     }
+  }
+
+  childAnnotations() {
+    return this.props.childAnnotations.map(a =>
+      <Annotation
+        {...a}
+        key={a._id}
+        author={a.author}
+        depth={this.props.depth + 1}
+        onCommentPost={this.props.onCommentPost}
+        onCommentToggle={this.props.onCommentToggle}
+      />);
   }
 
   render() {

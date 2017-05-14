@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Sidebar from '../components/Sidebar';
-import { fetchAnnotations, fetchUser } from '../actions';
+import { fetchAnnotations, fetchUser, toggleCollapsed } from '../actions';
 
 class SidebarContainer extends Component {
 
@@ -25,4 +25,10 @@ function mapStateToProps(state) {
   return { isAuthenticated };
 }
 
-export default connect(mapStateToProps)(SidebarContainer);
+function mapDispatchToProps(dispatch) {
+  return {
+    onCollapsedToggle: () => dispatch(toggleCollapsed()),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SidebarContainer);

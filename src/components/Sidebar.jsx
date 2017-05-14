@@ -17,7 +17,7 @@ export default class Sidebar extends React.Component {
       <Drawer
         open={this.state.open}
         openSecondary
-        containerStyle={{ width: '100%', right: this.state.open ? 0 : '-10%' }}
+        containerStyle={{ width: '100%' }}
       >
         <HeaderBar
           onOpenToggle={() => this.setState({ open: !this.state.open })}

@@ -24,7 +24,7 @@ const AnnotationList = props => (
           display: 'inline-block',
         }}
       >
-        Highlight text to create an annotation for this article
+        Select text to annotate an article
       </Subheader>}
     {props.annotations.map(a =>
       <Annotation

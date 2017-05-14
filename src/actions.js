@@ -285,3 +285,9 @@ export function filterAnnotations(groups) {
     groups,
   };
 }
+
+export function toggleCollapsed() {
+  return {
+    type: types.TOGGLE_COLLAPSED,
+  };
+}
