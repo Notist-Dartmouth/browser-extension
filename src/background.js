@@ -10,6 +10,8 @@ import {
   updateArticleUrl,
   createGroupAsync,
   deleteAnnotationAsync,
+  postFbPageArticles,
+  updateUserExploreNum,
 } from './actions';
 
 /* eslint-disable no-undef */
@@ -66,9 +68,14 @@ chrome.tabs.onActivated.addListener(activeInfo =>
   }));
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  console.log('request type ', request.type);
   if (request.type === 'CONTENT_STATUS') {
     sendResponse({ contentEnabled });
   } else if (request.type === 'SET_BADGE') {
     setNumAnnotations(request.nAnnotations);
+  } else if (request.type === 'USER_EXPLORE_UPDATE') { // PETER LOOK HERE... why isn't this triggering?
+    updateUserExploreNum(request.explore_num, request.std_dev);
+  } else if (request.type === 'ADD_EXPLORE_ARTICLES') {
+    postFbPageArticles(request.pages, request.score);
   }
 });
