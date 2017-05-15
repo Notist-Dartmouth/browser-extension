@@ -12,7 +12,7 @@ const styles = {
     fontStyle: 'italic',
     borderLeft: 'thick solid #F98C25',
     paddingLeft: 10,
-    paddingBottom: 20,
+    paddingBottom: 10,
   },
   expandButton: {
     position: 'absolute',
@@ -33,6 +33,7 @@ class Annotation extends React.Component {
     };
     this.childAnnotations = this.childAnnotations.bind(this);
     this.getAuthorDisplayName = this.getAuthorDisplayName.bind(this);
+    this.focusHighlight = this.focusHighlight.bind(this);
     this.toggleExpanded = () => this.setState({ isExpanded: !this.state.isExpanded });
   }
 
@@ -60,6 +61,10 @@ class Annotation extends React.Component {
         onCommentPost={this.props.onCommentPost}
         onCommentToggle={this.props.onCommentToggle}
       />);
+  }
+
+  focusHighlight() {
+    parent.focusHighlight(this.props._id);
   }
 
   render() {
@@ -92,7 +97,14 @@ class Annotation extends React.Component {
             <span style={{ paddingLeft: 12 }} >{moment(this.props.dateCreated).fromNow()}</span>
           </div>
           <br />
-          {this.props.depth === 0 && <div style={styles.articleText}>{this.props.articleText}</div>}
+          {this.props.depth === 0 &&
+            <div
+              style={styles.articleText}
+              role="button"
+              onClick={this.focusHighlight}
+            >
+              {this.props.articleText}
+            </div>}
           <br />
           <div
             style={styles.commentText}
@@ -122,7 +134,7 @@ Annotation.propTypes = {
   articleText: PropTypes.string,
   text: PropTypes.string,
   depth: PropTypes.number,
-  dateCreated: PropTypes.instanceOf(Date),
+  dateCreated: PropTypes.string.isRequired,
   newCommentVisible: PropTypes.bool,
   childAnnotations: PropTypes.arrayOf(PropTypes.object),
   onCommentPost: PropTypes.func.isRequired,

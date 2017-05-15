@@ -4,6 +4,7 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 import { Provider } from 'react-redux';
 import { Store } from 'react-chrome-redux';
 import _ from 'underscore';
+import $ from 'jquery';
 import SidebarContainer from './containers/SidebarContainer';
 import { newAnnotation, toggleCollapsed } from './actions';
 
@@ -62,6 +63,21 @@ const notistAnnotator = new annotator.App();
 notistAnnotator.include(adderModule);
 notistAnnotator.start();
 
+$(document).on('click', '.annotator-hl', (event) => {
+  if (store.getState().sidebar.collapsed) {
+    store.dispatch(toggleCollapsed());
+  }
+});
+
+window.focusHighlight = (annotationId) => {
+  const hlElement = $('span').find(`[data-annotation-id="${annotationId}"]`);
+  if (hlElement) {
+    $('html, body').animate({
+      scrollTop: hlElement.offset().top - 100,
+    }, 500);
+  }
+};
+
 const highlighter = new annotator.ui.highlighter.Highlighter(document.body);
 let currentAnnotations;
 
@@ -83,7 +99,11 @@ const handleAnnotationsChanged = () => {
       });
     }
     if (contentEnabled) {
-      currentAnnotations.forEach(a => highlighter.draw(a));
+      currentAnnotations.forEach((a) => {
+        const hlElement = highlighter.draw(Object.assign({}, a, {
+          id: a._id,
+        }));
+      });
     }
   }
 };
@@ -95,7 +115,11 @@ const updateContent = (isEnabled) => {
   if (isEnabled) {
     if (!contentEnabled) {
       $('#annotation-sidebar').show();
-      annotations.forEach(a => highlighter.draw(a));
+      annotations.forEach((a) => {
+        const hlElement = highlighter.draw(Object.assign({}, a, {
+          id: a._id,
+        }));
+      });
     }
   } else {
     $('#annotation-sidebar').hide();
