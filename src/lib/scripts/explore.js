@@ -9,12 +9,11 @@ function done() {
 
 function progress() {
   // TODO implement some type of progress bar
-  console.log(arguments);
+  console.log('Progress', arguments);
 }
 
 function onClick(ev) {
-  // getAllFriendScores2(done, progress);
-  testExplore();
+  getAllFriendScores2(done, progress);
 }
 
 window.addEventListener('load', (event) => {
@@ -77,8 +76,8 @@ function initializeExplore(friends) {
       curr = index;
     }
   });
-  console.log(curr);
-  console.log(oldcurr);
+  console.log('1st match', curr);
+  console.log('2nd match', oldcurr);
 
   updateExploreOnAPI(explore_num, std_dev, curr, oldcurr, optimal);
 }
@@ -96,12 +95,10 @@ function testExplore() {
 
 function updateExploreOnAPI(explore_num, std_dev, curr, oldcurr, optimal) {
   // make call to API to save user Explore Number and std_dev
-  // chrome.runtime.sendMessage({ type: 'USER_EXPLORE_UPDATE', explore_num, std_dev }, response =>
-  // console.log(response));
+  chrome.runtime.sendMessage({ type: 'USER_EXPLORE_UPDATE', explore_num, std_dev });
 
   // make call to our API to make call to FB API to find articles from specific pages
-  chrome.runtime.sendMessage({ type: 'ADD_EXPLORE_ARTICLES', pages: [curr, oldcurr], score: optimal }, response =>
-  console.log(response));
+  chrome.runtime.sendMessage({ type: 'ADD_EXPLORE_ARTICLES', pages: [curr, oldcurr], score: optimal });
 }
 
 function average(data) {
