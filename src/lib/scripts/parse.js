@@ -1,3 +1,7 @@
+/*
+This file is from https://github.com/politecho/politecho with some modifications from the Notist team
+*/
+
 /* eslint-disable */
 
 var lastRequestTime = 0;
@@ -18,7 +22,7 @@ function get(url, done) {
 	var delay = Math.max(lastRequestTime + requestInterval - (+new Date()), 0) + Math.random() * requestInterval;
 	lastRequestTime = delay + (+new Date());
 	timeoutHistory.push(setTimeout(function () {
-		xhr.send();
+		xhr.send(); // TODO: should probably catch error
 	}, delay));
 }
 
@@ -60,7 +64,7 @@ function getPageLikes(pageId, done, onFetch) {
 	console.log('getPageLikes', pageId);
 	get('https://mbasic.facebook.com/profile.php?id=' + pageId, function (text) {
 		var $t = $(text);
-		// MARK
+		// MARK -- changed refid = 8 from 17, TODO: implement some type of regex?
 		var url2 = 'https://mbasic.facebook.com' + $t.find('a[href$="about?refid=17"]').attr('href');
 		url2 = url2.replace(/about\?refid=17/, 'socialcontext');
 		onFetch();
@@ -168,64 +172,65 @@ function getLoggedInAs(done) {
 		}
 	});
 }
-
-chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-	if (request.action == "parse") {
-		var userData = request.cached;
-		getLoggedInAs(function(login) {
-			if (!login) {
-				// not logged in
-				chrome.runtime.sendMessage({
-					action: "parseResponse",
-					data: [],
-					login: null,
-					tab: sender.tab.id
-				});
-			}
-			else if (userData && userData["login"] && userData["time"] &&
-					login == userData["login"] &&
-					(new Date - new Date(parseInt(userData["time"]))) / 1000 / 60 < 30) {
-				// cached data is valid
-				chrome.runtime.sendMessage({
-					action: "parseResponse",
-					data: userData["data"],
-					login: userData["login"],
-					tab: sender.tab.id
-				});
-			}
-			else {
-				// cached data is invalid
-				getAllFriendScores2(function (data) {
-					console.log(data);
-					chrome.runtime.sendMessage({
-						action: "parseResponse",
-						data: data,
-						login: login,
-						tab: sender.tab.id
-					});
-				}, function (elapsed, total) {
-					console.log('Progress: ' + elapsed + '/' + total);
-					chrome.runtime.sendMessage({
-						action: "parseProgress",
-						data: {
-							elapsed: elapsed,
-							total: total,
-						},
-					});
-				});
-			}
-		});
-	} else if (request.action == 'reset') {
-		timeoutHistory.forEach(function (timeout) {
-			clearTimeout(timeout)
-		});
-		timeoutHistory = [];
-
-		xhrHistory.forEach(function (xhr) {
-			// http://stackoverflow.com/a/28257394/133211
-			xhr.onreadystatechange = null;
-			xhr.abort();
-		});
-		xhrHistory = [];
-	}
-});
+//
+// chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+// 	console.log('parse, request', request.type);
+// 	if (request.action == "parse") {
+// 		var userData = request.cached;
+// 		getLoggedInAs(function(login) {
+// 			if (!login) {
+// 				// not logged in
+// 				chrome.runtime.sendMessage({
+// 					action: "parseResponse",
+// 					data: [],
+// 					login: null,
+// 					tab: sender.tab.id
+// 				});
+// 			}
+// 			else if (userData && userData["login"] && userData["time"] &&
+// 					login == userData["login"] &&
+// 					(new Date - new Date(parseInt(userData["time"]))) / 1000 / 60 < 30) {
+// 				// cached data is valid
+// 				chrome.runtime.sendMessage({
+// 					action: "parseResponse",
+// 					data: userData["data"],
+// 					login: userData["login"],
+// 					tab: sender.tab.id
+// 				});
+// 			}
+// 			else {
+// 				// cached data is invalid
+// 				getAllFriendScores2(function (data) {
+// 					console.log(data);
+// 					chrome.runtime.sendMessage({
+// 						action: "parseResponse",
+// 						data: data,
+// 						login: login,
+// 						tab: sender.tab.id
+// 					});
+// 				}, function (elapsed, total) {
+// 					console.log('Progress: ' + elapsed + '/' + total);
+// 					chrome.runtime.sendMessage({
+// 						action: "parseProgress",
+// 						data: {
+// 							elapsed: elapsed,
+// 							total: total,
+// 						},
+// 					});
+// 				});
+// 			}
+// 		});
+// 	} else if (request.action == 'reset') {
+// 		timeoutHistory.forEach(function (timeout) {
+// 			clearTimeout(timeout)
+// 		});
+// 		timeoutHistory = [];
+//
+// 		xhrHistory.forEach(function (xhr) {
+// 			// http://stackoverflow.com/a/28257394/133211
+// 			xhr.onreadystatechange = null;
+// 			xhr.abort();
+// 		});
+// 		xhrHistory = [];
+// 	}
+// });

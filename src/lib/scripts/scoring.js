@@ -1,9 +1,19 @@
+/*
+This file is from https://github.com/politecho/politecho with some modifications from the Notist team
+*/
+
+
 /* eslint-disable */
 
-var ul = -.9;
-var l = -.25;
-var c = .25;
-var uc = .9;
+// var ul = -.9;
+// var l = -.25;
+// var c = .25;
+// var uc = .9;
+var ul = .1;
+var l = .75;
+var c = 1.25;
+var uc = 1.9;
+
 
 //Reputable classifyng sources
 var news_dict = {};
@@ -54,7 +64,7 @@ news_dict["29259828486"] = l; //The Atlantic
 news_dict["338028696036"] = c; //Yahoo News
 news_dict["8304333127"] = c; //Wall Street Journal
 
-news_dict["15704546335"] = uc; //Fox News
+news_dict["15704546335"] = c; //Fox News
 news_dict["102533606954"] = uc; //Drudge Report
 news_dict["95475020353"] = uc; //Breitbart
 news_dict["80256732576"] = uc; //Info Wars
@@ -65,20 +75,24 @@ news_dict["36400348187"] = uc; //Glenn Beck Program
 news_dict["85452072376"] = uc; //NewsMax
 news_dict["182919686769"] = uc; //DailyCaller
 news_dict["912274352202712"] = uc; //DailyCaller Politics
-news_dict["35994014410"] = uc; //The Washington Times
+news_dict["35994014410"] = c; //The Washington Times
 news_dict["408250066356"] = uc; //Bill O'Reilly
 news_dict["123624513983"] = uc; //Western Journalism
 news_dict["519305544814653"] = uc; //Conservative Tribune
 news_dict["112623813202"] = uc; //LifeSiteNews
 news_dict["193266897438"] = uc; //Pamela Geller
-news_dict["169204449790211"] = uc; //Conservative News Today
+news_dict["169204449790211"] = c; //Conservative News Today
 news_dict["158924294183807"] = uc; //Allen West Republic
 
 //Fake news
-var ulf = -1;
-var lf = -.6;
-var cf = .6;
-var ucf = 1;
+// var ulf = -1;
+// var lf = -.6;
+// var cf = .6;
+// var ucf = 1;
+var ulf = 0;
+var lf = .4;
+var cf = 1.6;
+var ucf = 2;
 
 //Fake news classifyng sources
 var fakenews_dict = {};
@@ -127,10 +141,14 @@ fakenews_dict["319569361390023"] = ucf; //Twitchy
 fakenews_dict["245481491808"] = ucf; //Now The End Begins
 
 //Politicians
-var ulp = -.75;
-var lp = -.25;
-var cp = .25;
-var ucp = .75;
+// var ulp = -.75;
+// var lp = -.25;
+// var cp = .25;
+// var ucp = .75;
+var ulp = .25;
+var lp = .75;
+var cp = 1.25;
+var ucp = 1.75;
 
 //Fake news classifyng sources
 var pol_dict = {};
@@ -320,7 +338,8 @@ function score(post_ids) {
 	for (i = 0; i < num_posts; i++) {
 		post_id = post_ids[i];
 		var page_data = {
-			name: pageToName[post_id]
+			name: pageToName[post_id],
+			page_id: post_id
 		};
 		var oldFound = found;
 		if (news_dict[post_id]) {
