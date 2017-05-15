@@ -10,9 +10,11 @@ import {
   updateArticleUrl,
   createGroupAsync,
   deleteAnnotationAsync,
+} from './actions';
+import {
   postFbPageArticles,
   updateUserExploreNum,
-} from './actions';
+} from './api';
 
 /* eslint-disable no-undef */
 
@@ -73,7 +75,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     sendResponse({ contentEnabled });
   } else if (request.type === 'SET_BADGE') {
     setNumAnnotations(request.nAnnotations);
-  } else if (request.type === 'USER_EXPLORE_UPDATE') { // PETER LOOK HERE... why isn't this triggering?
+  } else if (request.type === 'USER_EXPLORE_UPDATE') {
     updateUserExploreNum(request.explore_num, request.std_dev);
   } else if (request.type === 'ADD_EXPLORE_ARTICLES') {
     postFbPageArticles(request.pages, request.score);
