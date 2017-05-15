@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "Notist",
   "description": "Annotate websites and online articles",
-  "version": "1.0.1",
+  "version": "1.0.8",
   "icons": {
     "16": "favicon-16.png",
     "48": "favicon-48.png",
@@ -17,7 +17,15 @@
   "content_scripts": [
     {
       "matches": ["http://*/*", "https://*/*"],
-      "exclude_matches": ["http://notist.io/*", "http://facebook.com/*", "https://facebook.com/*", "http://google.com/*", "https://google.com/*"],
+      "exclude_matches": [
+        "http://notist.io/*",
+        "http://facebook.com/*",
+        "https://facebook.com/*",
+        "http://google.com/*",
+        "https://google.com/*",
+        "http://*/*.pdf",
+        "https://*/*.pdf"
+      ],
       "css": [
         "lib/css/annotator.min.css"
       ],

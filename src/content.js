@@ -1,13 +1,12 @@
 import React from 'react';
 import { render } from 'react-dom';
-import ShadowDOM from 'react-shadow';
+import injectTapEventPlugin from 'react-tap-event-plugin';
 import { Provider } from 'react-redux';
 import { Store } from 'react-chrome-redux';
-import injectTapEventPlugin from 'react-tap-event-plugin';
 import _ from 'underscore';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import $ from 'jquery';
 import SidebarContainer from './containers/SidebarContainer';
-import { newAnnotation } from './actions';
+import { newAnnotation, toggleCollapsed } from './actions';
 
 /* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
@@ -22,16 +21,10 @@ document.getElementById('annotation-sidebar').style.all = 'initial';
 
 store.ready().then(() =>
   render(
-    <ShadowDOM>
-      <div>
-        <Provider store={store}>
-          <MuiThemeProvider>
-            <SidebarContainer />
-          </MuiThemeProvider>
-        </Provider>
-      </div>
-    </ShadowDOM>
-    , document.getElementById('annotation-sidebar')));
+    <Provider store={store} >
+      <SidebarContainer />
+    </Provider>,
+    document.getElementById('annotation-sidebar')));
 
 injectTapEventPlugin();
 
@@ -59,6 +52,9 @@ const adderModule = () => ({
     });
   },
   annotationCreated: (annotation) => {
+    if (store.getState().sidebar.collapsed) {
+      store.dispatch(toggleCollapsed());
+    }
     store.dispatch(newAnnotation(annotation.articleText, annotation.ranges));
   },
 });
@@ -66,6 +62,21 @@ const adderModule = () => ({
 const notistAnnotator = new annotator.App();
 notistAnnotator.include(adderModule);
 notistAnnotator.start();
+
+$(document).on('click', '.annotator-hl', (event) => {
+  if (store.getState().sidebar.collapsed) {
+    store.dispatch(toggleCollapsed());
+  }
+});
+
+window.focusHighlight = (annotationId) => {
+  const hlElement = $(document).find(`span[data-annotation-id="${annotationId}"]`);
+  if (hlElement && hlElement.offset()) {
+    $('html, body').animate({
+      scrollTop: hlElement.offset().top - 100,
+    }, 500);
+  }
+};
 
 const highlighter = new annotator.ui.highlighter.Highlighter(document.body);
 let currentAnnotations;
@@ -88,7 +99,9 @@ const handleAnnotationsChanged = () => {
       });
     }
     if (contentEnabled) {
-      currentAnnotations.forEach(a => highlighter.draw(a));
+      currentAnnotations.forEach((a) => {
+        const hlElement = highlighter.draw(a);
+      });
     }
   }
 };
@@ -100,7 +113,9 @@ const updateContent = (isEnabled) => {
   if (isEnabled) {
     if (!contentEnabled) {
       $('#annotation-sidebar').show();
-      annotations.forEach(a => highlighter.draw(a));
+      annotations.forEach((a) => {
+        const hlElement = highlighter.draw(a);
+      });
     }
   } else {
     $('#annotation-sidebar').hide();

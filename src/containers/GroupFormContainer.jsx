@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import GroupForm from '../components/GroupDropdown/GroupForm';
 import { createGroup } from '../actions';
@@ -9,7 +10,6 @@ class GroupFormContainer extends React.Component {
     super(props);
     this.state = {
       name: '',
-      active: false,
       isPublic: false,
       isPersonal: false,
       validName: true,
@@ -18,7 +18,6 @@ class GroupFormContainer extends React.Component {
     };
     this.handleRadioToggle = this.handleRadioToggle.bind(this);
     this.handleChange = this.handleChange.bind(this);
-    this.handleToggleActive = this.handleToggleActive.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
@@ -32,6 +31,7 @@ class GroupFormContainer extends React.Component {
   }
 
   handleChange(e, newValue) {
+    e.preventDefault();
     if (e.target.id === 'name') {
       this.setState({ name: newValue });
       if (this.state.name.length > 0) {
@@ -42,10 +42,6 @@ class GroupFormContainer extends React.Component {
     }
   }
 
-  handleToggleActive() {
-    this.setState({ active: !this.state.active });
-  }
-
   handleSubmit() {
     if (this.state.name.length === 0) {
       this.setState({ validName: false });
@@ -54,6 +50,7 @@ class GroupFormContainer extends React.Component {
     const { name, description, isPersonal, isPublic } = this.state;
     const newGroup = { name, description, isPersonal, isPublic };
     this.props.dispatch(createGroup(newGroup));
+    this.props.onNewGroupClicked();
   }
 
   render() {
@@ -61,10 +58,10 @@ class GroupFormContainer extends React.Component {
       <GroupForm
         onSubmit={this.handleSubmit}
         onChange={this.handleChange}
-        onToggleActive={this.handleToggleActive}
         onRadioToggle={this.handleRadioToggle}
         validName={this.state.validName}
-        active={this.state.active}
+        active={this.props.active}
+        onToggleActive={this.props.onNewGroupClicked}
         visibilitySelected={this.state.visibilitySelected}
       />
     );
@@ -72,6 +69,8 @@ class GroupFormContainer extends React.Component {
 }
 
 GroupFormContainer.propTypes = {
+  active: PropTypes.bool.isRequired,
+  onNewGroupClicked: PropTypes.func.isRequired,
   dispatch: PropTypes.func.isRequired,
 };
 

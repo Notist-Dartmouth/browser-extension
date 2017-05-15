@@ -1,25 +1,11 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { ListItem } from 'material-ui/List';
 import FlatButton from 'material-ui/FlatButton';
 import marked from 'marked';
+import moment from 'moment';
 import CommentEditor from './CommentEditor';
 import ReplyBar from './ReplyBar';
-
-const styles = {
-  articleText: {
-    fontStyle: 'italic',
-    borderLeft: 'thick solid #F98C25',
-    paddingLeft: 10,
-    paddingBottom: 20,
-  },
-  expandButton: {
-    position: 'absolute',
-    bottom: 0,
-  },
-  commentText: {
-    paddingBottom: 20,
-  },
-};
 
 class Annotation extends React.Component {
 
@@ -28,9 +14,39 @@ class Annotation extends React.Component {
 
     this.state = {
       isExpanded: false,
+      hovering: false,
     };
+    this.handleMouseOver = this.handleMouseOver.bind(this);
+    this.handleMouseOut = this.handleMouseOut.bind(this);
     this.childAnnotations = this.childAnnotations.bind(this);
+    this.getAuthorDisplayName = this.getAuthorDisplayName.bind(this);
+    this.focusHighlight = this.focusHighlight.bind(this);
     this.toggleExpanded = () => this.setState({ isExpanded: !this.state.isExpanded });
+  }
+
+  getAuthorDisplayName() {
+    if (this.props.author && this.props.author.name) {
+      const filteredName = this.props.author.name.split(' ');
+      if (filteredName.length >= 2 && filteredName[1].charAt(0)) {
+        return `${filteredName[0]} ${filteredName[1].charAt(0)}.`;
+      } else {
+        return this.props.author.name;
+      }
+    } else {
+      return 'Anonymous';
+    }
+  }
+
+  handleMouseOver() {
+    this.setState({
+      hovering: true,
+    });
+  }
+
+  handleMouseOut() {
+    this.setState({
+      hovering: false,
+    });
   }
 
   childAnnotations() {
@@ -38,15 +54,35 @@ class Annotation extends React.Component {
       <Annotation
         {...a}
         key={a._id}
-        author={a.author._id || a.author}
+        author={a.author}
+        dateCreated={a.createDate}
         depth={this.props.depth + 1}
         onCommentPost={this.props.onCommentPost}
         onCommentToggle={this.props.onCommentToggle}
       />);
   }
 
+  focusHighlight() {
+    parent.focusHighlight(this.props._id);
+  }
+
   render() {
-    const listItemStyle = {
+    const styles = {
+      articleText: {
+        fontStyle: 'italic',
+        borderLeft: this.state.hovering ? 'thick solid #44808C' : 'thick solid #F98C25',
+        paddingLeft: 10,
+        paddingBottom: 10,
+        color: this.state.hovering ? '#F98C25' : 'black',
+        cursor: this.state.hovering ? 'pointer' : 'auto',
+      },
+      expandButton: {
+        position: 'absolute',
+        bottom: 0,
+      },
+      commentText: {
+        paddingBottom: 20,
+      },
       listItem: {
         cursor: 'auto',
         backgroundColor: 'none',
@@ -56,7 +92,7 @@ class Annotation extends React.Component {
 
     return (
       <ListItem
-        style={listItemStyle}
+        style={styles.listItemStyle}
         secondaryText={this.props.newCommentVisible &&
           <CommentEditor
             onCommentPost={this.props.onCommentPost}
@@ -70,7 +106,21 @@ class Annotation extends React.Component {
         onNestedListToggle={this.toggleExpanded}
       >
         <div>
-          {this.props.depth === 0 && <div style={styles.articleText}>{this.props.articleText}</div>}
+          <div>
+            <span style={{ fontWeight: 900 }} >{this.getAuthorDisplayName()}</span>
+            <span style={{ paddingLeft: 12 }} >{moment(this.props.dateCreated).fromNow()}</span>
+          </div>
+          <br />
+          {this.props.depth === 0 &&
+            <div
+              style={styles.articleText}
+              role="button"
+              onClick={this.focusHighlight}
+              onMouseOver={this.handleMouseOver}
+              onMouseOut={this.handleMouseOut}
+            >
+              {this.props.articleText}
+            </div>}
           <br />
           <div
             style={styles.commentText}
@@ -78,7 +128,7 @@ class Annotation extends React.Component {
           />
           <ReplyBar
             onReplyClicked={() => this.props.onCommentToggle(this.props._id)}
-            authorId={this.props.author}
+            authorId={this.props.author ? this.props.author._id : ''}
             annotationId={this.props._id}
           />
           {
@@ -100,12 +150,16 @@ Annotation.propTypes = {
   articleText: PropTypes.string,
   text: PropTypes.string,
   depth: PropTypes.number,
+  dateCreated: PropTypes.string.isRequired,
   newCommentVisible: PropTypes.bool,
   childAnnotations: PropTypes.arrayOf(PropTypes.object),
   onCommentPost: PropTypes.func.isRequired,
   onCommentToggle: PropTypes.func.isRequired,
   _id: PropTypes.string.isRequired,
-  author: PropTypes.string.isRequired,
+  author: PropTypes.shape({
+    _id: PropTypes.string,
+    name: PropTypes.string,
+  }),
 };
 
 Annotation.defaultProps = {
@@ -114,6 +168,10 @@ Annotation.defaultProps = {
   depth: 0,
   childAnnotations: [],
   newCommentVisible: false,
+  author: {
+    _id: '',
+    name: '',
+  },
 };
 
 export default Annotation;

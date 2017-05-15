@@ -29,6 +29,7 @@ describe('articles reducer', () => {
       annotations: [
         {
           _id: '12343532',
+          id: '12343532',
           articleText: 'the ring of fire',
           text: 'blue moon',
           ranges: [],

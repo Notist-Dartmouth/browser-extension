@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { List } from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
 import Annotation from './Annotation';
@@ -15,6 +16,7 @@ const AnnotationList = props => (
       </h3>
     }
     <GroupDropdownContainer label="Filter by group" />
+    <br />
     {props.annotations.length === 0 &&
       <Subheader
         style={{
@@ -23,13 +25,14 @@ const AnnotationList = props => (
           display: 'inline-block',
         }}
       >
-        Highlight text to create an annotation for this article
+        Select text to annotate an article
       </Subheader>}
     {props.annotations.map(a =>
       <Annotation
         {...a}
         key={a._id}
-        author={a.author._id || a.author}
+        author={a.author}
+        dateCreated={a.createDate}
         onCommentPost={props.onCommentPost}
         onCommentToggle={props.onCommentToggle}
       />)}

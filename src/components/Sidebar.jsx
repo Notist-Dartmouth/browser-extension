@@ -1,43 +1,42 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import Drawer from 'material-ui/Drawer';
 import { Card, CardText } from 'material-ui/Card';
 import AnnotationListContainer from '../containers/AnnotationListContainer';
 import AnnotationFormContainer from '../containers/AnnotationFormContainer';
 import HeaderBar from './HeaderBar';
 
-export default class Sidebar extends React.Component {
-
-  constructor(props) {
-    super(props);
-    this.state = { open: true };
-  }
-
-  render() {
-    return (
-      <Drawer
-        open={this.state.open}
-        openSecondary
-        containerStyle={{ width: '30%', right: this.state.open ? 0 : '5px' }}
-      >
-        <HeaderBar
-          onOpenToggle={() => this.setState({ open: !this.state.open })}
-          isOpen={this.state.open}
-        />
-        <Card hidden={this.props.isAuthenticated}>
-          <CardText>
-            <a
-              href={'/* @echo FRONTEND_HOST *//login'}
-              style={{ color: 'blue', textDecoration: 'none' }}
-            >Login</a> to create and edit annotations.
-          </CardText>
-        </Card>
-        <AnnotationFormContainer />
-        <AnnotationListContainer />
-      </Drawer>
-    );
-  }
-}
+const Sidebar = props => (
+  <Drawer
+    open={!props.collapsed}
+    openSecondary
+    containerStyle={{
+      width: '98%',
+      transform: 'none',
+    }}
+  >
+    <HeaderBar
+      onOpenToggle={props.onCollapsedToggle}
+      isOpen={!props.collapsed}
+    />
+    <Card hidden={props.isAuthenticated}>
+      <CardText>
+        <a
+          target="_parent"
+          href={'/* @echo FRONTEND_HOST *//login'}
+          style={{ color: 'blue', textDecoration: 'none' }}
+        >Login</a> to create and edit annotations.
+      </CardText>
+    </Card>
+    { !props.collapsed && <AnnotationFormContainer /> }
+    { !props.collapsed && <AnnotationListContainer /> }
+  </Drawer>
+);
 
 Sidebar.propTypes = {
   isAuthenticated: PropTypes.bool.isRequired,
+  onCollapsedToggle: PropTypes.func.isRequired,
+  collapsed: PropTypes.bool.isRequired,
 };
+
+export default Sidebar;
