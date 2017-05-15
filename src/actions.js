@@ -16,7 +16,7 @@ let apiHost;
 apiHost = 'https://notist.herokuapp.com';
 // @endif
 // @if ENVIRONMENT='development'
-apiHost = 'http://localhost:3000';
+apiHost = 'http://localhost:8080';
 // @endif
 
 export function updateAuthStatus(isAuthenticated) {
@@ -307,8 +307,10 @@ export function postFbPageArticles(pages, score) {
     credentials: 'include',
     headers,
     body: JSON.stringify({
+      pages,
+      score,
     }),
-  }).then(res => res.josn())
+  }).then(res => res.json())
   .then((res) => {
     console.log(res);
   });
