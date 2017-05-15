@@ -70,8 +70,8 @@ $(document).on('click', '.annotator-hl', (event) => {
 });
 
 window.focusHighlight = (annotationId) => {
-  const hlElement = $('span').find(`[data-annotation-id="${annotationId}"]`);
-  if (hlElement) {
+  const hlElement = $(document).find(`span[data-annotation-id="${annotationId}"]`);
+  if (hlElement && hlElement.offset()) {
     $('html, body').animate({
       scrollTop: hlElement.offset().top - 100,
     }, 500);
@@ -100,9 +100,7 @@ const handleAnnotationsChanged = () => {
     }
     if (contentEnabled) {
       currentAnnotations.forEach((a) => {
-        const hlElement = highlighter.draw(Object.assign({}, a, {
-          id: a._id,
-        }));
+        const hlElement = highlighter.draw(a);
       });
     }
   }
@@ -116,9 +114,7 @@ const updateContent = (isEnabled) => {
     if (!contentEnabled) {
       $('#annotation-sidebar').show();
       annotations.forEach((a) => {
-        const hlElement = highlighter.draw(Object.assign({}, a, {
-          id: a._id,
-        }));
+        const hlElement = highlighter.draw(a);
       });
     }
   } else {

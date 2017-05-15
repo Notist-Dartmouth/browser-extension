@@ -10,7 +10,7 @@ function annotation(state = initialAnnotationState, action) {
   switch (action.type) {
     case types.RECEIVE_ANNOTATIONS:
     case types.RECEIVE_ANNOTATION:
-      return Object.assign({}, state, action.annotation);
+      return Object.assign({ id: action.annotation._id }, state, action.annotation);
     case types.TOGGLE_NEW_COMMENT:
       return Object.assign({}, state, {
         newCommentVisible: action.annotationId === state._id ? !state.newCommentVisible : false,

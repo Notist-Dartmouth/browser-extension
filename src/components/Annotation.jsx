@@ -7,22 +7,6 @@ import moment from 'moment';
 import CommentEditor from './CommentEditor';
 import ReplyBar from './ReplyBar';
 
-const styles = {
-  articleText: {
-    fontStyle: 'italic',
-    borderLeft: 'thick solid #F98C25',
-    paddingLeft: 10,
-    paddingBottom: 10,
-  },
-  expandButton: {
-    position: 'absolute',
-    bottom: 0,
-  },
-  commentText: {
-    paddingBottom: 20,
-  },
-};
-
 class Annotation extends React.Component {
 
   constructor(props) {
@@ -30,7 +14,10 @@ class Annotation extends React.Component {
 
     this.state = {
       isExpanded: false,
+      hovering: false,
     };
+    this.handleMouseOver = this.handleMouseOver.bind(this);
+    this.handleMouseOut = this.handleMouseOut.bind(this);
     this.childAnnotations = this.childAnnotations.bind(this);
     this.getAuthorDisplayName = this.getAuthorDisplayName.bind(this);
     this.focusHighlight = this.focusHighlight.bind(this);
@@ -48,6 +35,18 @@ class Annotation extends React.Component {
     } else {
       return 'Anonymous';
     }
+  }
+
+  handleMouseOver() {
+    this.setState({
+      hovering: true,
+    });
+  }
+
+  handleMouseOut() {
+    this.setState({
+      hovering: false,
+    });
   }
 
   childAnnotations() {
@@ -68,7 +67,22 @@ class Annotation extends React.Component {
   }
 
   render() {
-    const listItemStyle = {
+    const styles = {
+      articleText: {
+        fontStyle: 'italic',
+        borderLeft: this.state.hovering ? 'thick solid #44808C' : 'thick solid #F98C25',
+        paddingLeft: 10,
+        paddingBottom: 10,
+        color: this.state.hovering ? '#F98C25' : 'black',
+        cursor: this.state.hovering ? 'pointer' : 'auto',
+      },
+      expandButton: {
+        position: 'absolute',
+        bottom: 0,
+      },
+      commentText: {
+        paddingBottom: 20,
+      },
       listItem: {
         cursor: 'auto',
         backgroundColor: 'none',
@@ -78,7 +92,7 @@ class Annotation extends React.Component {
 
     return (
       <ListItem
-        style={listItemStyle}
+        style={styles.listItemStyle}
         secondaryText={this.props.newCommentVisible &&
           <CommentEditor
             onCommentPost={this.props.onCommentPost}
@@ -102,6 +116,8 @@ class Annotation extends React.Component {
               style={styles.articleText}
               role="button"
               onClick={this.focusHighlight}
+              onMouseOver={this.handleMouseOver}
+              onMouseOut={this.handleMouseOut}
             >
               {this.props.articleText}
             </div>}
