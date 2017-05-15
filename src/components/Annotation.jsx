@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { ListItem } from 'material-ui/List';
 import FlatButton from 'material-ui/FlatButton';
 import marked from 'marked';
+import moment from 'moment';
 import CommentEditor from './CommentEditor';
 import ReplyBar from './ReplyBar';
 
@@ -54,6 +55,7 @@ class Annotation extends React.Component {
         {...a}
         key={a._id}
         author={a.author}
+        dateCreated={a.createDate}
         depth={this.props.depth + 1}
         onCommentPost={this.props.onCommentPost}
         onCommentToggle={this.props.onCommentToggle}
@@ -86,7 +88,8 @@ class Annotation extends React.Component {
       >
         <div>
           <div>
-            <b>{this.getAuthorDisplayName()}</b>
+            <span style={{ fontWeight: 900 }} >{this.getAuthorDisplayName()}</span>
+            <span style={{ paddingLeft: 12 }} >{moment(this.props.dateCreated).fromNow()}</span>
           </div>
           <br />
           {this.props.depth === 0 && <div style={styles.articleText}>{this.props.articleText}</div>}
@@ -119,6 +122,7 @@ Annotation.propTypes = {
   articleText: PropTypes.string,
   text: PropTypes.string,
   depth: PropTypes.number,
+  dateCreated: PropTypes.instanceOf(Date),
   newCommentVisible: PropTypes.bool,
   childAnnotations: PropTypes.arrayOf(PropTypes.object),
   onCommentPost: PropTypes.func.isRequired,
