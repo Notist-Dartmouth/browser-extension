@@ -1,3 +1,8 @@
+/*
+This file is from https://github.com/politecho/politecho with some modifications from the Notist team
+*/
+
+
 /* eslint-disable */
 
 // var ul = -.9;

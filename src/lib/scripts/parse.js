@@ -1,3 +1,7 @@
+/*
+This file is from https://github.com/politecho/politecho with some modifications from the Notist team
+*/
+
 /* eslint-disable */
 
 var lastRequestTime = 0;
@@ -60,9 +64,9 @@ function getPageLikes(pageId, done, onFetch) {
 	console.log('getPageLikes', pageId);
 	get('https://mbasic.facebook.com/profile.php?id=' + pageId, function (text) {
 		var $t = $(text);
-		// MARK -- changed refid = 8, TODO: implement some type of regex?
-		var url2 = 'https://mbasic.facebook.com' + $t.find('a[href$="about?refid=8"]').attr('href');
-		url2 = url2.replace(/about\?refid=8/, 'socialcontext');
+		// MARK -- changed refid = 8 from 17, TODO: implement some type of regex?
+		var url2 = 'https://mbasic.facebook.com' + $t.find('a[href$="about?refid=17"]').attr('href');
+		url2 = url2.replace(/about\?refid=17/, 'socialcontext');
 		onFetch();
 
 		get(url2, function (text2) {
