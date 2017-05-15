@@ -13,8 +13,8 @@ function progress() {
 }
 
 function onClick(ev) {
-  getAllFriendScores2(done, progress);
-  // initializeExplore();
+  // getAllFriendScores2(done, progress);
+  testExplore();
 }
 
 window.addEventListener('load', (event) => {
@@ -80,14 +80,21 @@ function initializeExplore(friends) {
   console.log(curr);
   console.log(oldcurr);
 
+  updateExploreOnAPI(explore_num, std_dev, curr, oldcurr, optimal);
+}
+
+function testExplore() {
   // to test
-  // const explore_num = 0.3;
-  // const std_dev = 0.3;
-  // const optimal = 0.9;
-  // const curr = '58736997707';
-  // const oldcurr = '153080620724';
+  const explore_num = 0.3;
+  const std_dev = 0.3;
+  const optimal = 0.9;
+  const curr = '15704546335';
+  const oldcurr = '8304333127';
+  updateExploreOnAPI(explore_num, std_dev, curr, oldcurr, optimal);
+}
 
 
+function updateExploreOnAPI(explore_num, std_dev, curr, oldcurr, optimal) {
   // make call to API to save user Explore Number and std_dev
   // chrome.runtime.sendMessage({ type: 'USER_EXPLORE_UPDATE', explore_num, std_dev }, response =>
   // console.log(response));

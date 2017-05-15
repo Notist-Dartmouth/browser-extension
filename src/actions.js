@@ -16,7 +16,7 @@ let apiHost;
 apiHost = 'https://notist.herokuapp.com';
 // @endif
 // @if ENVIRONMENT='development'
-apiHost = 'http://localhost:8080';
+apiHost = 'http://localhost:3000';
 // @endif
 
 export function updateAuthStatus(isAuthenticated) {
