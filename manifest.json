@@ -17,7 +17,15 @@
   "content_scripts": [
     {
       "matches": ["http://*/*", "https://*/*"],
-      "exclude_matches": ["http://notist.io/*", "http://facebook.com/*", "https://facebook.com/*", "http://google.com/*", "https://google.com/*"],
+      "exclude_matches": [
+        "http://notist.io/*",
+        "http://facebook.com/*",
+        "https://facebook.com/*",
+        "http://google.com/*",
+        "https://google.com/*",
+        "http://*/*.pdf",
+        "https://*/*.pdf"
+      ],
       "css": [
         "lib/css/annotator.min.css"
       ],
