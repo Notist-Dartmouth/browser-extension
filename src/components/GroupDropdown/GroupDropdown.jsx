@@ -22,6 +22,10 @@ const styles = {
   chip: {
     display: 'inline-block',
   },
+  button: {
+    textAlign: 'left',
+    backgroundColor: '#b6d3d9',
+  },
   header: {
     fontFamily: 'inherit',
     fontSize: '20px',
@@ -64,9 +68,15 @@ class GroupDropdown extends Component {
         <div>
           <FlatButton
             label={this.props.label}
-            style={{ textAlign: 'left' }}
-            primary
+            style={styles.button}
             onClick={this.toggleCollapsed}
+            labelPosition="before"
+            icon={
+              <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M7 10l5 5 5-5z" />
+                <path d="M0 0h24v24H0z" fill="none" />
+              </svg>
+            }
           />
           <span>
             {this.getSelectedGroups().map(g =>

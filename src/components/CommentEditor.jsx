@@ -101,12 +101,12 @@ class CommentEditor extends React.Component {
             __html: this.state.markdown.length > 0 ? marked(this.state.markdown) : marked('Nothing to preview'),
           }}
         />
-        <div>
+        <div style={{ paddingTop: '10px', paddingBottom: '10px' }}>
           {!this.props.parent && <GroupDropdownContainer /> }
           {!this.props.parent && <div style={styles.checkBox} >
             <Checkbox
               label="Public:"
-              style={{ width: '85%' }}
+              style={{ width: '85%', paddingLeft: '10px' }}
               onCheck={this.handleChecked}
               checked={this.state.isPublic}
               checkedIcon={<Visibility />}

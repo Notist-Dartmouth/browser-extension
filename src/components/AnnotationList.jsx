@@ -7,15 +7,17 @@ import GroupDropdownContainer from '../containers/GroupDropdownContainer';
 
 const AnnotationList = props => (
   <List>
-    <Subheader>
-      {props.annotations.length} annotations
-    </Subheader>
+    <div>
+      <Subheader style={{ width: '40%' }}>
+        {props.annotations.length} annotations
+      </Subheader>
+      <GroupDropdownContainer label="Filter by group" />
+    </div>
     { props.isFetchingAnnotations && props.isAuthenticated &&
       <h3 style={{ textAlign: 'center' }}>
         Loading...
       </h3>
     }
-    <GroupDropdownContainer label="Filter by group" />
     <br />
     {props.annotations.length === 0 &&
       <Subheader

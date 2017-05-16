@@ -7,6 +7,7 @@ import IconButton from 'material-ui/IconButton';
 
 const HeaderBar = props => (
   <AppBar
+    style={{ backgroundColor: '#44808C' }}
     title="Notist"
     iconElementLeft={
       <IconButton onClick={props.onOpenToggle}>
