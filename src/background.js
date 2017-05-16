@@ -26,7 +26,7 @@ import {
 
 const aliases = {
   CREATE_ANNOTATION: action =>
-    createAnnotationAsync(action.parent, action.articleText, action.ranges, action.text, action.groups),
+    createAnnotationAsync(action.parent, action.articleText, action.ranges, action.text, action.groups, action.isPublic),
   REQUEST_DELETE_ANNOTATION: action => deleteAnnotationAsync(action.annotationId),
   FETCH_ANNOTATIONS: () => fetchAnnotationsAsync(),
   FETCH_USER: () => fetchUserAsync(),

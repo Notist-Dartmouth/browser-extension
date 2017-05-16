@@ -130,6 +130,10 @@ function articles(state = {
       return Object.assign({}, state, {
         isFetchingAnnotations: true,
       });
+    case types.FETCH_ANNOTATIONS_FAILURE:
+      return Object.assign({}, state, {
+        isFetchingAnnotations: false,
+      });
     case types.RECEIVE_ANNOTATIONS:
       return Object.assign({}, state, {
         annotations: annotations(state.annotations, action),

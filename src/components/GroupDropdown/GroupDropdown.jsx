@@ -11,7 +11,12 @@ import GroupFormContainer from '../../containers/GroupFormContainer';
 const styles = {
   dropdown: {
     position: 'relative',
-    left: '10%',
+    left: '5%',
+    zIndex: 100,
+    display: 'inline-block',
+  },
+  container: {
+    width: '58%',
     display: 'inline-block',
   },
   chip: {
@@ -55,10 +60,11 @@ class GroupDropdown extends Component {
 
   render() {
     return (
-      <div>
+      <div style={styles.container} >
         <div>
           <FlatButton
             label={this.props.label}
+            style={{ textAlign: 'left' }}
             primary
             onClick={this.toggleCollapsed}
           />

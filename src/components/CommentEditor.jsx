@@ -1,6 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Visibility from 'material-ui/svg-icons/action/visibility';
+import VisibilityOff from 'material-ui/svg-icons/action/visibility-off';
 import marked from 'marked';
+import Checkbox from 'material-ui/Checkbox';
 import FlatButton from 'material-ui/FlatButton';
 import ICONS from '../constants/Icons';
 import Icon from './Icon';
@@ -14,6 +17,10 @@ const styles = {
   },
   controlBar: {
     border: '1px solid gray',
+  },
+  checkBox: {
+    width: '40%',
+    display: 'inline-block',
   },
   editorStyle: {
     border: '1px solid gray',
@@ -34,9 +41,15 @@ class CommentEditor extends React.Component {
     this.state = {
       isPreview: false,
       markdown: '',
+      isPublic: true,
     };
     this.onEditorChange = event => this.setState({ markdown: event.target.value });
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleChecked = this.handleChecked.bind(this);
+  }
+
+  handleChecked(event, isInputChecked) {
+    this.setState({ isPublic: isInputChecked });
   }
 
   handleSubmit() {
@@ -46,6 +59,7 @@ class CommentEditor extends React.Component {
       ranges,
       this.state.markdown,
       groups,
+      this.state.isPublic,
     );
     this.setState({
       markdown: '',
@@ -87,7 +101,20 @@ class CommentEditor extends React.Component {
             __html: this.state.markdown.length > 0 ? marked(this.state.markdown) : marked('Nothing to preview'),
           }}
         />
-        {!this.props.parent && <GroupDropdownContainer /> }
+        <div>
+          {!this.props.parent && <GroupDropdownContainer /> }
+          {!this.props.parent && <div style={styles.checkBox} >
+            <Checkbox
+              label="Public:"
+              style={{ width: '85%' }}
+              onCheck={this.handleChecked}
+              checked={this.state.isPublic}
+              checkedIcon={<Visibility />}
+              uncheckedIcon={<VisibilityOff />}
+              labelPosition="left"
+            />
+          </div>}
+        </div>
         <ButtonFooter
           primaryText="Post"
           onPrimaryClicked={this.handleSubmit}

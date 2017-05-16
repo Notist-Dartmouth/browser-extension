@@ -76,11 +76,13 @@ function sendCreateAnnotationRequest(dispatch, body) {
       } else {
         dispatch(receiveAnnotation(json.SUCCESS));
       }
+    } else {
+      dispatch(fetchAnnotationsFailure());
     }
   });
 }
 
-export function createAnnotationAsync(parent, articleText, ranges, text, groups) {
+export function createAnnotationAsync(parent, articleText, ranges, text, groups, isPublic) {
   return (dispatch, getState) => {
     const body = {
       parent,
@@ -89,7 +91,7 @@ export function createAnnotationAsync(parent, articleText, ranges, text, groups)
       text,
       uri: getState().articles.currentArticleUrl,
       groups,
-      isPublic: true, // TODO: pass whether is public or not
+      isPublic,
     };
     return sendCreateAnnotationRequest(dispatch, JSON.stringify(body));
   };
@@ -126,7 +128,7 @@ export function deleteAnnotationAsync(annotationId) {
   };
 }
 
-export function createAnnotation(parent, articleText, ranges, text, groups) {
+export function createAnnotation(parent, articleText, ranges, text, groups, isPublic) {
   return {
     type: types.CREATE_ANNOTATION,
     articleText,
@@ -134,6 +136,7 @@ export function createAnnotation(parent, articleText, ranges, text, groups) {
     parent,
     text,
     groups,
+    isPublic,
   };
 }
 
@@ -155,12 +158,19 @@ export function fetchAnnotationsAsync() {
       .then(res => res.json())
       .then((annotations) => {
         if (annotations.ERROR) {
-          console.log(annotations.ERROR); // TODO: error handling
+          console.log(annotations.ERROR);
+          dispatch(fetchAnnotationsFailure());
         } else {
           dispatch(receiveAnnotations(annotations));
         }
       });
     }
+  };
+}
+
+function fetchAnnotationsFailure() {
+  return {
+    type: types.FETCH_ANNOTATIONS_FAILURE,
   };
 }
 
