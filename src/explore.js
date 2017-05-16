@@ -1,27 +1,17 @@
 import _ from 'underscore';
-// import FB from 'fb';
+import {
+  news_dict,
+  fakenews_dict,
+} from './scoring';
 
-function done() {
-  console.log('done');
-  console.log(arguments);
-  initializeExplore(arguments[0]);
-}
+import {
+  updateUserExploreNum,
+  postFbPageArticles,
+} from './api';
 
-function progress() {
-  // TODO implement some type of progress bar
-  console.log('Progress', arguments);
-}
-
-function onClick(ev) {
-  getAllFriendScores2(done, progress);
-}
-
-window.addEventListener('load', (event) => {
-  document.querySelector('button').addEventListener('click', onClick);
-}, false);
-
-function initializeExplore(friends) {
+export const initializeExplore = (friends) => {
   // compute user's explore number
+  console.log(friends);
   let total = 0;
 
   const scores = [];
@@ -80,29 +70,28 @@ function initializeExplore(friends) {
   console.log('2nd match', oldcurr);
 
   updateExploreOnAPI(explore_num, std_dev, curr, oldcurr, optimal);
-}
+};
 
-function testExplore() {
-  // to test
+export const testExplore = () => {
+  // values to use to test
   const explore_num = 0.3;
   const std_dev = 0.3;
   const optimal = 0.9;
   const curr = '15704546335';
   const oldcurr = '8304333127';
+
   updateExploreOnAPI(explore_num, std_dev, curr, oldcurr, optimal);
-}
+};
 
 
-function updateExploreOnAPI(explore_num, std_dev, curr, oldcurr, optimal) {
-  // make call to API to save user Explore Number and std_dev
-  chrome.runtime.sendMessage({ type: 'USER_EXPLORE_UPDATE', explore_num, std_dev });
+export const updateExploreOnAPI = (explore_num, std_dev, curr, oldcurr, optimal) => {
+    // make calls to API to save user Explore Number and std_dev
+  updateUserExploreNum(explore_num, std_dev);
+  postFbPageArticles([curr, oldcurr], optimal);
+};
 
-  // make call to our API to make call to FB API to find articles from specific pages
-  chrome.runtime.sendMessage({ type: 'ADD_EXPLORE_ARTICLES', pages: [curr, oldcurr], score: optimal });
-}
-
-function average(data) {
+const average = (data) => {
   const sum = data.reduce((sum, value) => sum + value, 0);
   const avg = sum / data.length;
   return avg;
-}
+};

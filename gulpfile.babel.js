@@ -43,12 +43,6 @@ const build = (config) => {
       .pipe(webpack(webpackConfig))
       .pipe(preprocess(config))
       .pipe(gulp.dest('./dist'));
-  gulp.src('src/lib/scripts/explore.js')
-      .pipe(webpack(webpackConfig))
-      .pipe(preprocess(config))
-      .pipe(gulp.dest('./dist/lib/scripts'));
-  gulp.src('src/index.html')
-      .pipe(gulp.dest('./dist'));
 };
 
 gulp.task('dev', ['lib'], () => build(devConfig));
