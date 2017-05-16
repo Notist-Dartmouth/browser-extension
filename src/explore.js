@@ -4,6 +4,11 @@ import {
   fakenews_dict,
 } from './scoring';
 
+import {
+  updateUserExploreNum,
+  postFbPageArticles,
+} from './api';
+
 export const initializeExplore = (friends) => {
   // compute user's explore number
   console.log(friends);
@@ -68,7 +73,7 @@ export const initializeExplore = (friends) => {
 };
 
 export const testExplore = () => {
-  // to test
+  // values to use to test
   const explore_num = 0.3;
   const std_dev = 0.3;
   const optimal = 0.9;
@@ -80,11 +85,9 @@ export const testExplore = () => {
 
 
 export const updateExploreOnAPI = (explore_num, std_dev, curr, oldcurr, optimal) => {
-  // make call to API to save user Explore Number and std_dev
-  chrome.runtime.sendMessage({ type: 'USER_EXPLORE_UPDATE', explore_num, std_dev });
-
-  // make call to our API to make call to FB API to find articles from specific pages
-  chrome.runtime.sendMessage({ type: 'ADD_EXPLORE_ARTICLES', pages: [curr, oldcurr], score: optimal });
+    // make calls to API to save user Explore Number and std_dev
+  updateUserExploreNum(explore_num, std_dev);
+  postFbPageArticles([curr, oldcurr], optimal);
 };
 
 const average = (data) => {
