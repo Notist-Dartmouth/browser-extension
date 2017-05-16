@@ -3,7 +3,15 @@ This file is from https://github.com/politecho/politecho with some modifications
 */
 
 /* eslint-disable */
-import { news_dict, fakenews_dict, pol_dict } from './scoring';
+
+import $ from 'jquery';
+import {
+	news_dict,
+	fakenews_dict,
+	pol_dict,
+	score,
+	pageToName,
+} from './scoring';
 
 var lastRequestTime = 0;
 var requestInterval = 50;
@@ -85,7 +93,7 @@ function getPageLikes(pageId, done, onFetch) {
 	});
 }
 
-export default function getAllFriendScores2(done, progress) {
+export function getAllFriendScores2(done, progress) {
 	var maxNewsFeedDepth = 20;
 
 	var pageIds = getAllPageIds();
