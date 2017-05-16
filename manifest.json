@@ -12,7 +12,7 @@
     "scripts": ["background.js"]
   },
   "permissions": [
-    "tabs", "activeTab", "http://*/*", "https://*/*"
+    "tabs", "activeTab", "http://*/", "https://*/"
   ],
   "content_scripts": [
     {
@@ -32,8 +32,7 @@
       "js": [
         "lib/scripts/jquery-1.6.min.js",
         "lib/scripts/annotator.min.js",
-        "content.js",
-        "lib/scripts/explore.js"
+        "content.js"
       ]
     }
   ],

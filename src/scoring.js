@@ -335,8 +335,8 @@ function score(post_ids) {
 	post_ids = post_ids.filter(function(elem, index, self) {
     return index == self.indexOf(elem);
 	})
-	for (i = 0; i < num_posts; i++) {
-		post_id = post_ids[i];
+	for (var i = 0; i < num_posts; i++) {
+		var post_id = post_ids[i];
 		var page_data = {
 			name: pageToName[post_id],
 			page_id: post_id
@@ -367,4 +367,12 @@ function score(post_ids) {
 		authenticity: 1 - fake / found,
 		pages: pages
 	};
+}
+
+module.exports = {
+	news_dict,
+	fakenews_dict,
+	pol_dict,
+	score,
+	pageToName,
 }
