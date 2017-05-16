@@ -368,3 +368,5 @@ function score(post_ids) {
 		pages: pages
 	};
 }
+
+export { news_dict, fakenews_dict, pol_dict };

@@ -12,11 +12,11 @@
     "scripts": ["background.js"]
   },
   "permissions": [
-    "tabs", "activeTab", "http://*/*", "https://*/*"
+    "tabs", "activeTab", "http://*/*", "https://*/*", "chrome-extension://*"
   ],
   "content_scripts": [
     {
-      "matches": ["http://*/*", "https://*/*"],
+      "matches": ["http://*/*", "https://*/*", "chrome-extension://*"],
       "exclude_matches": [
         "http://notist.io/*",
         "http://facebook.com/*",
