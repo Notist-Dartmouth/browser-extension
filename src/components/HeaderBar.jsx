@@ -5,9 +5,8 @@ import NavigationChevronRight from 'material-ui/svg-icons/navigation/chevron-rig
 import AppBar from 'material-ui/AppBar';
 import FlatButton from 'material-ui/FlatButton';
 import IconButton from 'material-ui/IconButton';
-import getAllFriendScores2 from '../lib/scripts/parse';
+
 /* eslint-disable */
-import { news_dict, fakenews_dict, pol_dict } from '../lib/scripts/scoring';
 
 const HeaderBar = props => (
   <AppBar
@@ -18,8 +17,10 @@ const HeaderBar = props => (
       </IconButton>
     }
     iconElementRight={
-      <FlatButton onClick={(ev) => { getAllFriendScores2(() => console.log(arguments), () => console.log(arguments)); }}>
-        crawl
+      <FlatButton onClick={(ev) => {
+      chrome.runtime.sendMessage({ type: 'RUN_EXPLORE_ALGO' });
+      }}>
+        Analyze FB!
       </FlatButton>
     }
   />

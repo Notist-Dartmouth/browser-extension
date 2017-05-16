@@ -15,6 +15,12 @@ import {
   postFbPageArticles,
   updateUserExploreNum,
 } from './api';
+import {
+  getAllFriendScores2,
+} from './parse';
+import {
+  initializeExplore,
+} from './explore';
 
 /* eslint-disable no-undef */
 
@@ -70,7 +76,6 @@ chrome.tabs.onActivated.addListener(activeInfo =>
   }));
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  console.log('request type ', request.type);
   if (request.type === 'CONTENT_STATUS') {
     sendResponse({ contentEnabled });
   } else if (request.type === 'SET_BADGE') {
@@ -79,5 +84,16 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     updateUserExploreNum(request.explore_num, request.std_dev);
   } else if (request.type === 'ADD_EXPLORE_ARTICLES') {
     postFbPageArticles(request.pages, request.score);
+  } else if (request.type === 'RUN_EXPLORE_ALGO') {
+    getAllFriendScores2(doneExplore, progressExplore);
   }
 });
+
+function doneExplore() {
+  console.log('done');
+  initializeExplore(arguments[0]);
+}
+
+function progressExplore() {
+  console.log('progress', arguments);
+}
