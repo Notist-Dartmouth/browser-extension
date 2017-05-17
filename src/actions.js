@@ -79,6 +79,10 @@ function sendCreateAnnotationRequest(dispatch, body) {
     } else {
       dispatch(fetchAnnotationsFailure());
     }
+  })
+  .catch((e) => {
+    console.log(e);
+    dispatch(fetchAnnotationsFailure());
   });
 }
 
@@ -163,6 +167,10 @@ export function fetchAnnotationsAsync() {
         } else {
           dispatch(receiveAnnotations(annotations));
         }
+      })
+      .catch((e) => {
+        console.log(e);
+        dispatch(fetchAnnotationsFailure());
       });
     }
   };
