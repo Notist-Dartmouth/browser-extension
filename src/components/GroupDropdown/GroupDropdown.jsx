@@ -47,24 +47,52 @@ class GroupDropdown extends Component {
     this.toggleCollapsed = this.toggleCollapsed.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.getSelectedGroups = this.getSelectedGroups.bind(this);
+    this.handleBlur = this.handleBlur.bind(this);
+    this.setWrapperRef = this.setWrapperRef.bind(this);
+    this.handleClickOutside = this.handleClickOutside.bind(this);
+  }
+
+  componentDidMount() {
+    document.getElementById('notist-sidebar').contentWindow.document.addEventListener('mousedown', this.handleClickOutside);
+  }
+
+  componentWillUnmount() {
+    document.getElementById('notist-sidebar').contentWindow.document.removeEventListener('mousedown', this.handleClickOutside);
+  }
+
+  setWrapperRef(node) {
+    this.wrapperRef = node;
   }
 
   getSelectedGroups() {
     return this.props.groups.filter(g => _.indexOf(this.props.selectedGroups, g._id) > -1);
   }
 
-  handleChange(e, values) {
-    this.props.onChange(e, values);
-    this.toggleCollapsed();
+  // Detect whether the user clicks outside of the dropdown
+  // based on the answer to this stackoverflow post:
+  // http://stackoverflow.com/questions/32553158/detect-click-outside-react-component
+  handleClickOutside(event) {
+    if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
+      this.setState({ isCollapsed: true });
+    }
   }
 
   toggleCollapsed() {
     this.setState({ isCollapsed: !this.state.isCollapsed });
   }
 
+  handleChange(e, values) {
+    this.props.onChange(e, values);
+  }
+
+  handleBlur(e) {
+    console.log(e.target);
+    this.setState({ isCollapsed: true });
+  }
+
   render() {
     return (
-      <div style={styles.container} >
+      <div>
         <div>
           <FlatButton
             label={this.props.label}
@@ -88,38 +116,43 @@ class GroupDropdown extends Component {
               </Chip>))}
           </span>
         </div>
-        {!this.state.isCollapsed && <Paper
-          zDepth={2}
-          style={styles.dropdown}
+        {!this.state.isCollapsed &&
+        <div
+          ref={this.setWrapperRef}
         >
-          <div
-            style={styles.header}
-            hidden={this.state.isCollapsed}
+          <Paper
+            zDepth={2}
+            style={styles.dropdown}
           >
-            <span>{this.props.active ? 'New Group' : 'My Groups'}</span>
-          </div>
-          <Menu
-            multiple
-            hidden={this.props.active}
-            value={this.props.selectedGroups}
-            onChange={this.props.active ? null : this.handleChange}
-          >
-            {!this.props.active && this.props.groups.map(group => (
-              <MenuItem
-                key={group._id}
-                value={group._id}
-                checked={_.indexOf(this.props.selectedGroups, group._id) > -1}
-                primaryText={group.name}
+            <div
+              style={styles.header}
+              hidden={this.state.isCollapsed}
+            >
+              <span>{this.props.active ? 'New Group' : 'My Groups'}</span>
+            </div>
+            <Menu
+              multiple
+              hidden={this.props.active}
+              value={this.props.selectedGroups}
+              onChange={this.props.active ? null : this.handleChange}
+            >
+              {!this.props.active && this.props.groups.map(group => (
+                <MenuItem
+                  key={group._id}
+                  value={group._id}
+                  checked={_.indexOf(this.props.selectedGroups, group._id) > -1}
+                  primaryText={group.name}
+                />
+              ))}
+            </Menu>
+            <div>
+              <GroupFormContainer
+                active={this.props.active}
+                onNewGroupClicked={this.props.onNewGroupClicked}
               />
-            ))}
-          </Menu>
-          <div>
-            <GroupFormContainer
-              active={this.props.active}
-              onNewGroupClicked={this.props.onNewGroupClicked}
-            />
-          </div>
-        </Paper>}
+            </div>
+          </Paper>
+        </div>}
       </div>
     );
   }

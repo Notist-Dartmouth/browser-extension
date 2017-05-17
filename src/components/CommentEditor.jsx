@@ -102,7 +102,6 @@ class CommentEditor extends React.Component {
           }}
         />
         <div style={{ paddingTop: '10px', paddingBottom: '10px' }}>
-          {!this.props.parent && <GroupDropdownContainer /> }
           {!this.props.parent && <div style={styles.checkBox} >
             <Checkbox
               label="Public:"
@@ -114,6 +113,7 @@ class CommentEditor extends React.Component {
               labelPosition="left"
             />
           </div>}
+          {!this.props.parent && <GroupDropdownContainer /> }
         </div>
         <ButtonFooter
           primaryText="Post"

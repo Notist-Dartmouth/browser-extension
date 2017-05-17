@@ -15,6 +15,7 @@ class SidebarContainer extends Component {
   render() {
     return (
       <Frame
+        id="notist-sidebar"
         style={{
           border: 'none',
           position: 'fixed',
