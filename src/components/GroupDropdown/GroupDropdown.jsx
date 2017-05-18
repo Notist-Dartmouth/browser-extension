@@ -11,7 +11,7 @@ import GroupFormContainer from '../../containers/GroupFormContainer';
 const styles = {
   dropdown: {
     position: 'relative',
-    left: '5%',
+    left: 0,
     zIndex: 100,
     display: 'inline-block',
   },
@@ -19,8 +19,15 @@ const styles = {
     width: '58%',
     display: 'inline-block',
   },
+  popover: {
+    width: '70%',
+  },
   chip: {
-    display: 'inline-block',
+    margin: 4,
+  },
+  chipWrapper: {
+    display: 'flex',
+    flexWrap: 'wrap',
   },
   button: {
     textAlign: 'left',
@@ -49,6 +56,7 @@ class GroupDropdown extends Component {
     this.getSelectedGroups = this.getSelectedGroups.bind(this);
     this.handleBlur = this.handleBlur.bind(this);
     this.setWrapperRef = this.setWrapperRef.bind(this);
+    this.setButtonRef = this.setButtonRef.bind(this);
     this.handleClickOutside = this.handleClickOutside.bind(this);
   }
 
@@ -58,6 +66,10 @@ class GroupDropdown extends Component {
 
   componentWillUnmount() {
     document.getElementById('notist-sidebar').contentWindow.document.removeEventListener('mousedown', this.handleClickOutside);
+  }
+
+  setButtonRef(node) {
+    this.toggleButton = node;
   }
 
   setWrapperRef(node) {
@@ -72,6 +84,9 @@ class GroupDropdown extends Component {
   // based on the answer to this stackoverflow post:
   // http://stackoverflow.com/questions/32553158/detect-click-outside-react-component
   handleClickOutside(event) {
+    if (this.toggleButton && this.toggleButton.contains(event.target) && !this.state.isCollapsed) {
+      return;
+    }
     if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
       this.setState({ isCollapsed: true });
     }
@@ -93,7 +108,7 @@ class GroupDropdown extends Component {
   render() {
     return (
       <div>
-        <div>
+        <div ref={this.setButtonRef}>
           <FlatButton
             label={this.props.label}
             style={styles.button}
@@ -106,18 +121,20 @@ class GroupDropdown extends Component {
               </svg>
             }
           />
-          <span>
-            {this.getSelectedGroups().map(g =>
-              (<Chip
-                key={g._id}
-                onRequestDelete={() => this.props.handleChipDelete(g._id, this.props.selectedGroups)}
-              >
-                {g.name}
-              </Chip>))}
-          </span>
+        </div>
+        <div style={styles.chipWrapper}>
+          {this.getSelectedGroups().map(g =>
+            (<Chip
+              key={g._id}
+              style={styles.chip}
+              onRequestDelete={() => this.props.handleChipDelete(g._id, this.props.selectedGroups)}
+            >
+              {g.name}
+            </Chip>))}
         </div>
         {!this.state.isCollapsed &&
         <div
+          style={styles.popover}
           ref={this.setWrapperRef}
         >
           <Paper
