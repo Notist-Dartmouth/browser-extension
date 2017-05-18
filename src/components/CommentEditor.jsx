@@ -101,8 +101,8 @@ class CommentEditor extends React.Component {
             __html: this.state.markdown.length > 0 ? marked(this.state.markdown) : marked('Nothing to preview'),
           }}
         />
-        <div style={{ paddingTop: '10px', paddingBottom: '10px' }}>
-          {!this.props.parent && <div style={styles.checkBox} >
+        {!this.props.parent && <div style={{ paddingTop: '10px', paddingBottom: '10px' }}>
+          <div style={styles.checkBox} >
             <Checkbox
               label="Public:"
               style={{ width: '85%', paddingLeft: '10px' }}
@@ -112,9 +112,9 @@ class CommentEditor extends React.Component {
               uncheckedIcon={<VisibilityOff />}
               labelPosition="left"
             />
-          </div>}
-          {!this.props.parent && <GroupDropdownContainer /> }
-        </div>
+          </div>
+          <GroupDropdownContainer />
+        </div> }
         <ButtonFooter
           primaryText="Post"
           onPrimaryClicked={this.handleSubmit}

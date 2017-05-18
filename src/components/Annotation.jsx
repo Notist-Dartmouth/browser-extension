@@ -93,13 +93,6 @@ class Annotation extends React.Component {
     return (
       <ListItem
         style={styles.listItemStyle}
-        secondaryText={this.props.newCommentVisible &&
-          <CommentEditor
-            onCommentPost={this.props.onCommentPost}
-            onCommentCancel={() => this.props.onCommentToggle(this.props._id)}
-            parent={this.props._id}
-          />
-        }
         nestedListStyle={{ marginLeft: 20, borderLeft: '1px dashed black' }}
         nestedItems={this.childAnnotations()}
         open={this.state.isExpanded}
@@ -140,6 +133,14 @@ class Annotation extends React.Component {
               label={`Show Replies (${this.props.childAnnotations.length})`}
             />
           }
+          {this.props.newCommentVisible &&
+          <div>
+            <CommentEditor
+              onCommentPost={this.props.onCommentPost}
+              onCommentCancel={() => this.props.onCommentToggle(this.props._id)}
+              parent={this.props._id}
+            />
+          </div>}
         </div>
       </ListItem>
     );
