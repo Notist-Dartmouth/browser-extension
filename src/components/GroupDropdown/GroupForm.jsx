@@ -23,14 +23,17 @@ const styles = {
     paddingLeft: '15px',
     fontFamily: 'inherit',
   },
+  createButton: {
+    backgroundColor: '#b6d3d9',
+  },
 };
 
 const GroupForm = props => (
   <div style={styles.formElement}>
     {!props.active && <FlatButton
-      primary
       onClick={props.onToggleActive}
       label="Create Group"
+      style={styles.createButton}
       icon={<SocialGroupAdd />}
     />}
     <div hidden={!props.active}>

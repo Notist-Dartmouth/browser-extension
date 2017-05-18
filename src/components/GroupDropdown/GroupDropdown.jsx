@@ -33,6 +33,10 @@ const styles = {
     textAlign: 'left',
     backgroundColor: '#b6d3d9',
   },
+  menu: {
+    overflowY: 'scroll',
+    maxHeight: '180px',
+  },
   header: {
     fontFamily: 'inherit',
     fontSize: '20px',
@@ -122,16 +126,6 @@ class GroupDropdown extends Component {
             }
           />
         </div>
-        <div style={styles.chipWrapper}>
-          {this.getSelectedGroups().map(g =>
-            (<Chip
-              key={g._id}
-              style={styles.chip}
-              onRequestDelete={() => this.props.handleChipDelete(g._id, this.props.selectedGroups)}
-            >
-              {g.name}
-            </Chip>))}
-        </div>
         {!this.state.isCollapsed &&
         <div
           style={styles.popover}
@@ -143,11 +137,12 @@ class GroupDropdown extends Component {
           >
             <div
               style={styles.header}
-              hidden={this.state.isCollapsed}
+              hidden={this.state.isCollapsed || this.props.groups.length === 0}
             >
-              <span>{this.props.active ? 'New Group' : 'My Groups'}</span>
+              <span>{this.props.active ? 'New Group' : 'My groups'}</span>
             </div>
             <Menu
+              style={styles.menu}
               multiple
               hidden={this.props.active}
               value={this.props.selectedGroups}
@@ -162,7 +157,7 @@ class GroupDropdown extends Component {
                 />
               ))}
             </Menu>
-            <div>
+            <div style={{ backgroundColor: this.props.active ? 'white' : '#b6d3d9' }}>
               <GroupFormContainer
                 active={this.props.active}
                 onNewGroupClicked={this.props.onNewGroupClicked}
@@ -170,6 +165,16 @@ class GroupDropdown extends Component {
             </div>
           </Paper>
         </div>}
+        <div style={styles.chipWrapper}>
+          {this.getSelectedGroups().map(g =>
+            (<Chip
+              key={g._id}
+              style={styles.chip}
+              onRequestDelete={() => this.props.handleChipDelete(g._id, this.props.selectedGroups)}
+            >
+              {g.name}
+            </Chip>))}
+        </div>
       </div>
     );
   }
