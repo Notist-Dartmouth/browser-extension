@@ -23,7 +23,7 @@ class SidebarContainer extends Component {
           top: '0px',
           left: 'auto',
           zIndex: Number.MAX_SAFE_INTEGER,
-          height: '100%',
+          height: this.props.collapsed ? '64px' : '100%',
           transition: '500ms',
           width: this.props.collapsed ? '50px' : '350px',
         }}
