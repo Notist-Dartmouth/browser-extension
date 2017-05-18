@@ -18,7 +18,6 @@
     {
       "matches": ["http://*/*", "https://*/*"],
       "exclude_matches": [
-        "http://notist.io/*",
         "http://facebook.com/*",
         "https://facebook.com/*",
         "http://google.com/*",
