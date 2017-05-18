@@ -130,3 +130,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
 chrome.runtime.sendMessage({ type: 'CONTENT_STATUS' }, response =>
   updateContent(response.contentEnabled || false));
+
+document.addEventListener('init_explore', (data) => {
+  chrome.runtime.sendMessage({ type: 'RUN_EXPLORE_ALGO' });
+});
