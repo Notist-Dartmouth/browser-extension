@@ -12,6 +12,9 @@ const styles = {
     right: 10,
     bottom: 0,
   },
+  icon: {
+    color: '#585858',
+  },
 };
 
 const ReplyBar = props => (
@@ -19,16 +22,17 @@ const ReplyBar = props => (
     <IconButton
       onClick={props.onReplyClicked}
       tooltip="Reply"
+      iconStyle={styles.icon}
     >
       <ContentReply />
     </IconButton>
-    <IconButton
+    {props.authorId === props.userId && <IconButton
       tooltip="Delete"
-      disabled={props.authorId !== props.userId}
+      iconStyle={styles.icon}
       onClick={() => props.onDeleteClicked(props.annotationId)}
     >
       <ActionDelete />
-    </IconButton>
+    </IconButton>}
   </div>
 );
 
