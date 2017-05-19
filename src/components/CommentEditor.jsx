@@ -9,6 +9,11 @@ import ICONS from '../constants/Icons';
 import Icon from './Icon';
 import GroupDropdownContainer from '../containers/GroupDropdownContainer';
 import ButtonFooter from './ButtonFooter';
+import {
+  updateAnnotationPublic,
+  updateAnnotationMarkdown,
+  updateAnnotationParent,
+} from '../actions';
 
 const styles = {
   container: {
@@ -40,30 +45,22 @@ class CommentEditor extends React.Component {
     super(props);
     this.state = {
       isPreview: false,
-      markdown: '',
-      isPublic: true,
     };
-    this.onEditorChange = event => this.setState({ markdown: event.target.value });
+    this.onEditorChange = event => this.props.dispatch(updateAnnotationMarkdown(event.target.value));
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChecked = this.handleChecked.bind(this);
   }
 
+  componentDidMount() {
+    this.props.dispatch(updateAnnotationParent(this.props.parent));
+  }
+
   handleChecked(event, isInputChecked) {
-    this.setState({ isPublic: isInputChecked });
+    this.props.dispatch(updateAnnotationPublic(isInputChecked));
   }
 
   handleSubmit() {
-    const { articleText, ranges, groups } = this.props.newAnnotation;
-    this.props.onCommentPost(this.props.parent,
-      articleText,
-      ranges,
-      this.state.markdown,
-      groups,
-      this.state.isPublic,
-    );
-    this.setState({
-      markdown: '',
-    });
+    this.props.onCommentPost();
     this.props.onCommentCancel();
   }
 
@@ -90,7 +87,7 @@ class CommentEditor extends React.Component {
         <textarea
           style={styles.editorStyle}
           hidden={this.state.isPreview}
-          value={this.state.markdown}
+          value={this.props.newAnnotation.markdown}
           onChange={this.onEditorChange}
           placeholder="Enter Comment"
         />
@@ -98,7 +95,7 @@ class CommentEditor extends React.Component {
           style={styles.editorStyle}
           hidden={!this.state.isPreview}
           dangerouslySetInnerHTML={{
-            __html: this.state.markdown.length > 0 ? marked(this.state.markdown) : marked('Nothing to preview'),
+            __html: this.props.newAnnotation.markdown.length > 0 ? marked(this.props.newAnnotation.markdown) : marked('Nothing to preview'),
           }}
         />
         {!this.props.parent && <div style={{ paddingTop: '10px', paddingBottom: '10px' }}>
@@ -107,7 +104,7 @@ class CommentEditor extends React.Component {
               label="Public:"
               style={{ width: '85%', paddingLeft: '10px' }}
               onCheck={this.handleChecked}
-              checked={this.state.isPublic}
+              checked={this.props.newAnnotation.isPublic}
               checkedIcon={<Visibility />}
               uncheckedIcon={<VisibilityOff />}
               labelPosition="left"
@@ -129,17 +126,20 @@ class CommentEditor extends React.Component {
 CommentEditor.propTypes = {
   onCommentCancel: PropTypes.func.isRequired,
   onCommentPost: PropTypes.func.isRequired,
+  dispatch: PropTypes.func.isRequired,
   parent: PropTypes.string,
   newAnnotation: PropTypes.shape({
-    articleText: PropTypes.string,
-    ranges: PropTypes.array,
-    groups: PropTypes.array,
+    markdown: PropTypes.string,
+    isPublic: PropTypes.bool,
   }),
 };
 
 CommentEditor.defaultProps = {
   parent: null,
-  newAnnotation: {},
+  newAnnotation: {
+    markdown: '',
+    isPublic: true,
+  },
 };
 
 export default CommentEditor;

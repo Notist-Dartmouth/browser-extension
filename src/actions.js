@@ -86,14 +86,15 @@ function sendCreateAnnotationRequest(dispatch, body) {
   });
 }
 
-export function createAnnotationAsync(parent, articleText, ranges, text, groups, isPublic) {
+export function createAnnotationAsync() {
   return (dispatch, getState) => {
+    const { parent, articleText, ranges, markdown, groups, isPublic, articleURI } = getState().articles.newAnnotation;
     const body = {
       parent,
       articleText,
       ranges,
-      text,
-      uri: getState().articles.currentArticleUrl,
+      text: markdown,
+      uri: articleURI || getState().articles.currentArticleUrl,
       groups,
       isPublic,
     };
@@ -132,15 +133,9 @@ export function deleteAnnotationAsync(annotationId) {
   };
 }
 
-export function createAnnotation(parent, articleText, ranges, text, groups, isPublic) {
+export function createAnnotation(parent, articleText, ranges, text, groups, isPublic, articleURI) {
   return {
     type: types.CREATE_ANNOTATION,
-    articleText,
-    ranges,
-    parent,
-    text,
-    groups,
-    isPublic,
   };
 }
 
@@ -208,11 +203,33 @@ export function selectAnnotationGroups(groups) {
   };
 }
 
-export function newAnnotation(articleText, ranges) {
+export function newAnnotation(articleText, ranges, articleURI) {
   return {
     type: types.NEW_ANNOTATION,
     articleText,
+    articleURI,
     ranges,
+  };
+}
+
+export function updateAnnotationMarkdown(markdown) {
+  return {
+    type: types.UPDATE_ANNOTATION_MARKDOWN,
+    markdown,
+  };
+}
+
+export function updateAnnotationPublic(isPublic) {
+  return {
+    type: types.UPDATE_ANNOTATION_PUBLIC,
+    isPublic,
+  };
+}
+
+export function updateAnnotationParent(parent) {
+  return {
+    type: types.UPDATE_ANNOTATION_PARENT,
+    parent,
   };
 }
 

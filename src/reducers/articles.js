@@ -67,11 +67,27 @@ function articleUrl(state = '', action) {
 }
 
 function annotationForm(state = {
+  parent: null,
   articleText: '',
+  articleURI: null,
+  markdown: '',
+  isPublic: true,
   ranges: [],
   groups: [],
 }, action) {
   switch (action.type) {
+    case types.UPDATE_ANNOTATION_PARENT:
+      return Object.assign({}, state, {
+        parent: action.parent,
+      });
+    case types.UPDATE_ANNOTATION_PUBLIC:
+      return Object.assign({}, state, {
+        isPublic: action.isPublic,
+      });
+    case types.UPDATE_ANNOTATION_MARKDOWN:
+      return Object.assign({}, state, {
+        markdown: action.markdown,
+      });
     case types.SELECT_ANNOTATION_GROUPS:
       return Object.assign({}, state, {
         groups: action.groups,
@@ -80,6 +96,7 @@ function annotationForm(state = {
       return Object.assign({}, state, {
         articleText: action.articleText,
         ranges: action.ranges,
+        articleURI: action.articleURI,
       });
     default:
       return state;
@@ -93,7 +110,11 @@ function articles(state = {
   annotations: [],
   currentArticleUrl: '',
   newAnnotation: {
+    parent: null,
     articleText: '',
+    articleURI: null,
+    markdown: '',
+    isPublic: true,
     ranges: [],
     groups: [],
   },

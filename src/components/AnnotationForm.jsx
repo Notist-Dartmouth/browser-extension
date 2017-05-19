@@ -21,6 +21,7 @@ const AnnotationForm = props => (
       </div>
     </CardText>
     <CommentEditor
+      dispatch={props.dispatch}
       newAnnotation={props.newAnnotation}
       onCommentPost={props.onCommentPost}
       onCommentCancel={props.onFormCancel}
@@ -31,9 +32,11 @@ const AnnotationForm = props => (
 AnnotationForm.propTypes = {
   onCommentPost: PropTypes.func.isRequired,
   onFormCancel: PropTypes.func.isRequired,
+  dispatch: PropTypes.func.isRequired,
   isCreatingAnnotation: PropTypes.bool.isRequired,
   newAnnotation: PropTypes.shape({
     articleText: PropTypes.string,
+    articleURI: PropTypes.string,
     ranges: PropTypes.array,
     groups: PropTypes.array,
   }).isRequired,

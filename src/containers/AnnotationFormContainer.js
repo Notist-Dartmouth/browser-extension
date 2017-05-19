@@ -12,8 +12,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    onCommentPost: (parent, articleText, ranges, text, groups, isPublic) =>
-      dispatch(createAnnotation(parent, articleText, ranges, text, groups, isPublic)),
+    onCommentPost: () => dispatch(createAnnotation()),
     onFormCancel: () => dispatch(toggleCreatingAnnotation()),
   };
 }

@@ -55,7 +55,8 @@ const adderModule = () => ({
     if (store.getState().sidebar.collapsed) {
       store.dispatch(toggleCollapsed());
     }
-    store.dispatch(newAnnotation(annotation.articleText, annotation.ranges));
+    const { currentArticleUrl } = store.getState().articles;
+    store.dispatch(newAnnotation(annotation.articleText, annotation.ranges, currentArticleUrl));
   },
 });
 
