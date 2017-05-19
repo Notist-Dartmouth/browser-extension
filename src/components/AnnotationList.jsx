@@ -12,7 +12,7 @@ const AnnotationList = props => (
         {props.annotations.length} annotations
       </Subheader>
       <div style={{ paddingLeft: '15px' }}>
-        <GroupDropdownContainer label="Filter by group" />
+        <GroupDropdownContainer label="Filter by group" isFilter />
       </div>
     </div>
     { props.isFetchingAnnotations && props.isAuthenticated &&

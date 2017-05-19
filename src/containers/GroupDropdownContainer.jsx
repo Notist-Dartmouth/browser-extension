@@ -23,10 +23,10 @@ class GroupDropdownContainer extends Component {
 
   handleChipDelete(key, selectedGroups) {
     const newSelection = selectedGroups.filter(gId => gId !== key);
-    if (this.props.isCreatingAnnotation) {
-      this.props.dispatch(selectAnnotationGroups(newSelection));
-    } else {
+    if (this.props.isFilter) {
       this.props.dispatch(filterAnnotations(newSelection));
+    } else {
+      this.props.dispatch(selectAnnotationGroups(newSelection));
     }
   }
 
@@ -42,15 +42,14 @@ class GroupDropdownContainer extends Component {
         handleChipDelete={this.handleChipDelete}
         onNewGroupClicked={this.handleToggleActive}
         groups={this.props.groups}
-        onChange={this.props.isCreatingAnnotation ? this.handleFormSelect : this.handleFilterSelect}
-        selectedGroups={this.props.selectedGroups}
+        onChange={this.props.isFilter ? this.handleFilterSelect : this.handleFormSelect}
+        selectedGroups={this.props.isFilter ? this.props.groupsFilter : this.props.newAnnotationGroups}
       />
     );
   }
 }
 
 GroupDropdownContainer.propTypes = {
-  selectedGroups: PropTypes.arrayOf(PropTypes.string).isRequired,
   dispatch: PropTypes.func.isRequired,
   groups: PropTypes.arrayOf(PropTypes.shape({
     _id: PropTypes.string,
@@ -60,21 +59,23 @@ GroupDropdownContainer.propTypes = {
     isPersonal: PropTypes.bool,
   })).isRequired,
   label: PropTypes.string,
-  isCreatingAnnotation: PropTypes.bool,
+  isFilter: PropTypes.bool,
+  newAnnotationGroups: PropTypes.arrayOf(PropTypes.string).isRequired,
+  groupsFilter: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 GroupDropdownContainer.defaultProps = {
   label: 'Share with group',
-  isCreatingAnnotation: false,
+  isFilter: false,
 };
 
 function mapStateToProps(state) {
-  const { isCreatingAnnotation, newAnnotation, groupsFilter } = state.articles;
+  const { newAnnotation, groupsFilter } = state.articles;
   const { groups } = state.user;
   return {
-    selectedGroups: isCreatingAnnotation ? newAnnotation.groups : groupsFilter,
+    newAnnotationGroups: newAnnotation.groups,
     groups,
-    isCreatingAnnotation,
+    groupsFilter,
   };
 }
 
