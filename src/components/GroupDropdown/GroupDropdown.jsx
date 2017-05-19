@@ -31,7 +31,7 @@ const styles = {
   },
   button: {
     textAlign: 'left',
-    backgroundColor: '#b6d3d9',
+    backgroundColor: 'rgb(255, 204, 128)',
   },
   menu: {
     overflowY: 'scroll',

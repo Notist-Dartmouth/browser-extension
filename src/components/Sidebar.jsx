@@ -11,6 +11,7 @@ const Sidebar = props => (
     open={!props.collapsed}
     openSecondary
     containerStyle={{
+      backgroundColor: '#E0F7FA',
       width: '98%',
       transform: 'none',
     }}

@@ -85,25 +85,20 @@ class Annotation extends React.Component {
       },
       listItem: {
         cursor: 'auto',
-        backgroundColor: 'none',
-        paddingLeft: 20 * this.props.depth,
+        marginTop: 15,
+        backgroundColor: 'white',
       },
     };
 
     return (
       <ListItem
-        style={styles.listItemStyle}
-        nestedListStyle={{ marginLeft: 20, borderLeft: '1px dashed black' }}
+        style={styles.listItem}
+        nestedListStyle={{ marginLeft: 15, borderLeft: '1px dashed black' }}
         nestedItems={this.childAnnotations()}
         open={this.state.isExpanded}
         onNestedListToggle={this.toggleExpanded}
       >
         <div>
-          <div>
-            <span style={{ fontWeight: 900 }} >{this.getAuthorDisplayName()}</span>
-            <span style={{ paddingLeft: 12 }} >{moment(this.props.dateCreated).fromNow()}</span>
-          </div>
-          <br />
           {this.props.depth === 0 &&
             <div
               style={styles.articleText}
@@ -114,6 +109,11 @@ class Annotation extends React.Component {
             >
               {this.props.articleText}
             </div>}
+          <br />
+          <div>
+            <span style={{ fontWeight: 900 }} >{this.getAuthorDisplayName()}</span>
+            <span style={{ paddingLeft: 12 }} >{moment(this.props.dateCreated).fromNow()}</span>
+          </div>
           <br />
           <div
             style={styles.commentText}

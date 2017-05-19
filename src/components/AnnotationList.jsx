@@ -8,7 +8,7 @@ import GroupDropdownContainer from '../containers/GroupDropdownContainer';
 const AnnotationList = props => (
   <List>
     <div>
-      <Subheader style={{ width: '40%' }}>
+      <Subheader style={{ color: 'black', width: '40%' }}>
         {props.annotations.length} annotations
       </Subheader>
       <div style={{ paddingLeft: '15px' }}>
