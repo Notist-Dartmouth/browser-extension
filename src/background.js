@@ -16,10 +16,7 @@ import {
   updateUserExploreNum,
 } from './api';
 import {
-  getAllFriendScores2,
-} from './parse';
-import {
-  initializeExplore,
+  exploreSetup,
 } from './explore';
 
 /* eslint-disable no-undef */
@@ -85,15 +82,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   } else if (request.type === 'ADD_EXPLORE_ARTICLES') {
     postFbPageArticles(request.pages, request.score);
   } else if (request.type === 'RUN_EXPLORE_ALGO') {
-    getAllFriendScores2(doneExplore, progressExplore);
+    exploreSetup();
   }
 });
-
-function doneExplore() {
-  console.log('done');
-  initializeExplore(arguments[0]);
-}
-
-function progressExplore() {
-  console.log('progress', arguments);
-}
