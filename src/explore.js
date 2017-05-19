@@ -3,15 +3,46 @@ import {
   news_dict,
   fakenews_dict,
 } from './scoring';
-
+import {
+  getAllFriendScores2,
+} from './parse';
 import {
   updateUserExploreNum,
   postFbPageArticles,
 } from './api';
 
+let exploreHost;
+// @if ENVIRONMENT='production'
+exploreHost = 'https://notist.io/explore';
+// @endif
+// @if ENVIRONMENT='development'
+exploreHost = 'http://localhost:5000/explore';
+// @endif
+
+export const exploreSetup = () => {
+  getAllFriendScores2(politechoDone, politechoProgress);
+};
+
+function politechoDone() {
+  console.log(arguments);
+  const status = initializeExplore(arguments[0]);
+  if (status === 'SUCCESS') {
+    chrome.tabs.query({ active: true, url: 'http://*/explore*' }, (tabs) => { // active: true, currentWindow: true
+      chrome.tabs.sendMessage(tabs[0].id, { type: 'EXPLORE_DONE' });
+    });
+  }
+}
+
+function politechoProgress() {
+  console.log('progress', arguments);
+}
+
 export const initializeExplore = (friends) => {
-  // compute user's explore number
-  console.log(friends);
+  // if no friends then ERROR !
+  if (friends.length == 0) {
+    return 'ERROR';
+  }
+
   let total = 0;
 
   const scores = [];
@@ -35,6 +66,9 @@ export const initializeExplore = (friends) => {
     }
   });
   console.log(page_scores);
+  if (page_scores.length == 0) {
+    return 'ERROR';
+  }
 
   const explore_num = total / scores.length;
   console.log('Explore number', explore_num);
@@ -69,10 +103,10 @@ export const initializeExplore = (friends) => {
   console.log('1st match', curr);
   console.log('2nd match', oldcurr);
 
-  updateExploreOnAPI(explore_num, std_dev, curr, oldcurr, optimal);
+  return updateExploreOnAPI(explore_num, std_dev, curr, oldcurr, optimal);
 };
 
-export const testExplore = () => {
+export const testExplore = (done) => {
   // values to use to test
   const explore_num = 0.3;
   const std_dev = 0.3;
@@ -81,13 +115,18 @@ export const testExplore = () => {
   const oldcurr = '8304333127';
 
   updateExploreOnAPI(explore_num, std_dev, curr, oldcurr, optimal);
+  done();
 };
 
 
 export const updateExploreOnAPI = (explore_num, std_dev, curr, oldcurr, optimal) => {
     // make calls to API to save user Explore Number and std_dev
+    // should probably try to get some semblance of a response from these?
   updateUserExploreNum(explore_num, std_dev);
   postFbPageArticles([curr, oldcurr], optimal);
+
+  return 'SUCCESS';
+  // chrome.runtime.sendMessage({ type: 'EXPLORE_DONE' });
 };
 
 const average = (data) => {
