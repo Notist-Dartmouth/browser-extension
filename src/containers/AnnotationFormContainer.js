@@ -14,6 +14,7 @@ function mapDispatchToProps(dispatch) {
   return {
     onCommentPost: () => dispatch(createAnnotation()),
     onFormCancel: () => dispatch(toggleCreatingAnnotation()),
+    dispatch,
   };
 }
 

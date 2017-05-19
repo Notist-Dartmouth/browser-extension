@@ -55,7 +55,9 @@ class Annotation extends React.Component {
         {...a}
         key={a._id}
         author={a.author}
+        newAnnotation={this.props.newAnnotation}
         dateCreated={a.createDate}
+        dispatch={this.props.dispatch}
         depth={this.props.depth + 1}
         onCommentPost={this.props.onCommentPost}
         onCommentToggle={this.props.onCommentToggle}
@@ -136,6 +138,8 @@ class Annotation extends React.Component {
           {this.props.newCommentVisible &&
           <div>
             <CommentEditor
+              newAnnotation={this.props.newAnnotation}
+              dispatch={this.props.dispatch}
               onCommentPost={this.props.onCommentPost}
               onCommentCancel={() => this.props.onCommentToggle(this.props._id)}
               parent={this.props._id}
@@ -151,6 +155,7 @@ Annotation.propTypes = {
   articleText: PropTypes.string,
   text: PropTypes.string,
   depth: PropTypes.number,
+  dispatch: PropTypes.func.isRequired,
   dateCreated: PropTypes.string.isRequired,
   newCommentVisible: PropTypes.bool,
   childAnnotations: PropTypes.arrayOf(PropTypes.object),
@@ -161,6 +166,11 @@ Annotation.propTypes = {
     _id: PropTypes.string,
     name: PropTypes.string,
   }),
+  newAnnotation: PropTypes.shape({
+    articleText: PropTypes.string,
+    markdown: PropTypes.string,
+    parent: PropTypes.string,
+  }).isRequired,
 };
 
 Annotation.defaultProps = {

@@ -128,6 +128,12 @@ function articles(state = {
       return Object.assign({}, state, {
         currentArticleUrl: articleUrl(state.currentArticleUrl, action),
       });
+    case types.UPDATE_ANNOTATION_PUBLIC:
+    case types.UPDATE_ANNOTATION_MARKDOWN:
+    case types.UPDATE_ANNOTATION_PARENT:
+      return Object.assign({}, state, {
+        newAnnotation: annotationForm(state.newAnnotation, action),
+      });
     case types.SELECT_ANNOTATION_GROUPS:
     case types.NEW_ANNOTATION:
       return Object.assign({}, state, {

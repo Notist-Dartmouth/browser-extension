@@ -36,7 +36,9 @@ const AnnotationList = props => (
         {...a}
         key={a._id}
         author={a.author}
+        dispatch={props.dispatch}
         dateCreated={a.createDate}
+        newAnnotation={props.newAnnotation}
         onCommentPost={props.onCommentPost}
         onCommentToggle={props.onCommentToggle}
       />)}
@@ -46,6 +48,12 @@ const AnnotationList = props => (
 AnnotationList.propTypes = {
   annotations: PropTypes.arrayOf(PropTypes.object).isRequired,
   onCommentPost: PropTypes.func.isRequired,
+  dispatch: PropTypes.func.isRequired,
+  newAnnotation: PropTypes.shape({
+    articleText: PropTypes.string,
+    markdown: PropTypes.string,
+    parent: PropTypes.string,
+  }).isRequired,
   onCommentToggle: PropTypes.func.isRequired,
   isFetchingAnnotations: PropTypes.bool.isRequired,
   isAuthenticated: PropTypes.bool.isRequired,
