@@ -11,25 +11,10 @@ const mockStore = configureMockStore(middlewares);
 
 describe('actions', () => {
   it('should create action for creating an annotation', () => {
-    const articleText = 'valar morghulis';
-    const ranges = [{
-      end: '/p[69]/span/span',
-      endOffset: 12,
-      start: '/p[70]/span/span',
-      startOffset: 1,
-    }];
-    const text = 'valar dohaeris';
-    const parent = 4;
-    const groups = [1, 44, 2];
     const action = {
       type: types.CREATE_ANNOTATION,
-      articleText,
-      ranges,
-      text,
-      parent,
-      groups,
     };
-    expect(actions.createAnnotation(parent, articleText, ranges, text, groups)).toEqual(action);
+    expect(actions.createAnnotation()).toEqual(action);
   });
 
   it('should create action for updating user information', () => {
@@ -62,6 +47,9 @@ describe('async actions', () => {
 
     const expectedActions = [
       {
+        type: types.REQUEST_ANNOTATIONS,
+      },
+      {
         type: types.RECEIVE_ANNOTATION,
         annotation: {
           articleText,
@@ -72,9 +60,13 @@ describe('async actions', () => {
     const store = mockStore({
       articles: {
         currentArticleUrl: 'www.gotgoats.com',
+        newAnnotation: {
+          articleText,
+          markdown: text,
+        },
       },
     });
-    store.dispatch(actions.createAnnotationAsync(null, articleText, null, text, groups)).then(() => {
+    store.dispatch(actions.createAnnotationAsync()).then(() => {
       expect(store.getActions()).toEqual(expectedActions);
     });
   });
@@ -84,13 +76,22 @@ describe('async actions', () => {
     const store = mockStore({
       articles: {
         currentArticleUrl: 'www.tcpip.com',
+        newAnnotation: {
+          markdown: '',
+        },
       },
     });
-    store.dispatch(actions.createAnnotationAsync(null, 'the', null, 'walk')).then(() => {
+    store.dispatch(actions.createAnnotationAsync()).then(() => {
       expect(store.getActions()).toEqual([
+        {
+          type: types.REQUEST_ANNOTATIONS,
+        },
         {
           type: types.UPDATE_AUTH_STATUS,
           isAuthenticated: false,
+        },
+        {
+          type: types.FETCH_ANNOTATIONS_FAILURE,
         },
       ]);
     });
@@ -105,6 +106,9 @@ describe('async actions', () => {
 
     const expectedActions = [
       {
+        type: types.REQUEST_ANNOTATIONS,
+      },
+      {
         type: types.RECEIVE_REPLY,
         reply,
       },
@@ -112,9 +116,13 @@ describe('async actions', () => {
     const store = mockStore({
       articles: {
         currentArticleUrl: 'www.gotgoats.com',
+        newAnnotation: {
+          text: reply.text,
+          parent: reply.parent,
+        },
       },
     });
-    store.dispatch(actions.createAnnotationAsync(reply.parent, null, null, reply.text, [])).then(() => {
+    store.dispatch(actions.createAnnotationAsync()).then(() => {
       expect(store.getActions()).toEqual(expectedActions);
     });
   });
@@ -133,6 +141,9 @@ describe('async actions', () => {
     fetchMock.get('*', annotations);
 
     const expectedActions = [
+      {
+        type: types.REQUEST_ANNOTATIONS,
+      },
       {
         type: types.RECEIVE_ANNOTATIONS,
         annotations,
@@ -187,8 +198,10 @@ describe('async actions', () => {
       expect(store.getActions()).toEqual([
         {
           type: types.UPDATE_USER,
-          groups: [],
-          username: 'Athelstan',
+          newUser: {
+            groups: [],
+            username: 'Athelstan',
+          },
         },
         {
           type: types.UPDATE_AUTH_STATUS,

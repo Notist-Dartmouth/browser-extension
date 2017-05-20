@@ -14,7 +14,11 @@ describe('articles reducer', () => {
       currentArticleUrl: '',
       newAnnotation: {
         articleText: '',
+        articleURI: null,
         ranges: [],
+        isPublic: true,
+        markdown: '',
+        parent: null,
         groups: [],
       },
     };
@@ -40,6 +44,10 @@ describe('articles reducer', () => {
       currentArticleUrl: '',
       newAnnotation: {
         articleText: '',
+        articleURI: null,
+        isPublic: true,
+        markdown: '',
+        parent: null,
         ranges: [],
         groups: [],
       },
