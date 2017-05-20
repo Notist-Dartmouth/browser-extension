@@ -68,6 +68,7 @@ class CommentEditor extends React.Component {
 
   handleCancel() {
     this.setState({ markdown: '' });
+    this.props.dispatch(updateAnnotationMarkdown(''));
     this.props.onCommentCancel();
   }
 

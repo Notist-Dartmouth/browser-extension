@@ -151,6 +151,7 @@ function articles(state = {
         annotations: annotations(state.annotations, action),
         newAnnotation: Object.assign({}, initialAnnotationForm, {
           articleURI: state.currentArticleUrl,
+          markdown: state.newAnnotation.markdown,
         }),
         isCreatingAnnotation: false,
       });
