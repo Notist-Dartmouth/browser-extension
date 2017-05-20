@@ -45,10 +45,17 @@ class CommentEditor extends React.Component {
     super(props);
     this.state = {
       isPreview: false,
+      markdown: '',
     };
-    this.onEditorChange = event => this.props.dispatch(updateAnnotationMarkdown(event.target.value));
+    this.onEditorBlur = event => this.props.dispatch(updateAnnotationMarkdown(event.target.value));
+    this.onEditorChange = event => this.setState({ markdown: event.target.value });
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleCancel = this.handleCancel.bind(this);
     this.handleChecked = this.handleChecked.bind(this);
+  }
+
+  componentWillMount() {
+    this.setState({ markdown: this.props.newAnnotation.markdown });
   }
 
   componentDidMount() {
@@ -59,9 +66,15 @@ class CommentEditor extends React.Component {
     this.props.dispatch(updateAnnotationPublic(isInputChecked));
   }
 
+  handleCancel() {
+    this.setState({ markdown: '' });
+    this.props.onCommentCancel();
+  }
+
   handleSubmit() {
     this.props.onCommentPost();
     this.props.dispatch(updateAnnotationMarkdown(''));
+    this.setState({ markdown: '' });
     this.props.onCommentCancel();
   }
 
@@ -88,8 +101,9 @@ class CommentEditor extends React.Component {
         <textarea
           style={styles.editorStyle}
           hidden={this.state.isPreview}
-          value={this.props.newAnnotation.markdown}
+          value={this.state.markdown}
           onChange={this.onEditorChange}
+          onBlur={this.onEditorBlur}
           placeholder="Enter Comment"
         />
         <div
@@ -117,7 +131,7 @@ class CommentEditor extends React.Component {
           primaryText="Post"
           onPrimaryClicked={this.handleSubmit}
           secondaryText="Cancel"
-          onSecondaryClicked={this.props.onCommentCancel}
+          onSecondaryClicked={this.handleCancel}
         />
       </div>
     );
