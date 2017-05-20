@@ -22,12 +22,14 @@ const ReplyBar = props => (
     <IconButton
       onClick={props.onReplyClicked}
       tooltip="Reply"
+      tooltipPosition="top-center"
       iconStyle={styles.icon}
     >
       <ContentReply />
     </IconButton>
     {props.authorId === props.userId && <IconButton
       tooltip="Delete"
+      tooltipPosition="top-center"
       iconStyle={styles.icon}
       onClick={() => props.onDeleteClicked(props.annotationId)}
     >
