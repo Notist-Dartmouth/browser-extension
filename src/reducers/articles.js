@@ -66,7 +66,7 @@ function articleUrl(state = '', action) {
   }
 }
 
-function annotationForm(state = {
+const initialAnnotationForm = {
   parent: null,
   articleText: '',
   articleURI: null,
@@ -74,7 +74,9 @@ function annotationForm(state = {
   isPublic: true,
   ranges: [],
   groups: [],
-}, action) {
+};
+
+function annotationForm(state = initialAnnotationForm, action) {
   switch (action.type) {
     case types.UPDATE_ANNOTATION_PARENT:
       return Object.assign({}, state, {
@@ -93,7 +95,7 @@ function annotationForm(state = {
         groups: action.groups,
       });
     case types.NEW_ANNOTATION:
-      return Object.assign({}, state, {
+      return Object.assign({}, initialAnnotationForm, {
         articleText: action.articleText,
         ranges: action.ranges,
         articleURI: action.articleURI,
@@ -145,6 +147,13 @@ function articles(state = {
         groupsFilter: action.groups,
       });
     case types.TOGGLE_NEW_COMMENT:
+      return Object.assign({}, state, {
+        annotations: annotations(state.annotations, action),
+        newAnnotation: Object.assign({}, initialAnnotationForm, {
+          articleURI: state.currentArticleUrl,
+        }),
+        isCreatingAnnotation: false,
+      });
     case types.RECEIVE_REPLY:
     case types.RECEIVE_ANNOTATION:
     case types.DELETE_ANNOTATION:
