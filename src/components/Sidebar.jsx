@@ -14,6 +14,7 @@ const Sidebar = props => (
       backgroundColor: '#E0F7FA',
       width: '98%',
       transform: 'none',
+      overflow: props.collapsed ? 'hidden' : 'auto',
     }}
   >
     <HeaderBar

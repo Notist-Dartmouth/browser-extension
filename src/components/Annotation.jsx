@@ -84,10 +84,11 @@ class Annotation extends React.Component {
       },
       commentText: {
         paddingBottom: 20,
+        wordWrap: 'break-word',
       },
       listItem: {
         cursor: 'auto',
-        marginTop: 15,
+        marginTop: this.props.depth === 0 ? 15 : 0,
         backgroundColor: 'white',
       },
     };
@@ -95,7 +96,7 @@ class Annotation extends React.Component {
     return (
       <ListItem
         style={styles.listItem}
-        nestedListStyle={{ marginLeft: 15, borderLeft: '1px dashed black' }}
+        nestedListStyle={{ marginLeft: 15, borderLeft: '1px dashed black', padding: 0 }}
         nestedItems={this.childAnnotations()}
         open={this.state.isExpanded}
         onNestedListToggle={this.toggleExpanded}
