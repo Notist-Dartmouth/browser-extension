@@ -23,14 +23,14 @@ export const exploreSetup = () => {
   getAllFriendScores2(politechoDone, politechoProgress);
 };
 
+export const exploreResponse = (type, message) => {
+  chrome.tabs.query({ active: true, url: 'http://*/explore*' }, (tabs) => {
+    chrome.tabs.sendMessage(tabs[0].id, { type, message });
+  });
+};
+
 function politechoDone() {
-  console.log(arguments);
   const status = initializeExplore(arguments[0]);
-  if (status === 'SUCCESS') {
-    chrome.tabs.query({ active: true, url: 'http://*/explore*' }, (tabs) => { // active: true, currentWindow: true
-      chrome.tabs.sendMessage(tabs[0].id, { type: 'EXPLORE_DONE' });
-    });
-  }
 }
 
 function politechoProgress() {
@@ -39,8 +39,9 @@ function politechoProgress() {
 
 export const initializeExplore = (friends) => {
   // if no friends then ERROR !
+  console.log(friends);
   if (friends.length == 0) {
-    return 'ERROR';
+    exploreResponse('EXPLORE_ERROR', 'User must be logged in on facebook on Chrome.');
   }
 
   let total = 0;
@@ -67,7 +68,8 @@ export const initializeExplore = (friends) => {
   });
   console.log(page_scores);
   if (page_scores.length == 0) {
-    return 'ERROR';
+    exploreResponse('EXPLORE_ERROR', 'Initialization algorithm did not return useful data');
+    return;
   }
 
   const explore_num = total / scores.length;
@@ -103,10 +105,10 @@ export const initializeExplore = (friends) => {
   console.log('1st match', curr);
   console.log('2nd match', oldcurr);
 
-  return updateExploreOnAPI(explore_num, std_dev, curr, oldcurr, optimal);
+  updateExploreOnAPI(explore_num, std_dev, curr, oldcurr, optimal);
 };
 
-export const testExplore = (done) => {
+export const testExplore = () => {
   // values to use to test
   const explore_num = 0.3;
   const std_dev = 0.3;
@@ -115,18 +117,23 @@ export const testExplore = (done) => {
   const oldcurr = '8304333127';
 
   updateExploreOnAPI(explore_num, std_dev, curr, oldcurr, optimal);
-  done();
 };
 
 
 export const updateExploreOnAPI = (explore_num, std_dev, curr, oldcurr, optimal) => {
-    // make calls to API to save user Explore Number and std_dev
-    // should probably try to get some semblance of a response from these?
-  updateUserExploreNum(explore_num, std_dev);
-  postFbPageArticles([curr, oldcurr], optimal);
-
-  return 'SUCCESS';
-  // chrome.runtime.sendMessage({ type: 'EXPLORE_DONE' });
+  updateUserExploreNum(explore_num, std_dev).then((res) => {
+    if (!res.SUCCESS) {
+      return exploreResponse('EXPLORE_ERROR', 'Error connecting to server. Could not save explore number.');
+    } else {
+      return postFbPageArticles([curr, oldcurr], optimal).then((res) => {
+        if (!res.SUCCESS) {
+          return exploreResponse('EXPLORE_ERROR', 'Could not save/find articles that fit your explore number.');
+        } else {
+          return exploreResponse('EXPLORE_DONE');
+        }
+      });
+    }
+  });
 };
 
 const average = (data) => {
