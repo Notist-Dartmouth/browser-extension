@@ -128,6 +128,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   updateContent(request.contentEnabled);
 
   if (request.type === 'EXPLORE_ERROR') {
+    console.log(request.message);
     const event = document.createEvent('Event');
     event.initEvent('explore_error');
     document.dispatchEvent(event);
