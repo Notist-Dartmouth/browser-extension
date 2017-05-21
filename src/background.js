@@ -12,10 +12,6 @@ import {
   deleteAnnotationAsync,
 } from './actions';
 import {
-  postFbPageArticles,
-  updateUserExploreNum,
-} from './api';
-import {
   exploreSetup,
 } from './explore';
 
@@ -77,10 +73,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     sendResponse({ contentEnabled });
   } else if (request.type === 'SET_BADGE') {
     setNumAnnotations(request.nAnnotations);
-  } else if (request.type === 'USER_EXPLORE_UPDATE') {
-    updateUserExploreNum(request.explore_num, request.std_dev);
-  } else if (request.type === 'ADD_EXPLORE_ARTICLES') {
-    postFbPageArticles(request.pages, request.score);
   } else if (request.type === 'RUN_EXPLORE_ALGO') {
     exploreSetup();
   }
