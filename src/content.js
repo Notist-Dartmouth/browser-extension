@@ -127,7 +127,22 @@ const updateContent = (isEnabled) => {
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   updateContent(request.contentEnabled);
+
+  if (request.type === 'EXPLORE_ERROR') {
+    console.log(request.message);
+    const event = document.createEvent('Event');
+    event.initEvent('explore_error');
+    document.dispatchEvent(event);
+  } else if (request.type === 'EXPLORE_DONE') {
+    const event = document.createEvent('Event');
+    event.initEvent('explore_done');
+    document.dispatchEvent(event);
+  }
 });
 
 chrome.runtime.sendMessage({ type: 'CONTENT_STATUS' }, response =>
   updateContent(response.contentEnabled || false));
+
+document.addEventListener('init_explore', (data) => {
+  chrome.runtime.sendMessage({ type: 'RUN_EXPLORE_ALGO' });
+});

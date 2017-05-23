@@ -15,7 +15,7 @@ apiHost = 'http://localhost:3000';
 // @endif
 
 export function updateUserExploreNum(explore_num, std_dev) {
-  fetch(path.join(apiHost, '/api/user/exploreNumber'), {
+  return fetch(path.join(apiHost, '/api/user/exploreNumber'), {
     method: 'POST',
     credentials: 'include',
     headers,
@@ -27,7 +27,7 @@ export function updateUserExploreNum(explore_num, std_dev) {
 }
 
 export function postFbPageArticles(pages, score) {
-  fetch(path.join(apiHost, '/api/initializeExplore/articles'), {
+  return fetch(path.join(apiHost, '/api/initializeExplore/articles'), {
     method: 'POST',
     credentials: 'include',
     headers,

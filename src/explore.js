@@ -3,15 +3,47 @@ import {
   news_dict,
   fakenews_dict,
 } from './scoring';
-
+import {
+  getAllFriendScores2,
+} from './parse';
 import {
   updateUserExploreNum,
   postFbPageArticles,
 } from './api';
 
+let exploreHost;
+// @if ENVIRONMENT='production'
+exploreHost = 'https://notist.io/explore';
+// @endif
+// @if ENVIRONMENT='development'
+exploreHost = 'http://localhost:5000/explore';
+// @endif
+
+export const exploreSetup = () => {
+  getAllFriendScores2(politechoDone, politechoProgress);
+};
+
+export const exploreResponse = (type, message) => {
+  chrome.tabs.query({ active: true, url: 'http://*/explore*' }, (tabs) => {
+    chrome.tabs.sendMessage(tabs[0].id, { type, message });
+  });
+};
+
+function politechoDone() {
+  const status = initializeExplore(arguments[0]);
+}
+
+function politechoProgress() {
+  console.log('progress', arguments);
+}
+
 export const initializeExplore = (friends) => {
-  // compute user's explore number
+  // if no friends then ERROR !
   console.log(friends);
+  if (friends.length == 0) {
+    exploreResponse('EXPLORE_ERROR', 'User must be logged in on facebook on Chrome.');
+  }
+
   let total = 0;
 
   const scores = [];
@@ -35,6 +67,10 @@ export const initializeExplore = (friends) => {
     }
   });
   console.log(page_scores);
+  if (page_scores.length == 0) {
+    exploreResponse('EXPLORE_ERROR', 'Initialization algorithm did not return useful data');
+    return;
+  }
 
   const explore_num = total / scores.length;
   console.log('Explore number', explore_num);
@@ -85,9 +121,19 @@ export const testExplore = () => {
 
 
 export const updateExploreOnAPI = (explore_num, std_dev, curr, oldcurr, optimal) => {
-    // make calls to API to save user Explore Number and std_dev
-  updateUserExploreNum(explore_num, std_dev);
-  postFbPageArticles([curr, oldcurr], optimal);
+  updateUserExploreNum(explore_num, std_dev).then((res) => {
+    if (!res.SUCCESS) {
+      return exploreResponse('EXPLORE_ERROR', 'Error connecting to server. Could not save explore number.');
+    } else {
+      return postFbPageArticles([curr, oldcurr], optimal).then((res) => {
+        if (!res.SUCCESS) {
+          return exploreResponse('EXPLORE_ERROR', 'Could not save/find articles that fit your explore number.');
+        } else {
+          return exploreResponse('EXPLORE_DONE');
+        }
+      });
+    }
+  });
 };
 
 const average = (data) => {

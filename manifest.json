@@ -18,7 +18,6 @@
     {
       "matches": ["http://*/*", "https://*/*"],
       "exclude_matches": [
-        "http://notist.io/*",
         "http://facebook.com/*",
         "https://facebook.com/*",
         "http://google.com/*",
@@ -41,5 +40,8 @@
       "16": "favicon-16.png"
     },
     "default_title": "Notist"
+  },
+  "externally_connectable": {
+    "matches": ["http://notist.io/*"]
   }
 }
