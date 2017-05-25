@@ -36,9 +36,16 @@ const store = createStore(
 wrapStore(store, { portName: 'notist' });
 
 let contentEnabled = true;
+let prevUrl = null;
+let frontendHost;
+// @if ENVIRONMENT='production'
+frontendHost = 'https://notist.io';
+// @endif
+// @if ENVIRONMENT='development'
+frontendHost = 'http://localhost:5000';
+// @endif
 
-const toggleEnabled = () => {
-  contentEnabled = !contentEnabled;
+const updateEnabled = () => {
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
     if (contentEnabled) {
       chrome.browserAction.setIcon({ path: 'favicon-16.png' });
@@ -48,6 +55,25 @@ const toggleEnabled = () => {
     chrome.tabs.sendMessage(tabs[0].id, { contentEnabled });
   });
 };
+
+const toggleEnabled = () => {
+  contentEnabled = !contentEnabled;
+  updateEnabled();
+};
+
+store.subscribe(() => {
+  const { currentArticleUrl } = store.getState().articles;
+  if (currentArticleUrl !== prevUrl) {
+    if (currentArticleUrl.indexOf(`${frontendHost}/explore`) !== -1) {
+      contentEnabled = true;
+      updateEnabled();
+    } else if (currentArticleUrl.indexOf(`${frontendHost}`) !== -1) {
+      contentEnabled = false;
+      updateEnabled();
+    }
+  }
+  prevUrl = currentArticleUrl;
+});
 
 const setNumAnnotations = (nAnnotations) => {
   chrome.browserAction.setBadgeText({

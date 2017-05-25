@@ -24,8 +24,10 @@ export const exploreSetup = () => {
 };
 
 export const exploreResponse = (type, message) => {
-  chrome.tabs.query({ active: true, url: 'https://*/explore*' }, (tabs) => {
-    chrome.tabs.sendMessage(tabs[0].id, { type, message });
+  chrome.tabs.query({ active: true, url: exploreHost }, (tabs) => {
+    if (tabs.length > 0) {
+      chrome.tabs.sendMessage(tabs[0].id, { type, message });
+    }
   });
 };
 

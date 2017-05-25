@@ -137,6 +137,13 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     const event = document.createEvent('Event');
     event.initEvent('explore_done');
     document.dispatchEvent(event);
+  } else if (request.type === 'EXPLORE_PROGRESS') {
+    const event = new CustomEvent('explore_progress', {
+      detail: {
+        progress: request.message,
+      },
+    });
+    document.dispatchEvent(event);
   }
 });
 
