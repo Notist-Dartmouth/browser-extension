@@ -36,18 +36,42 @@ const store = createStore(
 wrapStore(store, { portName: 'notist' });
 
 let contentEnabled = true;
+let prevUrl = '';
+let frontendHost;
+// @if ENVIRONMENT='production'
+frontendHost = 'https://notist.io';
+// @endif
+// @if ENVIRONMENT='development'
+frontendHost = 'http://localhost:5000';
+// @endif
 
-const toggleEnabled = () => {
-  contentEnabled = !contentEnabled;
+const setEnabled = (isEnabled) => {
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    if (contentEnabled) {
+    if (isEnabled) {
       chrome.browserAction.setIcon({ path: 'favicon-16.png' });
     } else {
       chrome.browserAction.setIcon({ path: 'favicon-gray-16.png' });
     }
-    chrome.tabs.sendMessage(tabs[0].id, { contentEnabled });
+    chrome.tabs.sendMessage(tabs[0].id, { contentEnabled: isEnabled });
   });
 };
+
+const toggleEnabled = () => {
+  contentEnabled = !contentEnabled;
+  setEnabled(contentEnabled);
+};
+
+store.subscribe(() => {
+  const { currentArticleUrl } = store.getState().articles;
+  if (currentArticleUrl !== prevUrl) {
+    if (currentArticleUrl.indexOf(`${frontendHost}`) !== -1) {
+      setEnabled(false);
+    } else if (prevUrl.indexOf(`${frontendHost}`) !== -1 && currentArticleUrl.indexOf(`${frontendHost}`) === -1) {
+      setEnabled(contentEnabled);
+    }
+  }
+  prevUrl = currentArticleUrl;
+});
 
 const setNumAnnotations = (nAnnotations) => {
   chrome.browserAction.setBadgeText({
