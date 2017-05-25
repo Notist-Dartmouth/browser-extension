@@ -36,7 +36,7 @@ const store = createStore(
 wrapStore(store, { portName: 'notist' });
 
 let contentEnabled = true;
-let prevUrl = null;
+let prevUrl = '';
 let frontendHost;
 // @if ENVIRONMENT='production'
 frontendHost = 'https://notist.io';
@@ -45,31 +45,29 @@ frontendHost = 'https://notist.io';
 frontendHost = 'http://localhost:5000';
 // @endif
 
-const updateEnabled = () => {
+const setEnabled = (isEnabled) => {
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    if (contentEnabled) {
+    if (isEnabled) {
       chrome.browserAction.setIcon({ path: 'favicon-16.png' });
     } else {
       chrome.browserAction.setIcon({ path: 'favicon-gray-16.png' });
     }
-    chrome.tabs.sendMessage(tabs[0].id, { contentEnabled });
+    chrome.tabs.sendMessage(tabs[0].id, { contentEnabled: isEnabled });
   });
 };
 
 const toggleEnabled = () => {
   contentEnabled = !contentEnabled;
-  updateEnabled();
+  setEnabled(contentEnabled);
 };
 
 store.subscribe(() => {
   const { currentArticleUrl } = store.getState().articles;
   if (currentArticleUrl !== prevUrl) {
-    if (currentArticleUrl.indexOf(`${frontendHost}/explore`) !== -1) {
-      contentEnabled = true;
-      updateEnabled();
-    } else if (currentArticleUrl.indexOf(`${frontendHost}`) !== -1) {
-      contentEnabled = false;
-      updateEnabled();
+    if (currentArticleUrl.indexOf(`${frontendHost}`) !== -1) {
+      setEnabled(false);
+    } else if (prevUrl.indexOf(`${frontendHost}`) !== -1 && currentArticleUrl.indexOf(`${frontendHost}`) === -1) {
+      setEnabled(contentEnabled);
     }
   }
   prevUrl = currentArticleUrl;
