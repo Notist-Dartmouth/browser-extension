@@ -35,6 +35,7 @@ function politechoDone() {
 
 function politechoProgress() {
   console.log('progress', arguments);
+  exploreResponse('EXPLORE_PROGRESS', arguments);
 }
 
 export const initializeExplore = (friends) => {
