@@ -68,7 +68,6 @@ news_dict["15704546335"] = c; //Fox News
 news_dict["102533606954"] = uc; //Drudge Report
 news_dict["95475020353"] = uc; //Breitbart
 news_dict["80256732576"] = uc; //Info Wars
-news_dict["136264019722601"] = uc; //Rush Limbaugh Show
 news_dict["140738092630206"] = uc; //The Blaze
 news_dict["69813760388"] = uc; //Sean Hannity Show
 news_dict["36400348187"] = uc; //Glenn Beck Program
@@ -236,7 +235,6 @@ var pageToName = {
 	"102533606954": "Drudge Report",
 	"95475020353": "Breitbart",
 	"80256732576": "Info Wars",
-	"136264019722601": "Rush Limbaugh Show",
 	"140738092630206": "The Blaze",
 	"69813760388": "Sean Hannity Show",
 	"36400348187": "Glenn Beck Program",
